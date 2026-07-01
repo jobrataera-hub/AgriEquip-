@@ -1,0 +1,43 @@
+// Firestore Security Rules
+// Copy this to Firebase Console > Firestore > Rules tab
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // User profiles - authenticated users can read/write their own
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    // Equipment listings - anyone can read, owners can write their own
+    match /equipment/{equipmentId} {
+      allow read: if true;
+      allow create: if request.auth.uid != null;
+      allow update, delete: if request.auth.uid == resource.data.ownerId;
+    }
+
+    // Bookings - authenticated users can read/write their own
+    match /bookings/{bookingId} {
+      allow read: if request.auth.uid == resource.data.renterId || request.auth.uid == resource.data.ownerId;
+      allow create: if request.auth.uid != null && request.auth.uid == request.resource.data.renterId;
+      allow update: if request.auth.uid == resource.data.renterId || request.auth.uid == resource.data.ownerId;
+    }
+
+    // Reviews - authenticated users can write their own
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if request.auth.uid != null && request.auth.uid == request.resource.data.reviewerId;
+    }
+
+    // Admin dashboard access
+    match /admin/{document=**} {
+      allow read, write: if request.auth.token.admin == true;
+    }
+
+    // Transactions/Payments
+    match /transactions/{transactionId} {
+      allow read: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid != null;
+    }
+  }
+}
