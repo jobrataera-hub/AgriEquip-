@@ -9,25 +9,26 @@ import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-s
 // TODO: Replace with your Firebase config from Firebase Console
 // Go to Firebase Console > Project Settings > Web App > Config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+  apiKey: "AIzaSyDQL4d38G1ZQwARORaszwsf1YIRypKjP_M",
+    authDomain: "agriequip-8124b.firebaseapp.com",
+      projectId: "agriequip-8124b",
+        storageBucket: "agriequip-8124b.appspot.com",
+          messagingSenderId: "662047538853",
+            appId: "1:662047538853:web:84dd49584bface153a174c"
+            };
 
-// Initialize Authentication with persistence
-const auth = getAuth(app);
-await setPersistence(auth, browserLocalPersistence);
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
 
-// Initialize Firestore
-const db = getFirestore(app);
+            // Initialize Authentication with persistence
+            const auth = getAuth(app);
+            await setPersistence(auth, browserLocalPersistence);
 
-// Initialize Storage
-const storage = getStorage(app);
+            // Initialize Firestore
+            const db = getFirestore(app);
 
-export { auth, db, storage, app };
+            // Initialize Storage
+            const storage = getStorage(app);
+
+            export { auth, db, storage, app };
