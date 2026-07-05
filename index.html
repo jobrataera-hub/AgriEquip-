@@ -8,68 +8,138 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <button id="menuToggle" style="position:fixed;top:15px;left:15px;z-index:200;background:#22C55E;border:none;color:white;font-size:1.5rem;padding:8px 12px;border-radius:8px;cursor:pointer">☰</button>
 
-  <aside class="sidebar">
-    <div class="logo"><h2>AgriEquip</h2></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <button id="menuToggle" class="menu-toggle">✕</button>
+      <h2>AgriEquip</h2>
+    </div>
     <nav class="nav-menu">
-      <a href="#" class="nav-link active" data-section="home"><span class="icon">🏠</span> Home</a>
-      <a href="#" class="nav-link" data-section="browse"><span class="icon">🔍</span> Browse Equipment</a>
-      <a href="#" class="nav-link" data-section="bookings"><span class="icon">📅</span> My Bookings</a>
-      <a href="#" class="nav-link" data-section="listings"><span class="icon">📦</span> My Listings</a>
-      <a href="#" class="nav-link" data-section="profile"><span class="icon">👤</span> Profile</a>
-      <a href="#" class="nav-link" data-section="earnings"><span class="icon">💰</span> Earnings</a>
+      <a href="#" class="nav-link active" data-section="home">🏠 Home</a>
+      <a href="#" class="nav-link" data-section="browse">🔍 Browse Equipment</a>
+      <a href="#" class="nav-link" data-section="bookings">📅 My Bookings</a>
+      <a href="#" class="nav-link" data-section="listings">📦 My Listings</a>
+      <a href="#" class="nav-link" data-section="profile">👤 Profile</a>
+      <a href="#" class="nav-link" data-section="earnings">💰 Earnings</a>
     </nav>
-    <button class="logout-btn">Logout</button>
+    <button class="logout-btn">🚪 Logout</button>
   </aside>
 
   <main class="main-content">
     <header class="dashboard-header">
-      <h1 id="pageTitle">Welcome to AgriEquip</h1>
-      <div class="user-info">
-        <span id="userEmail"></span>
-      </div>
+      <button id="openMenu" class="open-menu-btn">☰ AgriEquip</button>
+      <span id="userEmail" style="font-size:0.8rem;color:#64748B"></span>
     </header>
 
     <div id="home" class="section">
       <div class="welcome-card">
-        <h2>Welcome to AgriEquip</h2>
-        <p>Your trusted platform for agricultural equipment rental</p>
+        <h2>🌾 Welcome to AgriEquip</h2>
+        <p>Ethiopia's trusted agricultural equipment rental marketplace</p>
       </div>
       <div class="quick-stats">
         <div class="stat-card"><h3 id="totalBookings">0</h3><p>Total Bookings</p></div>
         <div class="stat-card"><h3 id="activeBookings">0</h3><p>Active Bookings</p></div>
         <div class="stat-card"><h3 id="earnings">0 ETB</h3><p>Total Earnings</p></div>
+        <div class="stat-card"><h3 id="totalListings">0</h3><p>My Listings</p></div>
+      </div>
+      <div class="section-card">
+        <h3>🚀 Quick Actions</h3>
+        <div class="quick-actions">
+          <button class="action-btn" onclick="showSection('browse')">🔍 Browse Equipment</button>
+          <button class="action-btn" onclick="showSection('listings')">➕ List My Equipment</button>
+          <button class="action-btn" onclick="showSection('bookings')">📅 View Bookings</button>
+        </div>
       </div>
     </div>
 
     <div id="browse" class="section" style="display:none">
-      <h2>Browse Equipment</h2>
-      <p style="margin-top:20px;color:#64748B">Equipment listings will appear here.</p>
+      <h2>🔍 Browse Equipment</h2>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search tractors, plows..." />
+        <select id="categoryFilter">
+          <option value="">All Categories</option>
+          <option value="tractor">Tractor</option>
+          <option value="plow">Plow</option>
+          <option value="harvester">Harvester</option>
+          <option value="irrigation">Irrigation</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div id="equipmentList" class="equipment-grid">
+        <p class="empty-msg">No equipment available yet. Be the first to list!</p>
+      </div>
     </div>
 
     <div id="bookings" class="section" style="display:none">
-      <h2>My Bookings</h2>
-      <p style="margin-top:20px;color:#64748B">Your bookings will appear here.</p>
+      <h2>📅 My Bookings</h2>
+      <div id="bookingsList">
+        <div class="empty-state">
+          <p>📭 No bookings yet</p>
+          <p style="color:#64748B;margin-top:10px">Browse equipment and make your first booking!</p>
+          <button class="action-btn" style="margin-top:15px" onclick="showSection('browse')">Browse Equipment</button>
+        </div>
+      </div>
     </div>
 
     <div id="listings" class="section" style="display:none">
-      <h2>My Listings</h2>
-      <p style="margin-top:20px;color:#64748B">Your equipment listings will appear here.</p>
+      <h2>📦 My Equipment Listings</h2>
+      <button class="action-btn" id="addListingBtn" style="margin-bottom:20px">➕ Add New Equipment</button>
+      <div id="addListingForm" style="display:none" class="section-card">
+        <h3>Add Equipment</h3>
+        <input type="text" id="equipName" placeholder="Equipment name" class="form-input">
+        <select id="equipCategory" class="form-input">
+          <option value="tractor">Tractor</option>
+          <option value="plow">Plow</option>
+          <option value="harvester">Harvester</option>
+          <option value="irrigation">Irrigation</option>
+          <option value="other">Other</option>
+        </select>
+        <input type="number" id="equipPrice" placeholder="Price per day (ETB)" class="form-input">
+        <input type="text" id="equipLocation" placeholder="Location (city)" class="form-input">
+        <textarea id="equipDesc" placeholder="Description" class="form-input" rows="3"></textarea>
+        <button class="action-btn" id="submitListing">Submit Listing</button>
+        <button class="action-btn" style="background:#64748B;margin-top:10px" onclick="document.getElementById('addListingForm').style.display='none'">Cancel</button>
+      </div>
+      <div id="myListings">
+        <div class="empty-state">
+          <p>📭 No listings yet</p>
+          <p style="color:#64748B;margin-top:10px">List your equipment to start earning!</p>
+        </div>
+      </div>
     </div>
 
     <div id="profile" class="section" style="display:none">
-      <h2>Profile</h2>
-      <p style="margin-top:20px;color:#64748B">Your profile information will appear here.</p>
+      <h2>👤 My Profile</h2>
+      <div class="section-card">
+        <div class="profile-avatar">👨‍🌾</div>
+        <p id="profileEmail" style="font-size:1.1rem;font-weight:600;margin:10px 0"></p>
+        <p style="color:#64748B">Member of AgriEquip</p>
+        <div style="margin-top:20px">
+          <input type="text" id="profileName" placeholder="Full name" class="form-input">
+          <input type="text" id="profilePhone" placeholder="Phone number (+251...)" class="form-input">
+          <input type="text" id="profileCity" placeholder="City" class="form-input">
+          <button class="action-btn" id="saveProfile">💾 Save Profile</button>
+        </div>
+      </div>
     </div>
 
     <div id="earnings" class="section" style="display:none">
-      <h2>Earnings</h2>
-      <p style="margin-top:20px;color:#64748B">Your earnings will appear here.</p>
+      <h2>💰 My Earnings</h2>
+      <div class="quick-stats">
+        <div class="stat-card"><h3 id="totalEarnings">0 ETB</h3><p>Total Earned</p></div>
+        <div class="stat-card"><h3 id="pendingEarnings">0 ETB</h3><p>Pending</p></div>
+        <div class="stat-card"><h3 id="completedRentals">0</h3><p>Completed Rentals</p></div>
+      </div>
+      <div class="section-card">
+        <h3>📊 Earnings Summary</h3>
+        <p style="color:#64748B;margin-top:10px">Complete rentals to start earning. AgriEquip charges 10% commission per rental.</p>
+      </div>
     </div>
+
   </main>
 
   <script type="module" src="js/auth.js"></script>
   <script type="module" src="js/dashboard.js"></script>
+  <script type="module" src="js/equipment.js"></script>
 </body>
 </html>
