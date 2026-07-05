@@ -33,19 +33,22 @@
 
 <main class="main-content">
   <div class="topbar">
-    <button class="open-menu-btn" id="openMenu">
-      <div class="hamburger"><span></span><span></span><span></span></div>
-      <span class="topbar-logo">AgriEquip</span>
-    </button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="open-menu-btn" id="openMenu">
+        <div class="hamburger"><span></span><span></span><span></span></div>
+      </button>
+      <button id="backBtn" style="background:none;border:none;font-size:1.2rem;cursor:pointer;opacity:0.3">◀</button>
+      <button id="fwdBtn" style="background:none;border:none;font-size:1.2rem;cursor:pointer;opacity:0.3">▶</button>
+      <span id="pageTitle" class="topbar-logo">🏠 Home</span>
+    </div>
     <div class="user-pill">
       <div class="user-avatar" id="userInitial">?</div>
-      <span id="userEmail" style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+      <span id="userEmail" style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.72rem"></span>
     </div>
   </div>
 
   <div class="page-content">
 
-    <!-- HOME -->
     <div id="home" class="section">
       <div class="welcome-card">
         <div class="welcome-tag">🌍 Ethiopia's #1 Farm Equipment Marketplace</div>
@@ -68,9 +71,9 @@
       </div>
       <div class="section-card">
         <h3>💎 Your VIP Status</h3>
-        <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
           <div>
-            <p id="vipBadge" style="font-size:1.2rem;font-weight:700;color:#22C55E">⚪ Free</p>
+            <p id="vipBadge" style="font-size:1.1rem;font-weight:700;color:#22C55E">⚪ Free</p>
             <p style="font-size:0.8rem;color:#64748B;margin-top:4px">Commission: <span id="commissionRate">10</span>%</p>
           </div>
           <button class="action-btn" style="width:auto;padding:10px 20px" onclick="showSection('vip')">Upgrade →</button>
@@ -78,9 +81,7 @@
       </div>
     </div>
 
-    <!-- BROWSE -->
     <div id="browse" class="section" style="display:none">
-      <h2 class="section-title">🔍 Browse Equipment</h2>
       <div class="search-container">
         <div class="search-bar">
           <div class="search-input-wrap">
@@ -88,7 +89,7 @@
             <input type="text" id="searchInput" placeholder="Search tractors, plows, harvesters...">
           </div>
           <select id="categoryFilter">
-            <option value="">All Categories</option>
+            <option value="">🌐 All Categories</option>
             <option value="tractor">🚜 Tractor</option>
             <option value="plow">⚙️ Plow</option>
             <option value="harvester">🌾 Harvester</option>
@@ -97,26 +98,18 @@
           </select>
         </div>
       </div>
-      <div id="equipmentList" class="equipment-grid">
-        <div class="loading"><div class="spinner"></div></div>
-      </div>
+      <div id="equipmentList" class="equipment-grid"></div>
     </div>
 
-    <!-- BOOKINGS -->
     <div id="bookings" class="section" style="display:none">
-      <h2 class="section-title">📅 My Bookings</h2>
-      <div id="bookingsList">
-        <div class="loading"><div class="spinner"></div></div>
-      </div>
+      <div id="bookingsList"></div>
     </div>
 
-    <!-- LISTINGS -->
     <div id="listings" class="section" style="display:none">
-      <h2 class="section-title">📦 My Equipment Listings</h2>
       <button class="action-btn" id="addListingBtn" style="margin-bottom:16px">➕ Add New Equipment</button>
       <div id="addListingForm" style="display:none" class="section-card">
-        <h3>➕ Add Equipment</h3>
-        <input type="text" id="equipName" placeholder="Equipment name (e.g. John Deere Tractor)" class="form-input">
+        <h3>➕ List Your Equipment</h3>
+        <input type="text" id="equipName" placeholder="Equipment name *" class="form-input">
         <select id="equipCategory" class="form-input">
           <option value="tractor">🚜 Tractor</option>
           <option value="plow">⚙️ Plow</option>
@@ -124,49 +117,47 @@
           <option value="irrigation">💧 Irrigation System</option>
           <option value="other">📦 Other</option>
         </select>
-        <input type="number" id="equipPrice" placeholder="Price per day (ETB)" class="form-input">
-        <input type="text" id="equipLocation" placeholder="Your city/location" class="form-input">
-        <textarea id="equipDesc" placeholder="Describe your equipment..." class="form-input" rows="3"></textarea>
+        <input type="number" id="equipPrice" placeholder="Price per day (ETB) *" class="form-input">
+        <input type="text" id="equipLocation" placeholder="Your city/location *" class="form-input">
+        <textarea id="equipDesc" placeholder="Describe your equipment (optional)" class="form-input" rows="3"></textarea>
         <button class="action-btn" id="submitListing">✅ Submit Listing</button>
-        <button class="action-btn" style="background:#64748B;margin-top:8px" onclick="document.getElementById('addListingForm').style.display='none'">Cancel</button>
+        <button class="action-btn" style="background:#64748B;margin-top:8px" onclick="document.getElementById('addListingForm').style.display='none'">✕ Cancel</button>
       </div>
-      <div id="myListings"><div class="loading"><div class="spinner"></div></div></div>
+      <div id="myListings"></div>
     </div>
 
-    <!-- WALLET -->
     <div id="wallet" class="section" style="display:none">
-      <h2 class="section-title">💳 My Wallet</h2>
       <div class="wallet-card">
-        <p style="color:rgba(255,255,255,0.6);font-size:0.85rem">Available Balance</p>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.85rem">💳 Available Balance</p>
         <div class="wallet-balance" id="walletBalance">0 ETB</div>
-        <p style="color:rgba(255,255,255,0.5);font-size:0.75rem">AgriEquip Wallet • Secure</p>
+        <p style="color:rgba(255,255,255,0.4);font-size:0.72rem;margin-top:4px">AgriEquip Secure Wallet</p>
         <div class="wallet-actions">
           <button class="wallet-btn deposit" id="depositBtn">⬆️ Deposit</button>
           <button class="wallet-btn withdraw" id="withdrawBtn">⬇️ Withdraw</button>
         </div>
       </div>
       <div class="section-card">
+        <h3>ℹ️ How Wallet Works</h3>
+        <p style="color:#64748B;font-size:0.82rem;line-height:1.6">1. Request a deposit — admin approves and credits your wallet.<br>2. Use wallet balance to activate VIP plans.<br>3. Rental earnings are added to your wallet.<br>4. Request withdrawal anytime — admin processes within 24hrs.</p>
+      </div>
+      <div class="section-card">
         <h3>📊 Transaction History</h3>
-        <div id="transactionHistory"><p style="color:#64748B">No transactions yet.</p></div>
+        <div id="transactionHistory"></div>
       </div>
     </div>
 
-    <!-- VIP -->
     <div id="vip" class="section" style="display:none">
-      <h2 class="section-title">💎 VIP Plans</h2>
       <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);color:white;margin-bottom:16px">
-        <h3 style="color:white">How it works</h3>
-        <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;margin-top:8px">Upgrade your plan to list more equipment and pay lower commission on each rental. Pay from your wallet balance.</p>
+        <h3 style="color:white">💎 VIP Membership Plans</h3>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin-top:8px;line-height:1.6">Upgrade to list more equipment and pay lower commission on rentals. Fees are deducted from your wallet. Higher VIP = more listings + lower commission = more profit.</p>
       </div>
       <div class="vip-grid" id="vipPlans"></div>
     </div>
 
-    <!-- PROFILE -->
     <div id="profile" class="section" style="display:none">
-      <h2 class="section-title">👤 My Profile</h2>
       <div class="section-card" style="text-align:center">
         <div class="profile-avatar">👨‍🌾</div>
-        <p id="profileEmail" style="font-weight:700;font-size:1rem;margin-bottom:4px"></p>
+        <p id="profileEmail" style="font-weight:700;font-size:0.95rem;margin-bottom:4px"></p>
         <p style="color:#64748B;font-size:0.82rem">AgriEquip Member</p>
       </div>
       <div class="section-card">
@@ -178,18 +169,16 @@
       </div>
     </div>
 
-    <!-- EARNINGS -->
     <div id="earnings" class="section" style="display:none">
-      <h2 class="section-title">💰 My Earnings</h2>
       <div class="quick-stats">
         <div class="stat-card"><div class="stat-icon">✅</div><h3 id="totalEarnings">0 ETB</h3><p>Total Earned</p></div>
         <div class="stat-card"><div class="stat-icon">⏳</div><h3 id="pendingEarnings">0 ETB</h3><p>Pending</p></div>
         <div class="stat-card"><div class="stat-icon">📋</div><h3 id="completedRentals">0</h3><p>Completed</p></div>
-        <div class="stat-card"><div class="stat-icon">💸</div><h3 id="commissionPaid">0 ETB</h3><p>Commission Paid</p></div>
+        <div class="stat-card"><div class="stat-icon">💸</div><h3 id="commissionPaid">0 ETB</h3><p>Commission</p></div>
       </div>
       <div class="section-card">
-        <h3>📊 About Earnings</h3>
-        <p style="color:#64748B;font-size:0.85rem;line-height:1.6">You earn money when renters complete rentals of your equipment. AgriEquip charges a commission based on your VIP plan (Free: 10%, VIP 5: 4%). Upgrade your plan to keep more of your earnings.</p>
+        <h3>📊 How Earnings Work</h3>
+        <p style="color:#64748B;font-size:0.85rem;line-height:1.7">• You earn when renters complete rentals of your equipment<br>• AgriEquip deducts commission based on your VIP plan<br>• Free plan: 10% commission | VIP 5: only 4%<br>• Earnings are credited to your wallet automatically<br>• Withdraw anytime from your wallet</p>
       </div>
     </div>
 
