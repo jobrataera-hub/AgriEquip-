@@ -8,18 +8,31 @@ export async function getWalletBalance(userId) {
   } catch (e) { return 0; }
 }
 
-export async function requestDeposit(userId, amount) {
+export async function requestDeposit(userId, amount, bankName = 'AgriEquip', reference = '') {
   try {
-    await addDoc(collection(db, 'transactions'), { userId, type: 'deposit', amount: Number(amount), status: 'pending', createdAt: new Date().toISOString() });
-    return { success: true, message: 'Deposit request submitted. Admin will approve shortly.' };
+    await addDoc(collection(db, 'transactions'), {
+      userId, type: 'deposit',
+      amount: Number(amount),
+      status: 'pending',
+      bankName, reference,
+      createdAt: new Date().toISOString()
+    });
+    return { success: true, message: 'Deposit request submitted.' };
   } catch (e) { return { success: false, message: e.message }; }
 }
 
-export async function requestWithdrawal(userId, amount) {
+export async function requestWithdrawal(userId, amount, bankName = 'AgriEquip', accountNo = '') {
   try {
     const balance = await getWalletBalance(userId);
+    if (balance < 200) return { success: false, message: 'Minimum withdrawal is 200 ETB.' };
     if (balance < amount) return { success: false, message: 'Insufficient balance.' };
-    await addDoc(collection(db, 'transactions'), { userId, type: 'withdrawal', amount: Number(amount), status: 'pending', createdAt: new Date().toISOString() });
+    await addDoc(collection(db, 'transactions'), {
+      userId, type: 'withdrawal',
+      amount: Number(amount),
+      status: 'pending',
+      bankName, accountNo,
+      createdAt: new Date().toISOString()
+    });
     return { success: true, message: 'Withdrawal request submitted.' };
   } catch (e) { return { success: false, message: e.message }; }
 }

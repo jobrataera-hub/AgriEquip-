@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AgriEquip</title>
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/themes.css">
 </head>
 <body>
 
@@ -25,30 +26,33 @@
     <a href="#" class="nav-link" data-section="listings"><span class="nav-icon">📦</span> My Listings</a>
     <a href="#" class="nav-link" data-section="wallet"><span class="nav-icon">💳</span> Wallet</a>
     <a href="#" class="nav-link" data-section="vip"><span class="nav-icon">💎</span> VIP Plans</a>
-    <a href="#" class="nav-link" data-section="profile"><span class="nav-icon">👤</span> Profile</a>
     <a href="#" class="nav-link" data-section="earnings"><span class="nav-icon">💰</span> Earnings</a>
+    <a href="#" class="nav-link" data-section="profile"><span class="nav-icon">👤</span> Profile</a>
+    <a href="#" class="nav-link" data-section="settings"><span class="nav-icon">⚙️</span> Settings</a>
+    <a href="#" class="nav-link" data-section="about"><span class="nav-icon">ℹ️</span> About & Legal</a>
   </nav>
-  <button class="logout-btn">🚪 Sign Out</button>
+  <button class="logout-btn" id="logoutBtn">🚪 Sign Out</button>
 </aside>
 
 <main class="main-content">
   <div class="topbar">
-    <div style="display:flex;align-items:center;gap:8px">
+    <div style="display:flex;align-items:center;gap:6px">
       <button class="open-menu-btn" id="openMenu">
         <div class="hamburger"><span></span><span></span><span></span></div>
       </button>
-      <button id="backBtn" style="background:none;border:none;font-size:1.2rem;cursor:pointer;opacity:0.3">◀</button>
-      <button id="fwdBtn" style="background:none;border:none;font-size:1.2rem;cursor:pointer;opacity:0.3">▶</button>
+      <button id="backBtn" class="nav-arrow-btn" title="Go back">◀</button>
+      <button id="fwdBtn" class="nav-arrow-btn" title="Go forward">▶</button>
       <span id="pageTitle" class="topbar-logo">🏠 Home</span>
     </div>
     <div class="user-pill">
       <div class="user-avatar" id="userInitial">?</div>
-      <span id="userEmail" style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.72rem"></span>
+      <span id="userEmail"></span>
     </div>
   </div>
 
   <div class="page-content">
 
+    <!-- HOME -->
     <div id="home" class="section">
       <div class="welcome-card">
         <div class="welcome-tag">🌍 Ethiopia's #1 Farm Equipment Marketplace</div>
@@ -79,8 +83,17 @@
           <button class="action-btn" style="width:auto;padding:10px 20px" onclick="showSection('vip')">Upgrade →</button>
         </div>
       </div>
+      <div class="section-card">
+        <h3>🎁 Referral Program</h3>
+        <p style="color:#64748B;font-size:0.85rem;margin-bottom:12px">Invite friends and earn 50 ETB per referral when they complete their first rental!</p>
+        <div style="background:var(--light);border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <span id="referralCode" style="font-weight:700;font-size:1rem;letter-spacing:2px;color:#22C55E">Loading...</span>
+          <button class="action-btn" style="width:auto;padding:8px 16px;font-size:0.8rem" onclick="copyReferral()">📋 Copy</button>
+        </div>
+      </div>
     </div>
 
+    <!-- BROWSE -->
     <div id="browse" class="section" style="display:none">
       <div class="search-container">
         <div class="search-bar">
@@ -101,10 +114,12 @@
       <div id="equipmentList" class="equipment-grid"></div>
     </div>
 
+    <!-- BOOKINGS -->
     <div id="bookings" class="section" style="display:none">
       <div id="bookingsList"></div>
     </div>
 
+    <!-- LISTINGS -->
     <div id="listings" class="section" style="display:none">
       <button class="action-btn" id="addListingBtn" style="margin-bottom:16px">➕ Add New Equipment</button>
       <div id="addListingForm" style="display:none" class="section-card">
@@ -119,26 +134,44 @@
         </select>
         <input type="number" id="equipPrice" placeholder="Price per day (ETB) *" class="form-input">
         <input type="text" id="equipLocation" placeholder="Your city/location *" class="form-input">
-        <textarea id="equipDesc" placeholder="Describe your equipment (optional)" class="form-input" rows="3"></textarea>
+        <textarea id="equipDesc" placeholder="Describe your equipment..." class="form-input" rows="3"></textarea>
         <button class="action-btn" id="submitListing">✅ Submit Listing</button>
         <button class="action-btn" style="background:#64748B;margin-top:8px" onclick="document.getElementById('addListingForm').style.display='none'">✕ Cancel</button>
       </div>
       <div id="myListings"></div>
     </div>
 
+    <!-- WALLET -->
     <div id="wallet" class="section" style="display:none">
       <div class="wallet-card">
         <p style="color:rgba(255,255,255,0.6);font-size:0.85rem">💳 Available Balance</p>
         <div class="wallet-balance" id="walletBalance">0 ETB</div>
-        <p style="color:rgba(255,255,255,0.4);font-size:0.72rem;margin-top:4px">AgriEquip Secure Wallet</p>
+        <p style="color:rgba(255,255,255,0.4);font-size:0.72rem;margin-top:4px">AgriEquip Secure Wallet • Min withdrawal: 200 ETB</p>
         <div class="wallet-actions">
           <button class="wallet-btn deposit" id="depositBtn">⬆️ Deposit</button>
           <button class="wallet-btn withdraw" id="withdrawBtn">⬇️ Withdraw</button>
         </div>
       </div>
       <div class="section-card">
-        <h3>ℹ️ How Wallet Works</h3>
-        <p style="color:#64748B;font-size:0.82rem;line-height:1.6">1. Request a deposit — admin approves and credits your wallet.<br>2. Use wallet balance to activate VIP plans.<br>3. Rental earnings are added to your wallet.<br>4. Request withdrawal anytime — admin processes within 24hrs.</p>
+        <h3>🏦 Supported Banks</h3>
+        <div class="bank-grid">
+          <div class="bank-item">🏦 CBE</div>
+          <div class="bank-item">🏦 Awash Bank</div>
+          <div class="bank-item">🏦 Dashen Bank</div>
+          <div class="bank-item">🏦 Abyssinia Bank</div>
+          <div class="bank-item">📱 Telebirr</div>
+          <div class="bank-item">📱 M-Pesa</div>
+        </div>
+      </div>
+      <div class="section-card">
+        <h3>ℹ️ Wallet Rules</h3>
+        <ul style="color:#64748B;font-size:0.82rem;line-height:2;list-style:none">
+          <li>✅ Minimum deposit: 100 ETB</li>
+          <li>✅ Minimum withdrawal: 200 ETB</li>
+          <li>✅ Withdrawals processed within 24 hours</li>
+          <li>✅ Deposits credited after admin approval</li>
+          <li>✅ All transactions are logged and secured</li>
+        </ul>
       </div>
       <div class="section-card">
         <h3>📊 Transaction History</h3>
@@ -146,39 +179,145 @@
       </div>
     </div>
 
+    <!-- VIP -->
     <div id="vip" class="section" style="display:none">
       <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);color:white;margin-bottom:16px">
         <h3 style="color:white">💎 VIP Membership Plans</h3>
-        <p style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin-top:8px;line-height:1.6">Upgrade to list more equipment and pay lower commission on rentals. Fees are deducted from your wallet. Higher VIP = more listings + lower commission = more profit.</p>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin-top:8px;line-height:1.6">Upgrade to list more equipment and pay lower commission. Fees are paid monthly from your wallet. Higher VIP = more listings + lower commission = more profit.</p>
       </div>
       <div class="vip-grid" id="vipPlans"></div>
     </div>
 
+    <!-- EARNINGS -->
+    <div id="earnings" class="section" style="display:none">
+      <div class="wallet-card" style="margin-bottom:16px">
+        <p style="color:rgba(255,255,255,0.6);font-size:0.85rem">💰 Total Earnings</p>
+        <div class="wallet-balance" id="totalEarnings">0 ETB</div>
+        <p style="color:rgba(255,255,255,0.4);font-size:0.72rem;margin-top:4px">From completed rentals</p>
+      </div>
+      <div class="quick-stats">
+        <div class="stat-card"><div class="stat-icon">⏳</div><h3 id="pendingEarnings">0 ETB</h3><p>Pending</p></div>
+        <div class="stat-card"><div class="stat-icon">📋</div><h3 id="completedRentals">0</h3><p>Completed</p></div>
+        <div class="stat-card"><div class="stat-icon">💸</div><h3 id="commissionPaid">0 ETB</h3><p>Commission</p></div>
+        <div class="stat-card"><div class="stat-icon">📦</div><h3 id="earningsListings">0</h3><p>Active Listings</p></div>
+      </div>
+      <div id="earningsHistory" class="section-card">
+        <h3>📊 Rental Earnings History</h3>
+        <div id="earningsHistoryList"><p style="color:#64748B;font-size:0.85rem;margin-top:10px">No completed rentals yet. List equipment and start earning!</p></div>
+      </div>
+      <div class="section-card">
+        <h3>💡 How to Earn More</h3>
+        <ul style="color:#64748B;font-size:0.82rem;line-height:2;list-style:none">
+          <li>📦 List more equipment → More rental opportunities</li>
+          <li>💎 Upgrade VIP → Lower commission → More profit</li>
+          <li>📍 Add accurate location → More local renters</li>
+          <li>📸 Add good descriptions → More bookings</li>
+          <li>🎁 Refer friends → 50 ETB per referral</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
     <div id="profile" class="section" style="display:none">
       <div class="section-card" style="text-align:center">
         <div class="profile-avatar">👨‍🌾</div>
         <p id="profileEmail" style="font-weight:700;font-size:0.95rem;margin-bottom:4px"></p>
-        <p style="color:#64748B;font-size:0.82rem">AgriEquip Member</p>
+        <p id="profileVIP" style="color:#22C55E;font-size:0.85rem">⚪ Free Member</p>
+        <p id="profileReferral" style="color:#64748B;font-size:0.75rem;margin-top:4px"></p>
       </div>
       <div class="section-card">
         <h3>✏️ Edit Profile</h3>
         <input type="text" id="profileName" placeholder="Full name" class="form-input">
         <input type="tel" id="profilePhone" placeholder="Phone (+251...)" class="form-input">
         <input type="text" id="profileCity" placeholder="City" class="form-input">
+        <input type="text" id="profileReferralInput" placeholder="Referral code (optional)" class="form-input">
         <button class="action-btn" id="saveProfile">💾 Save Changes</button>
       </div>
     </div>
 
-    <div id="earnings" class="section" style="display:none">
-      <div class="quick-stats">
-        <div class="stat-card"><div class="stat-icon">✅</div><h3 id="totalEarnings">0 ETB</h3><p>Total Earned</p></div>
-        <div class="stat-card"><div class="stat-icon">⏳</div><h3 id="pendingEarnings">0 ETB</h3><p>Pending</p></div>
-        <div class="stat-card"><div class="stat-icon">📋</div><h3 id="completedRentals">0</h3><p>Completed</p></div>
-        <div class="stat-card"><div class="stat-icon">💸</div><h3 id="commissionPaid">0 ETB</h3><p>Commission</p></div>
+    <!-- SETTINGS -->
+    <div id="settings" class="section" style="display:none">
+      <div class="section-card">
+        <h3>🎨 Theme</h3>
+        <div class="theme-options">
+          <button class="theme-btn active" data-theme="dark" onclick="setTheme('dark')">
+            <div class="theme-preview dark-preview"></div>
+            <span>Dark</span>
+          </button>
+          <button class="theme-btn" data-theme="light" onclick="setTheme('light')">
+            <div class="theme-preview light-preview"></div>
+            <span>Light</span>
+          </button>
+          <button class="theme-btn" data-theme="black" onclick="setTheme('black')">
+            <div class="theme-preview black-preview"></div>
+            <span>Black</span>
+          </button>
+          <button class="theme-btn" data-theme="green" onclick="setTheme('green')">
+            <div class="theme-preview green-preview"></div>
+            <span>Nature</span>
+          </button>
+        </div>
       </div>
       <div class="section-card">
-        <h3>📊 How Earnings Work</h3>
-        <p style="color:#64748B;font-size:0.85rem;line-height:1.7">• You earn when renters complete rentals of your equipment<br>• AgriEquip deducts commission based on your VIP plan<br>• Free plan: 10% commission | VIP 5: only 4%<br>• Earnings are credited to your wallet automatically<br>• Withdraw anytime from your wallet</p>
+        <h3>🔔 Notifications</h3>
+        <div class="setting-row">
+          <div><p style="font-weight:600;font-size:0.9rem">Booking alerts</p><p style="color:#64748B;font-size:0.8rem">Get notified of new bookings</p></div>
+          <label class="toggle"><input type="checkbox" checked id="notifBookings"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div><p style="font-weight:600;font-size:0.9rem">Wallet updates</p><p style="color:#64748B;font-size:0.8rem">Deposit and withdrawal alerts</p></div>
+          <label class="toggle"><input type="checkbox" checked id="notifWallet"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="section-card">
+        <h3>🌐 Language</h3>
+        <select class="form-input" id="langSelect" onchange="setLanguage(this.value)">
+          <option value="en">🇬🇧 English</option>
+          <option value="am">🇪🇹 Amharic (አማርኛ)</option>
+        </select>
+      </div>
+      <div class="section-card">
+        <h3>⚠️ Danger Zone</h3>
+        <button class="action-btn" style="background:#EF4444" onclick="clearCache()">🗑️ Clear Cache</button>
+      </div>
+    </div>
+
+    <!-- ABOUT & LEGAL -->
+    <div id="about" class="section" style="display:none">
+      <div class="welcome-card" style="text-align:center">
+        <div style="font-size:3rem;margin-bottom:12px">🌾</div>
+        <h2>AgriEquip</h2>
+        <p style="margin-top:8px;opacity:0.7">Version 1.0.0 • Made in Ethiopia</p>
+      </div>
+      <div class="section-card">
+        <h3>📞 Contact Us</h3>
+        <ul style="list-style:none;color:#64748B;font-size:0.85rem;line-height:2.2">
+          <li>📧 Email: support@agriequip.et</li>
+          <li>📱 Phone: +251 911 000 000</li>
+          <li>📠 FAX: +251 11 000 0000</li>
+          <li>🌐 Website: agriequip.et</li>
+          <li>📍 Address: Addis Ababa, Ethiopia</li>
+          <li>🕐 Support Hours: Mon-Fri 8AM-6PM EAT</li>
+        </ul>
+      </div>
+      <div class="section-card">
+        <h3>⚖️ Legal</h3>
+        <div style="color:#64748B;font-size:0.82rem;line-height:1.8">
+          <p style="font-weight:700;color:var(--text);margin-bottom:8px">Terms of Service</p>
+          <p>AgriEquip is a marketplace platform connecting equipment owners with renters in Ethiopia. By using this platform, you agree to our terms of service and community guidelines.</p>
+          <p style="font-weight:700;color:var(--text);margin:12px 0 8px">Privacy Policy</p>
+          <p>We collect only necessary information to operate the platform. Your data is stored securely in Firebase and never sold to third parties.</p>
+          <p style="font-weight:700;color:var(--text);margin:12px 0 8px">Commission Policy</p>
+          <p>AgriEquip charges a commission on completed rentals based on your VIP plan (Free: 10%, VIP 5: 4%). Commission is deducted automatically from rental payments.</p>
+          <p style="font-weight:700;color:var(--text);margin:12px 0 8px">Refund Policy</p>
+          <p>Cancellations made 24+ hours before rental start date receive a full refund. Late cancellations are subject to a 20% fee.</p>
+          <p style="font-weight:700;color:var(--text);margin:12px 0 8px">Disclaimer</p>
+          <p>AgriEquip is not responsible for equipment condition, damages, or disputes between renters and owners. All transactions are between users.</p>
+        </div>
+      </div>
+      <div class="section-card">
+        <h3>📜 Licenses</h3>
+        <p style="color:#64748B;font-size:0.82rem;line-height:1.8">AgriEquip is licensed under the Ethiopian Business License No. XXXX-XXXX. Firebase services provided by Google LLC. All rights reserved © 2026 AgriEquip.</p>
       </div>
     </div>
 

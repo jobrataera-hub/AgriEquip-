@@ -1,0 +1,174 @@
+/* ===== DARK THEME (default) ===== */
+[data-theme="dark"] {
+  --bg: #0F172A;
+  --surface: #1E293B;
+  --card: #1E293B;
+  --text: #F1F5F9;
+  --muted: #94A3B8;
+  --border: #334155;
+  --light: #1E293B;
+  --topbar-bg: rgba(15,23,42,0.95);
+}
+[data-theme="dark"] body { background: #0F172A; color: #F1F5F9; }
+[data-theme="dark"] .section-card { background: #1E293B; border-color: #334155; color: #F1F5F9; }
+[data-theme="dark"] .stat-card { background: #1E293B; border-color: #334155; }
+[data-theme="dark"] .stat-card p { color: #94A3B8; }
+[data-theme="dark"] .topbar { background: rgba(15,23,42,0.95); border-color: #334155; }
+[data-theme="dark"] .topbar-logo { color: #22C55E; }
+[data-theme="dark"] .form-input { background: #0F172A; border-color: #334155; color: #F1F5F9; }
+[data-theme="dark"] .search-container { background: #1E293B; border-color: #334155; }
+[data-theme="dark"] #searchInput { background: #0F172A; border-color: #334155; color: #F1F5F9; }
+[data-theme="dark"] #categoryFilter { background: #0F172A; border-color: #334155; color: #F1F5F9; }
+[data-theme="dark"] .equip-card { background: #1E293B; border-color: #334155; }
+[data-theme="dark"] .equip-card h3 { color: #F1F5F9; }
+[data-theme="dark"] .vip-card { background: #1E293B; }
+[data-theme="dark"] .transaction-item { background: #0F172A; border-color: #334155; }
+[data-theme="dark"] .user-pill { background: #1E293B; border-color: #334155; color: #94A3B8; }
+[data-theme="dark"] .open-menu-btn:hover { background: rgba(34,197,94,0.1); }
+[data-theme="dark"] .hamburger span { background: #F1F5F9; }
+[data-theme="dark"] .nav-arrow-btn { color: #94A3B8; }
+[data-theme="dark"] .page-content { background: #0F172A; }
+[data-theme="dark"] .section-card h3 { color: #F1F5F9; }
+[data-theme="dark"] .bank-item { background: #0F172A; border-color: #334155; color: #94A3B8; }
+[data-theme="dark"] .setting-row { border-color: #334155; }
+
+/* ===== LIGHT THEME ===== */
+[data-theme="light"] {
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --card: #FFFFFF;
+  --text: #1E293B;
+  --muted: #64748B;
+  --border: #E2E8F0;
+  --light: #F8FAFC;
+}
+[data-theme="light"] body { background: #F8FAFC; color: #1E293B; }
+[data-theme="light"] .sidebar { background: linear-gradient(180deg,#0F172A,#1E293B); }
+[data-theme="light"] .topbar { background: rgba(248,250,252,0.95); border-color: #E2E8F0; }
+[data-theme="light"] .topbar-logo { color: #0F172A; }
+[data-theme="light"] .hamburger span { background: #0F172A; }
+[data-theme="light"] .page-content { background: #F8FAFC; }
+[data-theme="light"] .nav-arrow-btn { color: #64748B; }
+
+/* ===== BLACK THEME ===== */
+[data-theme="black"] {
+  --bg: #000000;
+  --surface: #111111;
+  --card: #111111;
+  --text: #FFFFFF;
+  --muted: #888888;
+  --border: #222222;
+  --light: #111111;
+}
+[data-theme="black"] body { background: #000; color: #fff; }
+[data-theme="black"] .section-card { background: #111; border-color: #222; color: #fff; }
+[data-theme="black"] .stat-card { background: #111; border-color: #222; }
+[data-theme="black"] .stat-card p { color: #888; }
+[data-theme="black"] .topbar { background: rgba(0,0,0,0.98); border-color: #222; }
+[data-theme="black"] .topbar-logo { color: #22C55E; }
+[data-theme="black"] .form-input { background: #000; border-color: #333; color: #fff; }
+[data-theme="black"] .search-container { background: #111; border-color: #222; }
+[data-theme="black"] #searchInput { background: #000; border-color: #333; color: #fff; }
+[data-theme="black"] #categoryFilter { background: #000; border-color: #333; color: #fff; }
+[data-theme="black"] .equip-card { background: #111; border-color: #222; }
+[data-theme="black"] .equip-card h3 { color: #fff; }
+[data-theme="black"] .vip-card { background: #111; }
+[data-theme="black"] .transaction-item { background: #000; border-color: #222; }
+[data-theme="black"] .user-pill { background: #111; border-color: #222; color: #888; }
+[data-theme="black"] .hamburger span { background: #fff; }
+[data-theme="black"] .nav-arrow-btn { color: #888; }
+[data-theme="black"] .page-content { background: #000; }
+[data-theme="black"] .bank-item { background: #000; border-color: #222; color: #888; }
+[data-theme="black"] .setting-row { border-color: #222; }
+[data-theme="black"] .section-card h3 { color: #fff; }
+
+/* ===== NATURE/GREEN THEME ===== */
+[data-theme="green"] {
+  --bg: #052e16;
+  --surface: #14532d;
+  --card: #14532d;
+  --text: #ECFDF5;
+  --muted: #86EFAC;
+  --border: #166534;
+  --light: #14532d;
+  --primary: #4ADE80;
+}
+[data-theme="green"] body { background: #052e16; color: #ECFDF5; }
+[data-theme="green"] .section-card { background: #14532d; border-color: #166534; color: #ECFDF5; }
+[data-theme="green"] .stat-card { background: #14532d; border-color: #166534; }
+[data-theme="green"] .topbar { background: rgba(5,46,22,0.98); border-color: #166534; }
+[data-theme="green"] .topbar-logo { color: #4ADE80; }
+[data-theme="green"] .form-input { background: #052e16; border-color: #166534; color: #ECFDF5; }
+[data-theme="green"] .equip-card { background: #14532d; border-color: #166534; }
+[data-theme="green"] .equip-card h3 { color: #ECFDF5; }
+[data-theme="green"] .hamburger span { background: #ECFDF5; }
+[data-theme="green"] .nav-arrow-btn { color: #86EFAC; }
+[data-theme="green"] .page-content { background: #052e16; }
+[data-theme="green"] .section-card h3 { color: #ECFDF5; }
+[data-theme="green"] .bank-item { background: #052e16; border-color: #166534; color: #86EFAC; }
+
+/* ===== THEME SWITCHER UI ===== */
+.theme-options { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.theme-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  background: none; border: 2px solid var(--border, #E2E8F0);
+  border-radius: 12px; padding: 10px; cursor: pointer;
+  font-size: 0.78rem; font-family: 'Poppins', sans-serif;
+  color: var(--text, #1E293B);
+  transition: all 0.3s; min-width: 70px;
+}
+.theme-btn.active { border-color: #22C55E; }
+.theme-btn:hover { border-color: #22C55E; transform: scale(1.05); }
+.theme-preview {
+  width: 40px; height: 30px; border-radius: 6px;
+}
+.dark-preview { background: linear-gradient(135deg,#0F172A,#1E293B); border: 1px solid #334155; }
+.light-preview { background: linear-gradient(135deg,#F8FAFC,#FFFFFF); border: 1px solid #E2E8F0; }
+.black-preview { background: #000; border: 1px solid #333; }
+.green-preview { background: linear-gradient(135deg,#052e16,#14532d); border: 1px solid #166534; }
+
+/* ===== SETTINGS UI ===== */
+.setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-bottom: 1px solid var(--border, #E2E8F0);
+}
+.setting-row:last-child { border-bottom: none; }
+.toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0; background: #CBD5E1;
+  border-radius: 24px; cursor: pointer; transition: 0.3s;
+}
+.toggle-slider::before {
+  content: ''; position: absolute;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: white; left: 3px; top: 3px;
+  transition: 0.3s;
+}
+.toggle input:checked + .toggle-slider { background: #22C55E; }
+.toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+/* ===== BANK GRID ===== */
+.bank-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px; margin-top: 10px;
+}
+.bank-item {
+  background: var(--light, #F8FAFC);
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 10px; padding: 10px 6px;
+  text-align: center; font-size: 0.75rem;
+  font-weight: 600; color: var(--muted, #64748B);
+  transition: all 0.3s; cursor: pointer;
+}
+.bank-item:hover { border-color: #22C55E; color: #22C55E; transform: scale(1.03); }
+
+/* ===== NAV ARROWS ===== */
+.nav-arrow-btn {
+  background: none; border: none;
+  font-size: 0.9rem; cursor: pointer;
+  padding: 4px 6px; border-radius: 6px;
+  transition: all 0.2s; opacity: 0.3;
+  color: var(--text, #1E293B);
+}
+.nav-arrow-btn:hover { background: rgba(34,197,94,0.1); opacity: 1 !important; }

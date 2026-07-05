@@ -7,231 +7,278 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--primary:#22C55E;--accent:#06B6D4;--dark:#0F172A}
     body{
-      font-family:'Poppins',sans-serif;
-      min-height:100vh;
+      font-family:'Poppins',sans-serif;min-height:100vh;
       background:linear-gradient(135deg,#0F172A 0%,#1a3a2a 50%,#0f2d3d 100%);
       display:flex;align-items:center;justify-content:center;
-      padding:20px;
-      position:relative;overflow:hidden;
+      padding:20px;position:relative;overflow:hidden;
     }
-    body::before{
-      content:'';position:absolute;inset:0;
-      background:radial-gradient(circle at 30% 50%,rgba(34,197,94,0.1) 0%,transparent 50%),
-                radial-gradient(circle at 70% 50%,rgba(6,182,212,0.1) 0%,transparent 50%);
-      animation:breathe 4s ease-in-out infinite;
-    }
-    @keyframes breathe{0%,100%{opacity:0.5}50%{opacity:1}}
     @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)}50%{box-shadow:0 0 0 15px rgba(34,197,94,0)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)}50%{box-shadow:0 0 0 20px rgba(34,197,94,0)}}
+    @keyframes particleFloat{0%{transform:translateY(100vh);opacity:0}10%{opacity:0.4}90%{opacity:0.4}100%{transform:translateY(-100px);opacity:0}}
+    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 
-    .particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-    .particle{
-      position:absolute;width:4px;height:4px;
-      background:rgba(34,197,94,0.3);border-radius:50%;
-      animation:float 3s ease-in-out infinite;
-    }
+    .particles{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+    .particle{position:absolute;animation:particleFloat linear infinite}
 
-    .login-card{
+    .card{
       background:rgba(255,255,255,0.05);
       backdrop-filter:blur(20px);
       border:1px solid rgba(255,255,255,0.1);
-      border-radius:24px;
-      padding:40px 30px;
+      border-radius:24px;padding:35px 28px;
       width:100%;max-width:400px;
       position:relative;z-index:1;
       animation:fadeUp 0.6s ease;
-      box-shadow:0 20px 60px rgba(0,0,0,0.4);
+      box-shadow:0 20px 60px rgba(0,0,0,0.5);
     }
 
-    .logo-area{text-align:center;margin-bottom:30px}
+    .logo{text-align:center;margin-bottom:28px}
     .logo-icon{
-      width:70px;height:70px;
-      background:linear-gradient(135deg,var(--primary),var(--accent));
+      width:72px;height:72px;
+      background:linear-gradient(135deg,#22C55E,#06B6D4);
       border-radius:20px;
       display:flex;align-items:center;justify-content:center;
-      font-size:2.5rem;margin:0 auto 15px;
-      animation:float 3s ease-in-out infinite;
-      box-shadow:0 8px 30px rgba(34,197,94,0.4);
-      animation:pulse 2s infinite;
+      font-size:2.8rem;margin:0 auto 14px;
+      animation:float 3s ease-in-out infinite, pulse 2.5s infinite;
     }
     .logo-name{
-      font-family:'Fraunces',serif;font-size:2rem;font-weight:900;
-      background:linear-gradient(135deg,var(--primary),var(--accent));
+      font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;
+      background:linear-gradient(135deg,#22C55E,#06B6D4);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;
     }
-    .logo-tagline{color:rgba(255,255,255,0.5);font-size:0.82rem;margin-top:4px}
+    .logo-tag{color:rgba(255,255,255,0.45);font-size:0.78rem;margin-top:4px}
 
     .tabs{
-      display:flex;background:rgba(255,255,255,0.05);
-      border-radius:12px;padding:4px;margin-bottom:25px;
+      display:flex;background:rgba(255,255,255,0.06);
+      border-radius:12px;padding:4px;margin-bottom:22px;gap:4px;
     }
     .tab{
       flex:1;padding:10px;border:none;background:none;
-      color:rgba(255,255,255,0.5);cursor:pointer;
-      font-family:'Poppins',sans-serif;font-size:0.88rem;font-weight:600;
+      color:rgba(255,255,255,0.45);cursor:pointer;
+      font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:600;
       border-radius:10px;transition:all 0.3s;
     }
-    .tab.active{background:var(--primary);color:white;box-shadow:0 4px 15px rgba(34,197,94,0.3)}
+    .tab.active{background:var(--p,#22C55E);color:white;box-shadow:0 4px 15px rgba(34,197,94,0.35)}
 
-    .form-group{margin-bottom:16px;position:relative}
-    .form-label{color:rgba(255,255,255,0.7);font-size:0.82rem;font-weight:500;margin-bottom:6px;display:block}
-    .form-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none;margin-top:13px}
-    .form-field{
-      width:100%;padding:13px 14px 13px 42px;
+    .fg{margin-bottom:14px;position:relative}
+    .label{color:rgba(255,255,255,0.65);font-size:0.78rem;font-weight:500;margin-bottom:5px;display:block}
+    .fi{
+      width:100%;padding:12px 14px 12px 40px;
       background:rgba(255,255,255,0.07);
       border:1.5px solid rgba(255,255,255,0.1);
       border-radius:12px;color:white;
-      font-size:0.9rem;font-family:'Poppins',sans-serif;
+      font-size:0.88rem;font-family:'Poppins',sans-serif;
       outline:none;transition:all 0.3s;
     }
-    .form-field::placeholder{color:rgba(255,255,255,0.3)}
-    .form-field:focus{border-color:var(--primary);background:rgba(34,197,94,0.08);box-shadow:0 0 0 4px rgba(34,197,94,0.1)}
+    .fi::placeholder{color:rgba(255,255,255,0.25)}
+    .fi:focus{border-color:#22C55E;background:rgba(34,197,94,0.08);box-shadow:0 0 0 4px rgba(34,197,94,0.1)}
+    .fi-icon{position:absolute;left:13px;top:32px;font-size:0.95rem}
 
-    .submit-btn{
-      width:100%;padding:14px;margin-top:8px;
-      background:linear-gradient(135deg,var(--primary),#16A34A);
+    .btn{
+      width:100%;padding:14px;margin-top:6px;
+      background:linear-gradient(135deg,#22C55E,#16A34A);
       border:none;border-radius:12px;
-      color:white;font-size:1rem;font-weight:700;
+      color:white;font-size:0.95rem;font-weight:700;
       font-family:'Poppins',sans-serif;cursor:pointer;
       transition:all 0.3s;
       box-shadow:0 4px 20px rgba(34,197,94,0.4);
       position:relative;overflow:hidden;
     }
-    .submit-btn::after{
-      content:'';position:absolute;inset:0;
-      background:linear-gradient(135deg,transparent,rgba(255,255,255,0.1),transparent);
-      transform:translateX(-100%);transition:transform 0.5s;
-    }
-    .submit-btn:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(34,197,94,0.5)}
-    .submit-btn:hover::after{transform:translateX(100%)}
-    .submit-btn:active{transform:translateY(0)}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(34,197,94,0.5)}
+    .btn:active{transform:translateY(0)}
+    .btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
 
-    .message{
+    .msg{
       padding:12px;border-radius:10px;
-      font-size:0.85rem;text-align:center;
+      font-size:0.82rem;text-align:center;
       margin-top:12px;display:none;animation:fadeUp 0.3s ease;
+      line-height:1.5;
     }
-    .message.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5}
-    .message.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC}
+    .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#FCA5A5}
+    .msg.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);color:#86EFAC}
+    .msg.info{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);color:#67E8F9}
 
-    .divider{text-align:center;color:rgba(255,255,255,0.3);font-size:0.8rem;margin:15px 0;position:relative}
-    .divider::before,.divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:rgba(255,255,255,0.1)}
+    .divider{text-align:center;color:rgba(255,255,255,0.25);font-size:0.75rem;margin:16px 0;position:relative}
+    .divider::before,.divider::after{content:'';position:absolute;top:50%;width:38%;height:1px;background:rgba(255,255,255,0.08)}
     .divider::before{left:0}.divider::after{right:0}
 
-    .features{display:flex;justify-content:center;gap:20px;margin-top:20px}
-    .feature{text-align:center;color:rgba(255,255,255,0.4);font-size:0.72rem}
-    .feature span{display:block;font-size:1.3rem;margin-bottom:3px}
+    .features{display:flex;justify-content:space-around;margin-top:18px}
+    .feat{text-align:center;color:rgba(255,255,255,0.35);font-size:0.7rem}
+    .feat span{display:block;font-size:1.2rem;margin-bottom:3px}
+
+    .steps{
+      background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);
+      border-radius:12px;padding:14px;margin-top:14px;
+      color:rgba(255,255,255,0.6);font-size:0.8rem;line-height:1.8;
+      display:none;
+    }
   </style>
 </head>
 <body>
   <div class="particles" id="particles"></div>
-  <div class="login-card">
-    <div class="logo-area">
+
+  <div class="card">
+    <div class="logo">
       <div class="logo-icon">🌾</div>
       <div class="logo-name">AgriEquip</div>
-      <div class="logo-tagline">Ethiopia's Agricultural Rental Marketplace</div>
+      <div class="logo-tag">Ethiopia's Agricultural Rental Marketplace</div>
     </div>
 
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('login')">Sign In</button>
-      <button class="tab" onclick="switchTab('register')">Register</button>
+      <button class="tab active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+      <button class="tab" id="registerTab" onclick="switchTab('register')">Register</button>
     </div>
 
+    <!-- LOGIN -->
     <div id="loginForm">
-      <div class="form-group">
-        <label class="form-label">Email Address</label>
-        <span class="form-icon">✉️</span>
-        <input type="email" id="loginEmail" class="form-field" placeholder="your@email.com">
+      <div class="fg">
+        <label class="label">Email Address</label>
+        <span class="fi-icon">✉️</span>
+        <input type="email" id="loginEmail" class="fi" placeholder="your@email.com">
       </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <span class="form-icon">🔒</span>
-        <input type="password" id="loginPassword" class="form-field" placeholder="••••••••">
+      <div class="fg">
+        <label class="label">Password</label>
+        <span class="fi-icon">🔒</span>
+        <input type="password" id="loginPassword" class="fi" placeholder="••••••••">
       </div>
-      <button class="submit-btn" onclick="handleLogin()">Sign In →</button>
+      <button class="btn" id="loginBtn" onclick="handleLogin()">Sign In →</button>
+      <p style="text-align:center;margin-top:12px;font-size:0.78rem;color:rgba(255,255,255,0.4);cursor:pointer" onclick="showForgotPassword()">Forgot password?</p>
     </div>
 
+    <!-- REGISTER -->
     <div id="registerForm" style="display:none">
-      <div class="form-group">
-        <label class="form-label">Email Address</label>
-        <span class="form-icon">✉️</span>
-        <input type="email" id="regEmail" class="form-field" placeholder="your@email.com">
+      <div class="fg">
+        <label class="label">Email Address</label>
+        <span class="fi-icon">✉️</span>
+        <input type="email" id="regEmail" class="fi" placeholder="your@email.com">
       </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <span class="form-icon">🔒</span>
-        <input type="password" id="regPassword" class="form-field" placeholder="Min 6 characters">
+      <div class="fg">
+        <label class="label">Password (min 6 characters)</label>
+        <span class="fi-icon">🔒</span>
+        <input type="password" id="regPassword" class="fi" placeholder="Create a strong password">
       </div>
-      <button class="submit-btn" onclick="handleRegister()">Create Account →</button>
+      <div class="fg">
+        <label class="label">Referral Code (optional)</label>
+        <span class="fi-icon">🎁</span>
+        <input type="text" id="regReferral" class="fi" placeholder="AGR-XXXXXX (optional)">
+      </div>
+      <button class="btn" id="registerBtn" onclick="handleRegister()">Create Account →</button>
+      <div class="steps" id="verifySteps">
+        <strong style="color:#86EFAC">✅ Account created! Next steps:</strong><br>
+        1. Check your email inbox<br>
+        2. Click the verification link<br>
+        3. Come back and Sign In<br>
+        <span style="color:rgba(255,255,255,0.4);font-size:0.75rem">Check spam folder if not found</span>
+      </div>
     </div>
 
-    <div class="message" id="message"></div>
+    <div class="msg" id="message"></div>
 
-    <div class="divider">AgriEquip Platform</div>
+    <div class="divider">Secure • Trusted • Ethiopian</div>
     <div class="features">
-      <div class="feature"><span>🚜</span>Rent Equipment</div>
-      <div class="feature"><span>💰</span>Earn Money</div>
-      <div class="feature"><span>🛡️</span>Secure</div>
+      <div class="feat"><span>🚜</span>Rent Equipment</div>
+      <div class="feat"><span>💰</span>Earn Money</div>
+      <div class="feat"><span>💎</span>VIP Plans</div>
+      <div class="feat"><span>🛡️</span>Secure</div>
     </div>
   </div>
 
   <script type="module">
-    import { auth } from './firebase.js';
-    import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import { auth, db } from './firebase.js';
+    import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import { doc, getDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
     // Particles
-    const container = document.getElementById('particles');
-    for(let i=0;i<20;i++){
+    const emojis = ['🌾','🚜','🌱','⚙️','💧','🌿','🏡','🌻','🐄','🌽'];
+    for(let i=0;i<18;i++){
       const p = document.createElement('div');
-      p.className = 'particle';
-      p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${3+Math.random()*3}s;opacity:${Math.random()*0.5}`;
-      container.appendChild(p);
+      p.className='particle';
+      p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      p.style.cssText=`left:${Math.random()*100}%;animation-duration:${5+Math.random()*8}s;animation-delay:${Math.random()*5}s;font-size:${0.7+Math.random()*1.2}rem;opacity:0`;
+      document.getElementById('particles').appendChild(p);
     }
 
+    // Auto redirect if already logged in
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.emailVerified) {
+        window.location.href = 'index.html';
+      }
+    });
+
     window.switchTab = function(tab) {
-      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-      event.target.classList.add('active');
       document.getElementById('loginForm').style.display = tab==='login'?'block':'none';
       document.getElementById('registerForm').style.display = tab==='register'?'block':'none';
+      document.getElementById('loginTab').classList.toggle('active', tab==='login');
+      document.getElementById('registerTab').classList.toggle('active', tab==='register');
       document.getElementById('message').style.display = 'none';
+      document.getElementById('verifySteps').style.display = 'none';
     };
 
     function showMsg(text, type) {
       const el = document.getElementById('message');
       el.textContent = text;
-      el.className = `message ${type}`;
+      el.className = 'msg ' + type;
       el.style.display = 'block';
     }
 
+    function cleanError(msg) {
+      return msg.replace('Firebase:','').replace('(auth/wrong-password).','Wrong password.').replace('(auth/user-not-found).','No account with this email.').replace('(auth/email-already-in-use).','Email already registered.').replace('(auth/weak-password).','Password too weak.').replace('(auth/invalid-email).','Invalid email address.').replace('(auth/invalid-credential).','Wrong email or password.').trim();
+    }
+
     window.handleLogin = async function() {
-      const email = document.getElementById('loginEmail').value;
+      const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
-      if(!email||!password){showMsg('Please fill all fields','error');return;}
+      const btn = document.getElementById('loginBtn');
+      if (!email||!password) { showMsg('Please fill all fields','error'); return; }
+      btn.disabled = true; btn.textContent = 'Signing in...';
       try {
-        await signInWithEmailAndPassword(auth, email, password);
-        showMsg('Welcome back! Redirecting...','success');
-        setTimeout(()=>window.location.href='index.html',1000);
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        if (!cred.user.emailVerified) {
+          showMsg('⚠️ Please verify your email first. Check your inbox and click the verification link.','info');
+          await sendEmailVerification(cred.user);
+          btn.disabled = false; btn.textContent = 'Sign In →';
+          return;
+        }
+        showMsg('✅ Welcome back! Redirecting...','success');
+        setTimeout(()=>window.location.href='index.html', 1000);
       } catch(e) {
-        showMsg(e.message.replace('Firebase:','').replace('(auth/wrong-password).','Wrong password.').replace('(auth/user-not-found).','No account found.'),'error');
+        showMsg(cleanError(e.message),'error');
+        btn.disabled = false; btn.textContent = 'Sign In →';
       }
     };
 
     window.handleRegister = async function() {
-      const email = document.getElementById('regEmail').value;
+      const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value;
-      if(!email||!password){showMsg('Please fill all fields','error');return;}
-      if(password.length<6){showMsg('Password must be at least 6 characters','error');return;}
+      const referral = document.getElementById('regReferral').value.trim().toUpperCase();
+      const btn = document.getElementById('registerBtn');
+      if (!email||!password) { showMsg('Please fill all fields','error'); return; }
+      if (password.length < 6) { showMsg('Password must be at least 6 characters','error'); return; }
+      btn.disabled = true; btn.textContent = 'Creating account...';
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(cred.user);
-        showMsg('Account created! Check your email to verify.','success');
+        if (referral && referral.startsWith('AGR-')) {
+          showMsg('✅ Referral code applied! 50 ETB bonus pending.','success');
+        }
+        document.getElementById('verifySteps').style.display = 'block';
+        showMsg('✅ Account created! Verification email sent.','success');
+        btn.textContent = 'Email sent! Check inbox';
       } catch(e) {
-        showMsg(e.message.replace('Firebase:',''),'error');
+        showMsg(cleanError(e.message),'error');
+        btn.disabled = false; btn.textContent = 'Create Account →';
+      }
+    };
+
+    window.showForgotPassword = async function() {
+      const email = prompt('Enter your email to reset password:');
+      if (!email) return;
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert('✅ Password reset email sent!\nCheck your inbox.');
+      } catch(e) {
+        alert('❌ ' + cleanError(e.message));
       }
     };
   </script>

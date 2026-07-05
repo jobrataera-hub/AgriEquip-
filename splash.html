@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriEquip</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      background:#0F172A;
+      display:flex;align-items:center;justify-content:center;
+      min-height:100vh;overflow:hidden;
+      font-family:'Poppins',sans-serif;
+    }
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes scaleUp{from{transform:scale(0.3);opacity:0}to{transform:scale(1);opacity:1}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+    @keyframes glow{0%,100%{box-shadow:0 0 30px rgba(34,197,94,0.3)}50%{box-shadow:0 0 60px rgba(34,197,94,0.8)}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes progress{from{width:0}to{width:100%}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+    @keyframes particleFloat{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100px) rotate(720deg);opacity:0}}
+
+    .particles{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+    .particle{
+      position:absolute;font-size:1.5rem;
+      animation:particleFloat linear infinite;
+    }
+
+    .splash{text-align:center;z-index:10;position:relative}
+
+    .logo-container{
+      width:120px;height:120px;
+      background:linear-gradient(135deg,#22C55E,#06B6D4);
+      border-radius:30px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:4rem;margin:0 auto 24px;
+      animation:scaleUp 0.8s cubic-bezier(0.34,1.56,0.64,1) both, float 3s ease-in-out 0.8s infinite, glow 2s ease-in-out 0.8s infinite;
+    }
+
+    .app-name{
+      font-size:2.8rem;font-weight:900;
+      background:linear-gradient(135deg,#22C55E,#06B6D4);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+      animation:slideUp 0.6s ease 0.5s both;
+      letter-spacing:-1px;
+    }
+
+    .tagline{
+      color:rgba(255,255,255,0.5);
+      font-size:0.9rem;margin-top:8px;
+      animation:slideUp 0.6s ease 0.7s both;
+    }
+
+    .loading-bar{
+      width:200px;height:3px;
+      background:rgba(255,255,255,0.1);
+      border-radius:3px;margin:30px auto 0;
+      overflow:hidden;
+      animation:fadeIn 0.5s ease 1s both;
+    }
+    .loading-fill{
+      height:100%;
+      background:linear-gradient(90deg,#22C55E,#06B6D4);
+      border-radius:3px;
+      animation:progress 2s ease 1s both;
+    }
+
+    .loading-text{
+      color:rgba(255,255,255,0.3);
+      font-size:0.75rem;margin-top:12px;
+      animation:pulse 1s ease 1s infinite;
+    }
+
+    .version{
+      position:fixed;bottom:20px;
+      color:rgba(255,255,255,0.2);font-size:0.7rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+
+  <div class="splash">
+    <div class="logo-container">🌾</div>
+    <div class="app-name">AgriEquip</div>
+    <div class="tagline">Ethiopia's Agricultural Rental Marketplace</div>
+    <div class="loading-bar"><div class="loading-fill"></div></div>
+    <div class="loading-text">Loading...</div>
+  </div>
+
+  <div class="version">v1.0.0 • Made in Ethiopia</div>
+
+  <script>
+    // Particles
+    const emojis = ['🌾','🚜','🌱','⚙️','💧','🌿','🏡','🌻'];
+    const container = document.getElementById('particles');
+    for(let i=0;i<15;i++){
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      p.style.cssText = `left:${Math.random()*100}%;animation-duration:${4+Math.random()*6}s;animation-delay:${Math.random()*4}s;font-size:${0.8+Math.random()*1.5}rem;opacity:0.3`;
+      container.appendChild(p);
+    }
+    // Redirect after 3 seconds
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 3000);
+  </script>
+</body>
+</html>
