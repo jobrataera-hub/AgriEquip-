@@ -1,9 +1,7 @@
-// Dashboard JavaScript
 import { auth, db } from '../firebase.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
-// Check auth state
 onAuthStateChanged(auth, (user) => {
   if (user) {
     document.getElementById('userEmail').textContent = user.email;
@@ -13,15 +11,12 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Load dashboard stats
 async function loadDashboardData(userId) {
   try {
     const rentalsRef = collection(db, 'rentals');
     const q = query(rentalsRef, where('renterId', '==', userId));
     const snapshot = await getDocs(q);
-    
     document.getElementById('totalBookings').textContent = snapshot.size;
-    
     let active = 0;
     snapshot.forEach(doc => {
       if (doc.data().status === 'active') active++;
