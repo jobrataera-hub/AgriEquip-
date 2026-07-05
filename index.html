@@ -1,250 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriEquip - Dashboard</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriEquip</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="logo">
-                <h2>AgriEquip</h2>
-            </div>
-            <nav class="nav-menu">
-                <a href="#" class="nav-link active" data-section="home">
-                    <span class="icon">🏠</span> Home
-                </a>
-                <a href="#" class="nav-link" data-section="browse">
-                    <span class="icon">🔍</span> Browse Equipment
-                </a>
-                <a href="#" class="nav-link" data-section="bookings">
-                    <span class="icon">📅</span> My Bookings
-                </a>
-                <a href="#" class="nav-link" data-section="listings">
-                    <span class="icon">📦</span> My Listings
-                </a>
-                <a href="#" class="nav-link" data-section="profile">
-                    <span class="icon">👤</span> Profile
-                </a>
-                <a href="#" class="nav-link" data-section="earnings">
-                    <span class="icon">💰</span> Earnings
-                </a>
-            </nav>
-            <button class="logout-btn">Logout</button>
-        </aside>
+  <button id="menuToggle" style="position:fixed;top:15px;left:15px;z-index:200;background:#22C55E;border:none;color:white;font-size:1.5rem;padding:8px 12px;border-radius:8px;cursor:pointer">☰</button>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="dashboard-header">
-                <h1 id="pageTitle">Welcome to AgriEquip</h1>
-                <div class="user-info">
-                    <span id="userEmail"></span>
-                    <img id="userPhoto" src="https://via.placeholder.com/40" alt="Profile" class="profile-pic">
-                </div>
-            </header>
+  <aside class="sidebar">
+    <div class="logo"><h2>AgriEquip</h2></div>
+    <nav class="nav-menu">
+      <a href="#" class="nav-link active" data-section="home"><span class="icon">🏠</span> Home</a>
+      <a href="#" class="nav-link" data-section="browse"><span class="icon">🔍</span> Browse Equipment</a>
+      <a href="#" class="nav-link" data-section="bookings"><span class="icon">📅</span> My Bookings</a>
+      <a href="#" class="nav-link" data-section="listings"><span class="icon">📦</span> My Listings</a>
+      <a href="#" class="nav-link" data-section="profile"><span class="icon">👤</span> Profile</a>
+      <a href="#" class="nav-link" data-section="earnings"><span class="icon">💰</span> Earnings</a>
+    </nav>
+    <button class="logout-btn">Logout</button>
+  </aside>
 
-            <!-- HOME SECTION -->
-            <section class="section active" id="home-section">
-                <div class="welcome-card">
-                    <h2>Welcome to AgriEquip</h2>
-                    <p>Your trusted platform for agricultural equipment rental</p>
-                </div>
+  <main class="main-content">
+    <header class="dashboard-header">
+      <h1 id="pageTitle">Welcome to AgriEquip</h1>
+      <div class="user-info">
+        <span id="userEmail"></span>
+      </div>
+    </header>
 
-                <div class="quick-stats">
-                    <div class="stat-card">
-                        <h3 id="totalBookings">0</h3>
-                        <p>Total Bookings</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="activeBookings">0</h3>
-                        <p>Active Bookings</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="earnings">0 ETB</h3>
-                        <p>Total Earnings</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3 id="equipment">0</h3>
-                        <p>Equipment Listed</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- BROWSE EQUIPMENT SECTION -->
-            <section class="section" id="browse-section">
-                <div class="browse-header">
-                    <h2>Browse Equipment</h2>
-                    <div class="search-filters">
-                        <input type="text" id="searchInput" placeholder="Search equipment..." class="search-box">
-                        <select id="categoryFilter" class="filter-select">
-                            <option value="">All Categories</option>
-                            <option value="tractor">Tractor</option>
-                            <option value="pump">Water Pump</option>
-                            <option value="thresher">Thresher</option>
-                            <option value="plow">Plow</option>
-                        </select>
-                        <input type="text" id="locationFilter" placeholder="Filter by location..." class="search-box">
-                    </div>
-                </div>
-
-                <div id="equipmentGrid" class="equipment-grid">
-                    <!-- Equipment cards will be loaded here -->
-                </div>
-            </section>
-
-            <!-- BOOKINGS SECTION -->
-            <section class="section" id="bookings-section">
-                <h2>My Bookings</h2>
-                <div class="bookings-filter">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="pending">Pending</button>
-                    <button class="filter-btn" data-filter="confirmed">Confirmed</button>
-                    <button class="filter-btn" data-filter="active">Active</button>
-                    <button class="filter-btn" data-filter="completed">Completed</button>
-                </div>
-                <div id="bookingsList" class="bookings-list">
-                    <!-- Bookings will be loaded here -->
-                </div>
-            </section>
-
-            <!-- LISTINGS SECTION -->
-            <section class="section" id="listings-section">
-                <div class="listings-header">
-                    <h2>My Equipment Listings</h2>
-                    <button id="addEquipmentBtn" class="btn btn-primary">+ Add Equipment</button>
-                </div>
-                <div id="listingsList" class="listings-list">
-                    <!-- Owner's equipment will be loaded here -->
-                </div>
-            </section>
-
-            <!-- PROFILE SECTION -->
-            <section class="section" id="profile-section">
-                <div class="profile-container">
-                    <div class="profile-header">
-                        <img id="profilePhoto" src="https://via.placeholder.com/100" alt="Profile" class="large-profile-pic">
-                        <div class="profile-info">
-                            <h2 id="profileName">User Name</h2>
-                            <p id="profileEmail">user@example.com</p>
-                            <span id="profileRole" class="badge">Renter</span>
-                        </div>
-                    </div>
-
-                    <form id="profileForm" class="profile-form">
-                        <div class="form-group">
-                            <label for="fullName">Full Name</label>
-                            <input type="text" id="fullName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phoneNumber">Phone Number</label>
-                            <input type="tel" id="phoneNumber" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Address</label>
-                            <input type="text" id="address">
-                        </div>
-                        <div class="form-group">
-                            <label for="bio">Bio</label>
-                            <textarea id="bio" rows="4"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Update Profile</button>
-                    </form>
-                </div>
-            </section>
-
-            <!-- EARNINGS SECTION -->
-            <section class="section" id="earnings-section">
-                <h2>Earnings & Transactions</h2>
-                <div class="earnings-summary">
-                    <div class="earning-card">
-                        <h3>Total Earnings</h3>
-                        <p id="totalEarnings" class="big-number">0 ETB</p>
-                    </div>
-                    <div class="earning-card">
-                        <h3>Pending Payouts</h3>
-                        <p id="pendingPayouts" class="big-number">0 ETB</p>
-                    </div>
-                </div>
-                <div class="transactions-list" id="transactionsList">
-                    <!-- Transactions will be loaded here -->
-                </div>
-            </section>
-        </main>
+    <div id="home" class="section">
+      <div class="welcome-card">
+        <h2>Welcome to AgriEquip</h2>
+        <p>Your trusted platform for agricultural equipment rental</p>
+      </div>
+      <div class="quick-stats">
+        <div class="stat-card"><h3 id="totalBookings">0</h3><p>Total Bookings</p></div>
+        <div class="stat-card"><h3 id="activeBookings">0</h3><p>Active Bookings</p></div>
+        <div class="stat-card"><h3 id="earnings">0 ETB</h3><p>Total Earnings</p></div>
+      </div>
     </div>
 
-    <!-- Add Equipment Modal -->
-    <div id="addEquipmentModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Add New Equipment</h2>
-            <form id="addEquipmentForm" class="add-equipment-form">
-                <div class="form-group">
-                    <label for="equipmentName">Equipment Name</label>
-                    <input type="text" id="equipmentName" required>
-                </div>
-                <div class="form-group">
-                    <label for="category">Category</label>
-                    <select id="equipmentCategory" required>
-                        <option value="">Select Category</option>
-                        <option value="tractor">Tractor</option>
-                        <option value="pump">Water Pump</option>
-                        <option value="thresher">Thresher</option>
-                        <option value="plow">Plow</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea id="equipmentDescription" rows="4" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="pricePerDay">Price per Day (ETB)</label>
-                    <input type="number" id="pricePerDay" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label for="location">Location</label>
-                    <input type="text" id="equipmentLocation" required>
-                </div>
-                <div class="form-group">
-                    <label for="photos">Photos</label>
-                    <input type="file" id="equipmentPhotos" multiple accept="image/*">
-                </div>
-                <button type="submit" class="btn btn-primary">Add Equipment</button>
-            </form>
-        </div>
+    <div id="browse" class="section" style="display:none">
+      <h2>Browse Equipment</h2>
+      <p style="margin-top:20px;color:#64748B">Equipment listings will appear here.</p>
     </div>
 
-    <!-- Booking Modal -->
-    <div id="bookingModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Book Equipment</h2>
-            <form id="bookingForm" class="booking-form">
-                <div class="form-group">
-                    <label for="startDate">Start Date</label>
-                    <input type="date" id="startDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="endDate">End Date</label>
-                    <input type="date" id="endDate" required>
-                </div>
-                <div class="form-group">
-                    <label>Total Price</label>
-                    <p id="totalPriceDisplay" class="big-number">0 ETB</p>
-                </div>
-                <div class="form-group">
-                    <label for="notes">Special Notes</label>
-                    <textarea id="bookingNotes" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Confirm Booking</button>
-            </form>
-        </div>
+    <div id="bookings" class="section" style="display:none">
+      <h2>My Bookings</h2>
+      <p style="margin-top:20px;color:#64748B">Your bookings will appear here.</p>
     </div>
 
-    <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/dashboard.js"></script>
+    <div id="listings" class="section" style="display:none">
+      <h2>My Listings</h2>
+      <p style="margin-top:20px;color:#64748B">Your equipment listings will appear here.</p>
+    </div>
+
+    <div id="profile" class="section" style="display:none">
+      <h2>Profile</h2>
+      <p style="margin-top:20px;color:#64748B">Your profile information will appear here.</p>
+    </div>
+
+    <div id="earnings" class="section" style="display:none">
+      <h2>Earnings</h2>
+      <p style="margin-top:20px;color:#64748B">Your earnings will appear here.</p>
+    </div>
+  </main>
+
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
