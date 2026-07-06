@@ -29,7 +29,7 @@ if (loginBtn) {
     const password = passwordInput.value;
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = 'index.html';
+      window.location.href = 'dashboard.html';
     } catch (error) {
       message.style.color = 'red';
       message.textContent = error.message;
