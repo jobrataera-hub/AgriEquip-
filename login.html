@@ -3,115 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#22C55E">
+  <link rel="manifest" href="manifest.json">
   <title>AgriEquip — Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
+    :root{--p:#22C55E;--a:#06B6D4;--d:#0F172A}
     body{
       font-family:'Poppins',sans-serif;min-height:100vh;
-      background:linear-gradient(135deg,#0F172A 0%,#1a3a2a 50%,#0f2d3d 100%);
+      background:linear-gradient(145deg,#0a1628 0%,#0d2818 40%,#0a1628 100%);
       display:flex;align-items:center;justify-content:center;
-      padding:20px;position:relative;overflow:hidden;
+      padding:16px;position:relative;overflow-x:hidden;
     }
-    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
     @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)}50%{box-shadow:0 0 0 20px rgba(34,197,94,0)}}
-    @keyframes particleFloat{0%{transform:translateY(100vh);opacity:0}10%{opacity:0.4}90%{opacity:0.4}100%{transform:translateY(-100px);opacity:0}}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.5)}70%{box-shadow:0 0 0 18px rgba(34,197,94,0)}}
+    @keyframes particleUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:0.5}90%{opacity:0.3}100%{transform:translateY(-80px) scale(1);opacity:0}}
     @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 
-    .particles{position:fixed;inset:0;pointer-events:none;overflow:hidden}
-    .particle{position:absolute;animation:particleFloat linear infinite}
+    .particles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+    .p{position:absolute;border-radius:50%;background:rgba(34,197,94,0.15);animation:particleUp linear infinite}
 
     .card{
-      background:rgba(255,255,255,0.05);
-      backdrop-filter:blur(20px);
-      border:1px solid rgba(255,255,255,0.1);
-      border-radius:24px;padding:35px 28px;
+      background:rgba(255,255,255,0.04);
+      backdrop-filter:blur(24px);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:24px;padding:30px 24px;
       width:100%;max-width:400px;
       position:relative;z-index:1;
-      animation:fadeUp 0.6s ease;
-      box-shadow:0 20px 60px rgba(0,0,0,0.5);
+      animation:fadeUp 0.65s ease;
+      box-shadow:0 24px 64px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
-    .logo{text-align:center;margin-bottom:28px}
-    .logo-icon{
-      width:72px;height:72px;
+    .logo{text-align:center;margin-bottom:24px}
+    .logo-box{
+      width:68px;height:68px;margin:0 auto 12px;
       background:linear-gradient(135deg,#22C55E,#06B6D4);
-      border-radius:20px;
+      border-radius:18px;
       display:flex;align-items:center;justify-content:center;
-      font-size:2.8rem;margin:0 auto 14px;
-      animation:float 3s ease-in-out infinite, pulse 2.5s infinite;
+      animation:float 3.5s ease-in-out infinite, pulse 2.5s ease-in-out infinite;
     }
     .logo-name{
-      font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;
+      font-family:'Fraunces',serif;font-size:1.9rem;font-weight:900;
       background:linear-gradient(135deg,#22C55E,#06B6D4);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     }
-    .logo-tag{color:rgba(255,255,255,0.45);font-size:0.78rem;margin-top:4px}
+    .logo-tag{color:rgba(255,255,255,0.35);font-size:0.73rem;margin-top:3px;letter-spacing:0.5px}
 
     .tabs{
-      display:flex;background:rgba(255,255,255,0.06);
-      border-radius:12px;padding:4px;margin-bottom:22px;gap:4px;
+      display:flex;background:rgba(255,255,255,0.05);
+      border-radius:12px;padding:3px;margin-bottom:20px;gap:3px;
     }
     .tab{
-      flex:1;padding:10px;border:none;background:none;
-      color:rgba(255,255,255,0.45);cursor:pointer;
-      font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:600;
+      flex:1;padding:9px;border:none;background:none;
+      color:rgba(255,255,255,0.4);cursor:pointer;
+      font-family:'Poppins',sans-serif;font-size:0.82rem;font-weight:600;
       border-radius:10px;transition:all 0.3s;
     }
-    .tab.active{background:var(--p,#22C55E);color:white;box-shadow:0 4px 15px rgba(34,197,94,0.35)}
+    .tab.active{background:#22C55E;color:white;box-shadow:0 4px 12px rgba(34,197,94,0.35)}
 
-    .fg{margin-bottom:14px;position:relative}
-    .label{color:rgba(255,255,255,0.65);font-size:0.78rem;font-weight:500;margin-bottom:5px;display:block}
+    .fg{margin-bottom:12px;position:relative}
+    .lbl{color:rgba(255,255,255,0.6);font-size:0.75rem;font-weight:500;margin-bottom:5px;display:block}
+    .ico{position:absolute;left:12px;font-size:0.85rem;pointer-events:none}
+    .ico-right{
+      position:absolute;right:12px;
+      background:none;border:none;cursor:pointer;
+      font-size:1rem;padding:0;
+      transition:all 0.2s;
+    }
     .fi{
-      width:100%;padding:12px 14px 12px 40px;
-      background:rgba(255,255,255,0.07);
-      border:1.5px solid rgba(255,255,255,0.1);
-      border-radius:12px;color:white;
-      font-size:0.88rem;font-family:'Poppins',sans-serif;
+      width:100%;padding:11px 14px 11px 36px;
+      background:rgba(255,255,255,0.06);
+      border:1.5px solid rgba(255,255,255,0.09);
+      border-radius:11px;color:white;
+      font-size:0.85rem;font-family:'Poppins',sans-serif;
       outline:none;transition:all 0.3s;
     }
-    .fi::placeholder{color:rgba(255,255,255,0.25)}
-    .fi:focus{border-color:#22C55E;background:rgba(34,197,94,0.08);box-shadow:0 0 0 4px rgba(34,197,94,0.1)}
-    .fi-icon{position:absolute;left:13px;top:32px;font-size:0.95rem}
+    .fi.has-right{padding-right:40px}
+    .fi::placeholder{color:rgba(255,255,255,0.2)}
+    .fi:focus{border-color:#22C55E;background:rgba(34,197,94,0.07);box-shadow:0 0 0 3px rgba(34,197,94,0.1)}
+    /* Dynamic icon top positioning */
+    .fg .ico{top:50%;transform:translateY(-50%)}
+    .fg:has(.lbl) .ico{top:calc(50% + 10px)}
 
     .btn{
-      width:100%;padding:14px;margin-top:6px;
+      width:100%;padding:13px;margin-top:4px;
       background:linear-gradient(135deg,#22C55E,#16A34A);
       border:none;border-radius:12px;
-      color:white;font-size:0.95rem;font-weight:700;
+      color:white;font-size:0.9rem;font-weight:700;
       font-family:'Poppins',sans-serif;cursor:pointer;
       transition:all 0.3s;
-      box-shadow:0 4px 20px rgba(34,197,94,0.4);
-      position:relative;overflow:hidden;
+      box-shadow:0 4px 18px rgba(34,197,94,0.4);
     }
-    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(34,197,94,0.5)}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(34,197,94,0.5)}
     .btn:active{transform:translateY(0)}
-    .btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+    .btn:disabled{opacity:0.55;cursor:not-allowed;transform:none}
 
     .msg{
-      padding:12px;border-radius:10px;
-      font-size:0.82rem;text-align:center;
-      margin-top:12px;display:none;animation:fadeUp 0.3s ease;
-      line-height:1.5;
+      padding:11px 14px;border-radius:10px;
+      font-size:0.8rem;text-align:center;
+      margin-top:10px;display:none;
+      animation:fadeUp 0.3s ease;line-height:1.5;
     }
-    .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#FCA5A5}
-    .msg.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);color:#86EFAC}
-    .msg.info{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);color:#67E8F9}
-
-    .divider{text-align:center;color:rgba(255,255,255,0.25);font-size:0.75rem;margin:16px 0;position:relative}
-    .divider::before,.divider::after{content:'';position:absolute;top:50%;width:38%;height:1px;background:rgba(255,255,255,0.08)}
-    .divider::before{left:0}.divider::after{right:0}
-
-    .features{display:flex;justify-content:space-around;margin-top:18px}
-    .feat{text-align:center;color:rgba(255,255,255,0.35);font-size:0.7rem}
-    .feat span{display:block;font-size:1.2rem;margin-bottom:3px}
+    .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5}
+    .msg.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC}
+    .msg.info{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);color:#67E8F9}
 
     .steps{
-      background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);
-      border-radius:12px;padding:14px;margin-top:14px;
-      color:rgba(255,255,255,0.6);font-size:0.8rem;line-height:1.8;
-      display:none;
+      background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.15);
+      border-radius:11px;padding:12px 14px;margin-top:10px;
+      color:rgba(255,255,255,0.55);font-size:0.78rem;line-height:1.9;display:none;
+    }
+
+    .divider{text-align:center;color:rgba(255,255,255,0.2);font-size:0.72rem;margin:14px 0;position:relative}
+    .divider::before,.divider::after{content:'';position:absolute;top:50%;width:36%;height:1px;background:rgba(255,255,255,0.07)}
+    .divider::before{left:0}.divider::after{right:0}
+
+    .feats{display:flex;justify-content:space-around;margin-top:14px}
+    .feat{text-align:center;color:rgba(255,255,255,0.3);font-size:0.68rem}
+    .feat span{display:block;font-size:1.1rem;margin-bottom:3px}
+
+    .forgot{
+      text-align:center;margin-top:10px;
+      color:rgba(255,255,255,0.3);font-size:0.75rem;cursor:pointer;
+      transition:color 0.2s;
+    }
+    .forgot:hover{color:#22C55E}
+
+    .section-title{
+      font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;
+      color:rgba(255,255,255,0.25);margin:14px 0 8px;
+      display:flex;align-items:center;gap:6px;
+    }
+    .section-title::before,.section-title::after{
+      content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);
     }
   </style>
 </head>
@@ -120,9 +146,17 @@
 
   <div class="card">
     <div class="logo">
-      <div class="logo-icon">🌾</div>
+      <div class="logo-box">
+        <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+          <rect width="42" height="42" rx="12" fill="rgba(0,0,0,0.2)"/>
+          <path d="M8 30 L15 22 L20 27 L28 16 L35 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="33" cy="12" r="4" fill="white" opacity="0.8"/>
+          <path d="M8 33 L35 33" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+          <path d="M8 37 L28 37" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.2"/>
+        </svg>
+      </div>
       <div class="logo-name">AgriEquip</div>
-      <div class="logo-tag">Ethiopia's Agricultural Rental Marketplace</div>
+      <div class="logo-tag">🇪🇹 Agricultural Rental Marketplace</div>
     </div>
 
     <div class="tabs">
@@ -130,76 +164,104 @@
       <button class="tab" id="registerTab" onclick="switchTab('register')">Register</button>
     </div>
 
-    <!-- LOGIN -->
+    <!-- LOGIN FORM -->
     <div id="loginForm">
       <div class="fg">
-        <label class="label">Email Address</label>
-        <span class="fi-icon">✉️</span>
+        <label class="lbl">Email Address</label>
+        <span class="ico" style="top:calc(50% + 10px)">✉️</span>
         <input type="email" id="loginEmail" class="fi" placeholder="your@email.com">
       </div>
       <div class="fg">
-        <label class="label">Password</label>
-        <span class="fi-icon">🔒</span>
-        <input type="password" id="loginPassword" class="fi" placeholder="••••••••">
+        <label class="lbl">Password</label>
+        <span class="ico" style="top:calc(50% + 10px)">🔒</span>
+        <input type="password" id="loginPassword" class="fi has-right" placeholder="••••••••">
+        <button type="button" class="ico-right" style="top:calc(50% + 10px)" onclick="togglePwd('loginPassword',this)">🙈</button>
       </div>
       <button class="btn" id="loginBtn" onclick="handleLogin()">Sign In →</button>
-      <p style="text-align:center;margin-top:12px;font-size:0.78rem;color:rgba(255,255,255,0.4);cursor:pointer" onclick="showForgotPassword()">Forgot password?</p>
+      <p class="forgot" onclick="showForgotPassword()">Forgot password? Reset it →</p>
     </div>
 
-    <!-- REGISTER -->
+    <!-- REGISTER FORM -->
     <div id="registerForm" style="display:none">
+      <div class="section-title">Personal Information</div>
       <div class="fg">
-        <label class="label">Email Address</label>
-        <span class="fi-icon">✉️</span>
+        <label class="lbl">Full Name *</label>
+        <span class="ico" style="top:calc(50% + 10px)">👤</span>
+        <input type="text" id="regFullName" class="fi" placeholder="e.g. Abebe Kebede">
+      </div>
+      <div class="fg">
+        <label class="lbl">Father's Name *</label>
+        <span class="ico" style="top:calc(50% + 10px)">👨</span>
+        <input type="text" id="regFatherName" class="fi" placeholder="e.g. Kebede Tadesse">
+      </div>
+
+      <div class="section-title">Account Details</div>
+      <div class="fg">
+        <label class="lbl">Email Address *</label>
+        <span class="ico" style="top:calc(50% + 10px)">✉️</span>
         <input type="email" id="regEmail" class="fi" placeholder="your@email.com">
       </div>
       <div class="fg">
-        <label class="label">Password (min 6 characters)</label>
-        <span class="fi-icon">🔒</span>
-        <input type="password" id="regPassword" class="fi" placeholder="Create a strong password">
+        <label class="lbl">Password * (min 6 chars)</label>
+        <span class="ico" style="top:calc(50% + 10px)">🔒</span>
+        <input type="password" id="regPassword" class="fi has-right" placeholder="Create a strong password">
+        <button type="button" class="ico-right" style="top:calc(50% + 10px)" onclick="togglePwd('regPassword',this)">🙈</button>
       </div>
       <div class="fg">
-        <label class="label">Referral Code (optional)</label>
-        <span class="fi-icon">🎁</span>
-        <input type="text" id="regReferral" class="fi" placeholder="AGR-XXXXXX (optional)">
+        <label class="lbl">Confirm Password *</label>
+        <span class="ico" style="top:calc(50% + 10px)">🔐</span>
+        <input type="password" id="regConfirm" class="fi has-right" placeholder="Repeat your password">
+        <button type="button" class="ico-right" style="top:calc(50% + 10px)" onclick="togglePwd('regConfirm',this)">🙈</button>
       </div>
+
+      <div class="section-title">Optional</div>
+      <div class="fg">
+        <label class="lbl">Referral Code</label>
+        <span class="ico" style="top:calc(50% + 10px)">🎁</span>
+        <input type="text" id="regReferral" class="fi" placeholder="AGR-XXXXXX (if someone invited you)">
+      </div>
+
       <button class="btn" id="registerBtn" onclick="handleRegister()">Create Account →</button>
       <div class="steps" id="verifySteps">
-        <strong style="color:#86EFAC">✅ Account created! Next steps:</strong><br>
-        1. Check your email inbox<br>
-        2. Click the verification link<br>
-        3. Come back and Sign In<br>
-        <span style="color:rgba(255,255,255,0.4);font-size:0.75rem">Check spam folder if not found</span>
+        <strong style="color:#86EFAC">✅ Account created successfully!</strong><br><br>
+        <strong>Next steps:</strong><br>
+        1️⃣ Check your email inbox<br>
+        2️⃣ Click the verification link<br>
+        3️⃣ Return here and Sign In<br><br>
+        <span style="color:rgba(255,255,255,0.35);font-size:0.72rem">💡 Check spam/junk if not found</span>
       </div>
     </div>
 
     <div class="msg" id="message"></div>
 
     <div class="divider">Secure • Trusted • Ethiopian</div>
-    <div class="features">
-      <div class="feat"><span>🚜</span>Rent Equipment</div>
-      <div class="feat"><span>💰</span>Earn Money</div>
-      <div class="feat"><span>💎</span>VIP Plans</div>
-      <div class="feat"><span>🛡️</span>Secure</div>
+    <div class="feats">
+      <div class="feat"><span>🚜</span>Rent</div>
+      <div class="feat"><span>💰</span>Earn</div>
+      <div class="feat"><span>💎</span>VIP</div>
+      <div class="feat"><span>🤖</span>AI</div>
+      <div class="feat"><span>🛡️</span>Safe</div>
     </div>
   </div>
 
   <script type="module">
     import { auth, db } from './firebase.js';
-    import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-    import { doc, getDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+    import {
+      signInWithEmailAndPassword, createUserWithEmailAndPassword,
+      sendEmailVerification, sendPasswordResetEmail, onAuthStateChanged
+    } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
     // Particles
-    const emojis = ['🌾','🚜','🌱','⚙️','💧','🌿','🏡','🌻','🐄','🌽'];
-    for(let i=0;i<18;i++){
-      const p = document.createElement('div');
-      p.className='particle';
-      p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-      p.style.cssText=`left:${Math.random()*100}%;animation-duration:${5+Math.random()*8}s;animation-delay:${Math.random()*5}s;font-size:${0.7+Math.random()*1.2}rem;opacity:0`;
-      document.getElementById('particles').appendChild(p);
+    for(let i=0;i<16;i++){
+      const el=document.createElement('div');
+      el.className='p';
+      const s=4+Math.random()*10;
+      el.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${6+Math.random()*8}s;animation-delay:${Math.random()*6}s`;
+      document.getElementById('particles').appendChild(el);
     }
 
-    // Auto redirect if already logged in
+    // Auto redirect if logged in
     onAuthStateChanged(auth, (user) => {
       if (user && user.emailVerified) {
         window.location.href = 'index.html';
@@ -212,73 +274,133 @@
       document.getElementById('loginTab').classList.toggle('active', tab==='login');
       document.getElementById('registerTab').classList.toggle('active', tab==='register');
       document.getElementById('message').style.display = 'none';
-      document.getElementById('verifySteps').style.display = 'none';
+      const steps = document.getElementById('verifySteps');
+      if (steps) steps.style.display = 'none';
+    };
+
+    window.togglePwd = function(id, btn) {
+      const input = document.getElementById(id);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🐵';
+      } else {
+        input.type = 'password';
+        btn.textContent = '🙈';
+      }
     };
 
     function showMsg(text, type) {
       const el = document.getElementById('message');
-      el.textContent = text;
+      el.innerHTML = text;
       el.className = 'msg ' + type;
       el.style.display = 'block';
     }
 
-    function cleanError(msg) {
-      return msg.replace('Firebase:','').replace('(auth/wrong-password).','Wrong password.').replace('(auth/user-not-found).','No account with this email.').replace('(auth/email-already-in-use).','Email already registered.').replace('(auth/weak-password).','Password too weak.').replace('(auth/invalid-email).','Invalid email address.').replace('(auth/invalid-credential).','Wrong email or password.').trim();
+    function cleanErr(msg) {
+      if (msg.includes('wrong-password') || msg.includes('invalid-credential')) return '❌ Wrong email or password.';
+      if (msg.includes('user-not-found')) return '❌ No account found with this email.';
+      if (msg.includes('email-already-in-use')) return '❌ Email already registered. Try signing in.';
+      if (msg.includes('weak-password')) return '❌ Password is too weak. Use at least 6 characters.';
+      if (msg.includes('invalid-email')) return '❌ Invalid email address.';
+      if (msg.includes('too-many-requests')) return '❌ Too many attempts. Please wait a few minutes.';
+      return '❌ ' + msg.replace('Firebase: ','').split('(')[0];
     }
 
     window.handleLogin = async function() {
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
       const btn = document.getElementById('loginBtn');
-      if (!email||!password) { showMsg('Please fill all fields','error'); return; }
+      if (!email || !password) { showMsg('⚠️ Please fill all fields.', 'error'); return; }
       btn.disabled = true; btn.textContent = 'Signing in...';
       try {
         const cred = await signInWithEmailAndPassword(auth, email, password);
         if (!cred.user.emailVerified) {
-          showMsg('⚠️ Please verify your email first. Check your inbox and click the verification link.','info');
+          showMsg('⚠️ Email not verified. Check your inbox and click the verification link.<br><br><small style="opacity:0.7">Click below to resend verification email.</small>', 'info');
           await sendEmailVerification(cred.user);
           btn.disabled = false; btn.textContent = 'Sign In →';
           return;
         }
-        showMsg('✅ Welcome back! Redirecting...','success');
-        setTimeout(()=>window.location.href='index.html', 1000);
+        showMsg('✅ Welcome back! Redirecting...', 'success');
+        setTimeout(() => window.location.href = 'index.html', 900);
       } catch(e) {
-        showMsg(cleanError(e.message),'error');
+        showMsg(cleanErr(e.message), 'error');
         btn.disabled = false; btn.textContent = 'Sign In →';
       }
     };
 
     window.handleRegister = async function() {
+      const fullName = document.getElementById('regFullName').value.trim();
+      const fatherName = document.getElementById('regFatherName').value.trim();
       const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value;
+      const confirm = document.getElementById('regConfirm').value;
       const referral = document.getElementById('regReferral').value.trim().toUpperCase();
       const btn = document.getElementById('registerBtn');
-      if (!email||!password) { showMsg('Please fill all fields','error'); return; }
-      if (password.length < 6) { showMsg('Password must be at least 6 characters','error'); return; }
+
+      if (!fullName || !fatherName || !email || !password) {
+        showMsg('⚠️ Please fill all required fields.', 'error'); return;
+      }
+      if (password.length < 6) {
+        showMsg('⚠️ Password must be at least 6 characters.', 'error'); return;
+      }
+      if (password !== confirm) {
+        showMsg('⚠️ Passwords do not match.', 'error'); return;
+      }
+
       btn.disabled = true; btn.textContent = 'Creating account...';
+
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(cred.user);
+
+        // Generate unique referral code
+        const myReferralCode = 'AGR-' + cred.user.uid.substring(0, 6).toUpperCase();
+
+        // Save to Firestore
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          email,
+          fullName,
+          fatherName,
+          displayName: fullName,
+          vipLevel: 'free',
+          walletBalance: 0,
+          referralCode: myReferralCode,
+          usedReferral: referral || null,
+          referralCount: 0,
+          referralEarnings: 0,
+          createdAt: new Date().toISOString()
+        });
+
+        // Credit referrer if valid code
         if (referral && referral.startsWith('AGR-')) {
-          showMsg('✅ Referral code applied! 50 ETB bonus pending.','success');
+          const q = query(collection(db, 'users'), where('referralCode', '==', referral));
+          const snap = await getDocs(q);
+          if (!snap.empty) {
+            const referrerDoc = snap.docs[0];
+            await updateDoc(doc(db, 'users', referrerDoc.id), {
+              referralCount: increment(1),
+              referralEarnings: increment(50)
+            });
+          }
         }
+
         document.getElementById('verifySteps').style.display = 'block';
-        showMsg('✅ Account created! Verification email sent.','success');
-        btn.textContent = 'Email sent! Check inbox';
+        showMsg('✅ Account created! Verification email sent to ' + email, 'success');
+        btn.textContent = '✉️ Check your email!';
       } catch(e) {
-        showMsg(cleanError(e.message),'error');
+        showMsg(cleanErr(e.message), 'error');
         btn.disabled = false; btn.textContent = 'Create Account →';
       }
     };
 
     window.showForgotPassword = async function() {
-      const email = prompt('Enter your email to reset password:');
+      const email = prompt('Enter your registered email address:');
       if (!email) return;
       try {
         await sendPasswordResetEmail(auth, email);
         alert('✅ Password reset email sent!\nCheck your inbox.');
       } catch(e) {
-        alert('❌ ' + cleanError(e.message));
+        alert(cleanErr(e.message));
       }
     };
   </script>

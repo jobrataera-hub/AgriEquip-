@@ -1,0 +1,17 @@
+{
+  "name": "AgriEquip",
+  "short_name": "AgriEquip",
+  "description": "Ethiopia's Agricultural Equipment Rental Marketplace",
+  "start_url": "/AgriEquip-/splash.html",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#22C55E",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%2322C55E'/><text y='140' font-size='120' text-anchor='middle' x='96'>🌾</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
