@@ -1,4 +1,3 @@
-// Teff AI - AgriEquip's Intelligent Assistant
 // Named after Ethiopia's ancient grain 🌾
 
 export function initTeffAI() {
