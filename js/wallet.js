@@ -3,44 +3,43 @@ import { doc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } fro
 
 export async function getWalletBalance(userId) {
   try {
-    const userDoc = await getDoc(doc(db, 'users', userId));
-    return userDoc.exists() ? (userDoc.data().walletBalance || 0) : 0;
-  } catch (e) { return 0; }
+    const snap = await getDoc(doc(db, 'users', userId));
+    return snap.exists() ? (snap.data().walletBalance || 0) : 0;
+  } catch(e) { return 0; }
 }
 
-export async function requestDeposit(userId, amount, bankName = 'AgriEquip', reference = '') {
+export async function requestDeposit(userId, amount, bankName, accountRef) {
   try {
     await addDoc(collection(db, 'transactions'), {
       userId, type: 'deposit',
       amount: Number(amount),
       status: 'pending',
-      bankName, reference,
+      bankName, accountRef,
       createdAt: new Date().toISOString()
     });
-    return { success: true, message: 'Deposit request submitted.' };
-  } catch (e) { return { success: false, message: e.message }; }
+    return { success: true };
+  } catch(e) { return { success: false, message: e.message }; }
 }
 
-export async function requestWithdrawal(userId, amount, bankName = 'AgriEquip', accountNo = '') {
+export async function requestWithdrawal(userId, amount, bankName, accountNumber) {
   try {
     const balance = await getWalletBalance(userId);
-    if (balance < 200) return { success: false, message: 'Minimum withdrawal is 200 ETB.' };
-    if (balance < amount) return { success: false, message: 'Insufficient balance.' };
+    if (Number(amount) < 200) return { success: false, message: 'Minimum withdrawal is 200 ETB.' };
+    if (Number(amount) > balance) return { success: false, message: `Insufficient balance. You have ${balance} ETB.` };
     await addDoc(collection(db, 'transactions'), {
       userId, type: 'withdrawal',
       amount: Number(amount),
       status: 'pending',
-      bankName, accountNo,
+      bankName, accountNumber,
       createdAt: new Date().toISOString()
     });
-    return { success: true, message: 'Withdrawal request submitted.' };
-  } catch (e) { return { success: false, message: e.message }; }
+    return { success: true };
+  } catch(e) { return { success: false, message: e.message }; }
 }
 
 export async function getTransactionHistory(userId) {
   try {
-    const q = query(collection(db, 'transactions'), where('userId', '==', userId));
-    const snap = await getDocs(q);
+    const snap = await getDocs(query(collection(db, 'transactions'), where('userId', '==', userId)));
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch (e) { return []; }
+  } catch(e) { return []; }
 }

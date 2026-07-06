@@ -3,6 +3,7 @@ import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/
 import { doc, getDoc, setDoc, collection, addDoc, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 import { VIP_PLANS, getUserVIP, upgradeVIP } from './vip.js';
 import { getWalletBalance, requestDeposit, requestWithdrawal, getTransactionHistory } from './wallet.js';
+import { initTeffAI } from './teffai.js';
 
 // ===== THEME =====
 function initTheme() {
@@ -21,17 +22,205 @@ window.setTheme = function(theme) {
 };
 initTheme();
 
-window.clearCache = function() {
-  if (confirm('Clear cache and reload?')) {
-    localStorage.removeItem('agriequip-theme');
-    location.reload();
+// ===== BANK MODAL =====
+const BANKS = [
+  { id:'cbe',  name:'CBE', icon:'🏦', desc:'Commercial Bank of Ethiopia' },
+  { id:'awash', name:'Awash Bank', icon:'🏦', desc:'Awash International Bank' },
+  { id:'dashen', name:'Dashen Bank', icon:'🏦', desc:'Dashen Bank S.C.' },
+  { id:'abyssinia', name:'Abyssinia Bank', icon:'🏦', desc:'Bank of Abyssinia' },
+  { id:'telebirr', name:'Telebirr', icon:'📱', desc:'Ethio Telecom Mobile Wallet' },
+  { id:'mpesa', name:'M-Pesa', icon:'📱', desc:'Safaricom M-Pesa Ethiopia' },
+];
+
+function openModal() {
+  const m = document.getElementById('bankModal');
+  if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+}
+function closeModal() {
+  const m = document.getElementById('bankModal');
+  if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
+}
+document.getElementById('bankModal')?.addEventListener('click', (e) => {
+  if (e.target === document.getElementById('bankModal')) closeModal();
+});
+
+function showBankSelect(type) {
+  const title = document.getElementById('modalTitle');
+  const sub = document.getElementById('modalSubtitle');
+  const body = document.getElementById('modalBody');
+  if (!body) return;
+
+  if (type === 'deposit') {
+    title.textContent = '⬆️ Deposit Funds';
+    sub.textContent = 'Select your bank or mobile wallet to deposit';
+  } else {
+    title.textContent = '⬇️ Withdraw Funds';
+    sub.textContent = 'Select your bank or mobile wallet to receive payment';
+  }
+
+  body.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      ${BANKS.map(bank => `
+        <button onclick="selectBank('${bank.id}','${bank.name}','${type}')"
+          style="background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);
+          border-radius:14px;padding:14px 10px;cursor:pointer;transition:all 0.3s;
+          display:flex;flex-direction:column;align-items:center;gap:6px;
+          font-family:'Poppins',sans-serif;"
+          onmouseover="this.style.borderColor='#22C55E';this.style.background='rgba(34,197,94,0.1)'"
+          onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.background='rgba(255,255,255,0.05)'">
+          <span style="font-size:1.8rem">${bank.icon}</span>
+          <span style="color:white;font-weight:600;font-size:0.82rem">${bank.name}</span>
+          <span style="color:#64748B;font-size:0.68rem;text-align:center">${bank.desc}</span>
+        </button>
+      `).join('')}
+    </div>
+    <button onclick="closeModal()" style="width:100%;padding:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.6);cursor:pointer;font-family:'Poppins',sans-serif;font-size:0.85rem">Cancel</button>
+  `;
+  openModal();
+}
+
+window.closeModal = closeModal;
+
+window.selectBank = function(bankId, bankName, type) {
+  const body = document.getElementById('modalBody');
+  const title = document.getElementById('modalTitle');
+  const sub = document.getElementById('modalSubtitle');
+
+  if (type === 'deposit') {
+    title.textContent = `⬆️ Deposit via ${bankName}`;
+    sub.textContent = 'Fill in your deposit details below';
+    body.innerHTML = `
+      <div style="margin-bottom:14px">
+        <label style="color:rgba(255,255,255,0.6);font-size:0.75rem;display:block;margin-bottom:5px">Amount (ETB) — Minimum 100 ETB</label>
+        <input type="number" id="depositAmount" placeholder="e.g. 500"
+          style="width:100%;padding:12px 14px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;color:white;font-size:0.9rem;font-family:'Poppins',sans-serif;outline:none"
+          onfocus="this.style.borderColor='#22C55E'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
+      </div>
+      <div style="margin-bottom:14px">
+        <label style="color:rgba(255,255,255,0.6);font-size:0.75rem;display:block;margin-bottom:5px">Your ${bankName} Account / Reference Number</label>
+        <input type="text" id="depositRef" placeholder="Account no. or transaction ref."
+          style="width:100%;padding:12px 14px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;color:white;font-size:0.9rem;font-family:'Poppins',sans-serif;outline:none"
+          onfocus="this.style.borderColor='#22C55E'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
+      </div>
+      <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:12px;margin-bottom:14px">
+        <p style="color:#86EFAC;font-size:0.78rem;line-height:1.7">
+          📋 <strong>Instructions:</strong><br>
+          1. Transfer your amount to AgriEquip's ${bankName} account<br>
+          2. Enter the transaction reference above<br>
+          3. Admin will verify and credit your wallet within 24hrs
+        </p>
+      </div>
+      <button onclick="submitDeposit('${bankName}')"
+        style="width:100%;padding:13px;background:linear-gradient(135deg,#22C55E,#16A34A);border:none;border-radius:12px;color:white;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:'Poppins',sans-serif;margin-bottom:8px;box-shadow:0 4px 15px rgba(34,197,94,0.3)">
+        ✅ Submit Deposit Request
+      </button>
+      <button onclick="showBankSelect('deposit')"
+        style="width:100%;padding:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer;font-family:'Poppins',sans-serif;font-size:0.82rem">
+        ← Change Bank
+      </button>
+    `;
+  } else {
+    title.textContent = `⬇️ Withdraw via ${bankName}`;
+    sub.textContent = 'Fill in your withdrawal details below';
+    body.innerHTML = `
+      <div style="margin-bottom:14px">
+        <label style="color:rgba(255,255,255,0.6);font-size:0.75rem;display:block;margin-bottom:5px">Amount (ETB) — Minimum 200 ETB</label>
+        <input type="number" id="withdrawAmount" placeholder="e.g. 500"
+          style="width:100%;padding:12px 14px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;color:white;font-size:0.9rem;font-family:'Poppins',sans-serif;outline:none"
+          onfocus="this.style.borderColor='#22C55E'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
+      </div>
+      <div style="margin-bottom:14px">
+        <label style="color:rgba(255,255,255,0.6);font-size:0.75rem;display:block;margin-bottom:5px">Your ${bankName} Account Number</label>
+        <input type="text" id="withdrawAccount" placeholder="Enter your account number"
+          style="width:100%;padding:12px 14px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;color:white;font-size:0.9rem;font-family:'Poppins',sans-serif;outline:none"
+          onfocus="this.style.borderColor='#22C55E'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
+      </div>
+      <div style="margin-bottom:14px">
+        <label style="color:rgba(255,255,255,0.6);font-size:0.75rem;display:block;margin-bottom:5px">Account Holder Name</label>
+        <input type="text" id="withdrawName" placeholder="Name on the account"
+          style="width:100%;padding:12px 14px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;color:white;font-size:0.9rem;font-family:'Poppins',sans-serif;outline:none"
+          onfocus="this.style.borderColor='#22C55E'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
+      </div>
+      <div style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:12px;padding:12px;margin-bottom:14px">
+        <p style="color:#67E8F9;font-size:0.78rem;line-height:1.7">
+          ℹ️ Withdrawals are processed within <strong>24 hours</strong>.<br>
+          Minimum: <strong>200 ETB</strong> per withdrawal.<br>
+          Make sure your account details are correct.
+        </p>
+      </div>
+      <button onclick="submitWithdrawal('${bankName}')"
+        style="width:100%;padding:13px;background:linear-gradient(135deg,#8B5CF6,#7C3AED);border:none;border-radius:12px;color:white;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:'Poppins',sans-serif;margin-bottom:8px;box-shadow:0 4px 15px rgba(139,92,246,0.3)">
+        ✅ Submit Withdrawal Request
+      </button>
+      <button onclick="showBankSelect('withdraw')"
+        style="width:100%;padding:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer;font-family:'Poppins',sans-serif;font-size:0.82rem">
+        ← Change Bank
+      </button>
+    `;
   }
 };
 
-window.setLanguage = function(lang) {
-  localStorage.setItem('agriequip-lang', lang);
-  alert(lang === 'am' ? 'አማርኛ በቅርቡ ይጨመራል!' : 'Language set to English');
+window.submitDeposit = async function(bankName) {
+  const amount = document.getElementById('depositAmount')?.value;
+  const ref = document.getElementById('depositRef')?.value.trim();
+  const user = auth.currentUser;
+  if (!user) return;
+  if (!amount || Number(amount) < 100) {
+    alert('❌ Minimum deposit is 100 ETB'); return;
+  }
+  if (!ref) {
+    alert('❌ Please enter your transaction reference number'); return;
+  }
+  const result = await requestDeposit(user.uid, amount, bankName, ref);
+  if (result.success) {
+    closeModal();
+    showSuccessToast(`✅ Deposit request of ${amount} ETB via ${bankName} submitted! Admin will verify within 24hrs.`);
+    await loadWallet(user);
+  } else {
+    alert('❌ ' + result.message);
+  }
 };
+
+window.submitWithdrawal = async function(bankName) {
+  const amount = document.getElementById('withdrawAmount')?.value;
+  const account = document.getElementById('withdrawAccount')?.value.trim();
+  const name = document.getElementById('withdrawName')?.value.trim();
+  const user = auth.currentUser;
+  if (!user) return;
+  if (!amount || Number(amount) < 200) {
+    alert('❌ Minimum withdrawal is 200 ETB'); return;
+  }
+  if (!account) {
+    alert('❌ Please enter your account number'); return;
+  }
+  if (!name) {
+    alert('❌ Please enter account holder name'); return;
+  }
+  const result = await requestWithdrawal(user.uid, amount, bankName, account);
+  if (result.success) {
+    closeModal();
+    showSuccessToast(`✅ Withdrawal of ${amount} ETB to ${bankName} submitted! Will be processed within 24hrs.`);
+    await loadWallet(user);
+  } else {
+    alert('❌ ' + result.message);
+  }
+};
+
+function showSuccessToast(msg) {
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:linear-gradient(135deg,#0F172A,#1a3a2a);
+    border:1px solid rgba(34,197,94,0.3);
+    color:white;padding:14px 20px;border-radius:14px;
+    font-size:0.82rem;z-index:99999;max-width:320px;text-align:center;
+    box-shadow:0 8px 30px rgba(0,0,0,0.4);line-height:1.5;
+    animation:fadeUp 0.4s ease;
+  `;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 5000);
+}
 
 // ===== NAVIGATION =====
 const navHistory = ['home'];
@@ -40,8 +229,8 @@ let navIndex = 0;
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('overlay');
 
-function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); }
-function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+function openSidebar() { sidebar?.classList.add('open'); overlay?.classList.add('show'); }
+function closeSidebar() { sidebar?.classList.remove('open'); overlay?.classList.remove('show'); }
 
 document.getElementById('openMenu')?.addEventListener('click', (e) => { e.stopPropagation(); openSidebar(); });
 document.getElementById('menuToggle')?.addEventListener('click', closeSidebar);
@@ -59,8 +248,8 @@ window.showSection = function(id) {
     home:'🏠 Home', browse:'🔍 Browse Equipment',
     bookings:'📅 My Bookings', listings:'📦 My Listings',
     wallet:'💳 Wallet', vip:'💎 VIP Plans',
-    earnings:'💰 Earnings', profile:'👤 Profile',
-    settings:'⚙️ Settings', about:'ℹ️ About & Legal'
+    earnings:'💰 Earnings', teffai:'🤖 Teff AI',
+    profile:'👤 Profile', settings:'⚙️ Settings', about:'ℹ️ About'
   };
   const titleEl = document.getElementById('pageTitle');
   if (titleEl) titleEl.textContent = titles[id] || 'AgriEquip';
@@ -70,13 +259,14 @@ window.showSection = function(id) {
     navIndex = navHistory.length - 1;
   }
   updateArrows();
+  if (id === 'teffai') initTeffAI();
 };
 
 function updateArrows() {
-  const backBtn = document.getElementById('backBtn');
-  const fwdBtn = document.getElementById('fwdBtn');
-  if (backBtn) backBtn.style.opacity = navIndex > 0 ? '1' : '0.3';
-  if (fwdBtn) fwdBtn.style.opacity = navIndex < navHistory.length - 1 ? '1' : '0.3';
+  const b = document.getElementById('backBtn');
+  const f = document.getElementById('fwdBtn');
+  if (b) b.style.opacity = navIndex > 0 ? '1' : '0.25';
+  if (f) f.style.opacity = navIndex < navHistory.length - 1 ? '1' : '0.25';
 }
 
 document.getElementById('backBtn')?.addEventListener('click', () => {
@@ -100,9 +290,9 @@ document.getElementById('logoutBtn')?.addEventListener('click', async () => {
 // ===== AUTH =====
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'login.html'; return; }
-  el('userEmail', user.email);
-  el('userInitial', user.email[0].toUpperCase());
-  el('profileEmail', user.email);
+  setEl('userEmail', user.email);
+  setEl('userInitial', user.email[0].toUpperCase());
+  setEl('profileEmail', user.email);
   await initUser(user);
   await loadAll(user);
   setupForms(user);
@@ -112,19 +302,19 @@ async function initUser(user) {
   const ref = doc(db, 'users', user.uid);
   const snap = await getDoc(ref);
   if (!snap.exists()) {
-    const referralCode = 'AGR-' + user.uid.substring(0, 6).toUpperCase();
     await setDoc(ref, {
       email: user.email,
       vipLevel: 'free',
       walletBalance: 0,
-      referralCode,
+      referralCode: 'AGR-' + user.uid.substring(0, 6).toUpperCase(),
       referralCount: 0,
+      referralEarnings: 0,
       createdAt: new Date().toISOString()
     });
   }
 }
 
-function el(id, val) {
+function setEl(id, val) {
   const e = document.getElementById(id);
   if (e) e.textContent = val;
 }
@@ -148,34 +338,36 @@ async function loadStats(user) {
     const vipLevel = await getUserVIP(user.uid);
     const plan = VIP_PLANS[vipLevel];
     const balance = await getWalletBalance(user.uid);
-    el('vipBadge', plan.badge + ' ' + plan.name);
-    el('commissionRate', plan.commission + '%');
-    el('walletBalance', balance + ' ETB');
-    el('profileVIP', plan.badge + ' ' + plan.name + ' Member');
+    setEl('vipBadge', plan.badge + ' ' + plan.name);
+    setEl('commissionRate', plan.commission + '%');
+    setEl('walletBalance', balance + ' ETB');
+    setEl('walletBalanceHome', balance + ' ETB');
+    setEl('profileVIP', plan.badge + ' ' + plan.name + ' Member');
 
     const userSnap = await getDoc(doc(db, 'users', user.uid));
     if (userSnap.exists()) {
-      const referralCode = userSnap.data().referralCode || 'AGR-' + user.uid.substring(0, 6).toUpperCase();
-      el('referralCode', referralCode);
-      el('profileReferral', '🎁 Referral: ' + referralCode);
+      const data = userSnap.data();
+      const code = data.referralCode || 'AGR-' + user.uid.substring(0, 6).toUpperCase();
+      setEl('referralCode', code);
+      setEl('profileReferral', '🎁 Code: ' + code);
+      if (data.fullName) setEl('profileFullName', data.fullName);
     }
 
     const rentalsSnap = await getDocs(query(collection(db, 'rentals'), where('renterId', '==', user.uid)));
     let active = 0;
     rentalsSnap.forEach(d => { if (d.data().status === 'active') active++; });
-    el('totalBookings', rentalsSnap.size);
-    el('activeBookings', active);
+    setEl('totalBookings', rentalsSnap.size);
+    setEl('activeBookings', active);
 
     const listSnap = await getDocs(query(collection(db, 'equipment'), where('ownerId', '==', user.uid)));
-    el('totalListings', listSnap.size);
-    el('earningsListings', listSnap.size);
-  } catch (e) { console.error(e); }
+    setEl('totalListings', listSnap.size);
+  } catch(e) { console.error(e); }
 }
 
 window.copyReferral = function() {
   const code = document.getElementById('referralCode')?.textContent;
-  if (code) {
-    navigator.clipboard.writeText(code).then(() => alert('✅ Referral code copied!\nShare: ' + code));
+  if (code && code !== 'Loading...') {
+    navigator.clipboard.writeText(code).then(() => showSuccessToast('📋 Referral code copied! Share it with friends to earn 50 ETB each.'));
   }
 };
 
@@ -187,38 +379,42 @@ async function loadBrowse() {
   try {
     const snap = await getDocs(collection(db, 'equipment'));
     if (snap.empty) {
-      grid.innerHTML = '<div class="empty-state"><p>🚜</p><p>No equipment listed yet</p><p style="font-size:0.82rem;margin-top:8px">Be the first to list equipment!</p><button class="action-btn" style="margin-top:15px;max-width:200px" onclick="showSection(\'listings\')">➕ Add Listing</button></div>';
+      grid.innerHTML = `
+        <div class="empty-state">
+          <p>🚜</p>
+          <p style="font-weight:600;margin-top:8px">No equipment listed yet</p>
+          <p style="font-size:0.8rem;margin-top:6px;color:#64748B">Be the first to list your equipment!</p>
+          <button class="action-btn" style="margin-top:14px;max-width:200px" onclick="showSection('listings')">➕ Add Listing</button>
+        </div>`;
       return;
     }
     grid.innerHTML = '';
     snap.forEach(d => {
       const q = d.data();
+      const emoji = {tractor:'🚜',plow:'⚙️',harvester:'🌾',irrigation:'💧',other:'📦'}[q.category]||'📦';
       grid.innerHTML += `
-      <div class="equip-card">
-        <div class="equip-badge">${getCatEmoji(q.category)} ${q.category||'Equipment'}</div>
-        <h3>${q.name}</h3>
-        <p style="font-size:0.82rem;margin:4px 0">📍 ${q.location||'Ethiopia'}</p>
-        <p style="color:#22C55E;font-weight:700;font-size:1.1rem;margin:8px 0">${q.pricePerDay} ETB<span style="color:#64748B;font-weight:400;font-size:0.78rem">/day</span></p>
-        ${q.description ? `<p style="color:#64748B;font-size:0.8rem;margin-bottom:10px">${q.description}</p>` : ''}
-        <button class="action-btn" onclick="bookEquipment('${d.id}','${q.name}',${q.pricePerDay},'${q.ownerId}')">📅 Book Now</button>
-      </div>`;
+        <div class="equip-card">
+          <div class="equip-badge">${emoji} ${q.category||'Equipment'}</div>
+          <h3>${q.name}</h3>
+          <p style="font-size:0.8rem;margin:4px 0;color:#64748B">📍 ${q.location||'Ethiopia'}</p>
+          <p style="color:#22C55E;font-weight:700;font-size:1.05rem;margin:8px 0">
+            ${q.pricePerDay} ETB<span style="color:#64748B;font-weight:400;font-size:0.78rem">/day</span>
+          </p>
+          ${q.description?`<p style="color:#64748B;font-size:0.78rem;margin-bottom:10px;line-height:1.5">${q.description}</p>`:''}
+          <button class="action-btn" onclick="bookEquipment('${d.id}','${q.name}',${q.pricePerDay},'${q.ownerId}')">📅 Book Now</button>
+        </div>`;
     });
-  } catch (e) { grid.innerHTML = '<p class="empty-msg">Error loading. Check connection.</p>'; console.error(e); }
+  } catch(e) { grid.innerHTML = '<p class="empty-msg">Error loading. Check connection.</p>'; }
 }
 
-function getCatEmoji(cat) {
-  return {tractor:'🚜',plow:'⚙️',harvester:'🌾',irrigation:'💧',other:'📦'}[cat]||'📦';
-}
-
-document.getElementById('searchInput')?.addEventListener('input', filterEquipment);
-document.getElementById('categoryFilter')?.addEventListener('change', filterEquipment);
-
-function filterEquipment() {
-  const search = document.getElementById('searchInput')?.value.toLowerCase()||'';
-  const cat = document.getElementById('categoryFilter')?.value||'';
+document.getElementById('searchInput')?.addEventListener('input', filterEquip);
+document.getElementById('categoryFilter')?.addEventListener('change', filterEquip);
+function filterEquip() {
+  const s = document.getElementById('searchInput')?.value.toLowerCase()||'';
+  const c = document.getElementById('categoryFilter')?.value||'';
   document.querySelectorAll('.equip-card').forEach(card => {
-    const text = card.textContent.toLowerCase();
-    card.style.display = (!search||text.includes(search)) && (!cat||text.includes(cat)) ? 'block' : 'none';
+    const t = card.textContent.toLowerCase();
+    card.style.display = (!s||t.includes(s)) && (!c||t.includes(c)) ? 'block' : 'none';
   });
 }
 
@@ -229,7 +425,7 @@ window.bookEquipment = async function(equipId, name, price, ownerId) {
   const days = prompt(`📅 Book "${name}"\n💰 ${price} ETB/day\n\nHow many days?`);
   if (!days || isNaN(days) || Number(days) < 1) return;
   const total = price * Number(days);
-  if (!confirm(`Confirm Booking:\n📦 ${name}\n📅 ${days} day(s)\n💰 Total: ${total} ETB\n\nProceed?`)) return;
+  if (!confirm(`Confirm Booking:\n📦 ${name}\n📅 ${days} day(s)\n💰 Total: ${total} ETB`)) return;
   try {
     await addDoc(collection(db, 'rentals'), {
       equipmentId: equipId, equipmentName: name,
@@ -237,98 +433,102 @@ window.bookEquipment = async function(equipId, name, price, ownerId) {
       ownerId, days: Number(days), totalPrice: total,
       status: 'pending', createdAt: new Date().toISOString()
     });
-    alert('✅ Booking request sent!\nThe owner will confirm shortly.');
+    showSuccessToast('✅ Booking request sent! The owner will confirm shortly.');
     await loadStats(user);
-  } catch (e) { alert('❌ Error: ' + e.message); }
+  } catch(e) { alert('❌ Error: ' + e.message); }
 };
 
 // ===== BOOKINGS =====
 async function loadBookings(user) {
-  const container = document.getElementById('bookingsList');
-  if (!container) return;
-  container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const c = document.getElementById('bookingsList');
+  if (!c) return;
+  c.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   try {
     const snap = await getDocs(query(collection(db, 'rentals'), where('renterId', '==', user.uid)));
     if (snap.empty) {
-      container.innerHTML = '<div class="empty-state"><p>📭</p><p>No bookings yet</p><button class="action-btn" style="margin-top:15px;max-width:200px" onclick="showSection(\'browse\')">🔍 Browse Equipment</button></div>';
+      c.innerHTML = `<div class="empty-state"><p>📭</p><p>No bookings yet</p><button class="action-btn" style="margin-top:14px;max-width:200px" onclick="showSection('browse')">🔍 Browse Equipment</button></div>`;
       return;
     }
-    container.innerHTML = '';
+    c.innerHTML = '';
     snap.forEach(d => {
       const b = d.data();
       const colors = {pending:'#F59E0B',active:'#22C55E',completed:'#06B6D4',cancelled:'#EF4444'};
       const color = colors[b.status]||'#64748B';
-      container.innerHTML += `
-      <div class="section-card" style="border-left:4px solid ${color};margin-bottom:10px">
-        <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
-          <div>
-            <h3 style="font-size:0.95rem">${b.equipmentName}</h3>
-            <p style="color:#64748B;font-size:0.8rem;margin-top:4px">📅 ${b.days} day(s) • 💰 ${b.totalPrice} ETB</p>
-            <p style="color:#64748B;font-size:0.75rem;margin-top:2px">🕐 ${new Date(b.createdAt).toLocaleDateString()}</p>
+      c.innerHTML += `
+        <div class="section-card" style="border-left:4px solid ${color};margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
+            <div>
+              <h3 style="font-size:0.92rem">${b.equipmentName}</h3>
+              <p style="color:#64748B;font-size:0.78rem;margin-top:4px">📅 ${b.days} day(s) • 💰 ${b.totalPrice} ETB</p>
+              <p style="color:#64748B;font-size:0.73rem;margin-top:2px">🕐 ${new Date(b.createdAt).toLocaleDateString()}</p>
+            </div>
+            <span style="background:${color}22;color:${color};padding:4px 10px;border-radius:50px;font-size:0.7rem;font-weight:700;white-space:nowrap">${b.status.toUpperCase()}</span>
           </div>
-          <span style="background:${color}22;color:${color};padding:4px 10px;border-radius:50px;font-size:0.72rem;font-weight:700;white-space:nowrap">${b.status.toUpperCase()}</span>
-        </div>
-      </div>`;
+        </div>`;
     });
-  } catch (e) { container.innerHTML = '<p class="empty-msg">Error loading bookings.</p>'; }
+  } catch(e) { c.innerHTML = '<p class="empty-msg">Error loading bookings.</p>'; }
 }
 
 // ===== MY LISTINGS =====
 async function loadMyListings(user) {
-  const container = document.getElementById('myListings');
-  if (!container) return;
-  container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const c = document.getElementById('myListings');
+  if (!c) return;
+  c.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   try {
     const snap = await getDocs(query(collection(db, 'equipment'), where('ownerId', '==', user.uid)));
     if (snap.empty) {
-      container.innerHTML = '<div class="empty-state"><p>📦</p><p>No listings yet</p><p style="font-size:0.82rem;margin-top:8px">Add your first equipment to start earning!</p></div>';
+      c.innerHTML = `<div class="empty-state"><p>📦</p><p>No listings yet</p><p style="font-size:0.8rem;color:#64748B;margin-top:6px">Add equipment to start earning!</p></div>`;
       return;
     }
-    container.innerHTML = '';
+    c.innerHTML = '';
     snap.forEach(d => {
       const eq = d.data();
-      container.innerHTML += `
-      <div class="equip-card">
-        <div class="equip-badge">${getCatEmoji(eq.category)} ${eq.category}</div>
-        <h3>${eq.name}</h3>
-        <p style="font-size:0.82rem;margin:4px 0">📍 ${eq.location}</p>
-        <p style="color:#22C55E;font-weight:700;font-size:1rem;margin:6px 0">${eq.pricePerDay} ETB/day</p>
-        <p style="color:#22C55E;font-size:0.8rem">✅ Active listing</p>
-      </div>`;
+      const emoji = {tractor:'🚜',plow:'⚙️',harvester:'🌾',irrigation:'💧',other:'📦'}[eq.category]||'📦';
+      c.innerHTML += `
+        <div class="equip-card">
+          <div class="equip-badge">${emoji} ${eq.category}</div>
+          <h3>${eq.name}</h3>
+          <p style="font-size:0.8rem;margin:4px 0;color:#64748B">📍 ${eq.location}</p>
+          <p style="color:#22C55E;font-weight:700;font-size:1rem;margin:6px 0">${eq.pricePerDay} ETB/day</p>
+          <p style="color:#22C55E;font-size:0.78rem">✅ Active listing</p>
+        </div>`;
     });
-  } catch (e) { console.error(e); }
+  } catch(e) { console.error(e); }
 }
 
 // ===== WALLET =====
 async function loadWallet(user) {
-  try {
-    const balance = await getWalletBalance(user.uid);
-    el('walletBalance', balance + ' ETB');
-    await loadTransactions(user);
-  } catch (e) { console.error(e); }
+  const balance = await getWalletBalance(user.uid);
+  setEl('walletBalance', balance + ' ETB');
+  setEl('walletBalanceHome', balance + ' ETB');
+  await loadTransactions(user);
 }
 
 async function loadTransactions(user) {
-  const container = document.getElementById('transactionHistory');
-  if (!container) return;
-  try {
-    const hist = await getTransactionHistory(user.uid);
-    if (!hist.length) {
-      container.innerHTML = '<div class="empty-state" style="padding:20px"><p>📊</p><p style="font-size:0.85rem">No transactions yet</p></div>';
-      return;
-    }
-    container.innerHTML = hist.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).map(t => `
+  const c = document.getElementById('transactionHistory');
+  if (!c) return;
+  const hist = await getTransactionHistory(user.uid);
+  if (!hist.length) {
+    c.innerHTML = '<div class="empty-state" style="padding:20px"><p>📊</p><p style="font-size:0.82rem">No transactions yet</p></div>';
+    return;
+  }
+  c.innerHTML = hist.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).map(t => `
     <div class="transaction-item">
       <div>
         <p style="font-weight:600;font-size:0.85rem">${t.type==='deposit'?'⬆️ Deposit':'⬇️ Withdrawal'}</p>
-        <p style="color:#64748B;font-size:0.75rem">${new Date(t.createdAt).toLocaleDateString()} • ${t.bankName||'AgriEquip Wallet'}</p>
+        <p style="color:#64748B;font-size:0.73rem;margin-top:2px">${t.bankName||'AgriEquip'} • ${new Date(t.createdAt).toLocaleDateString()}</p>
+        ${t.accountRef?`<p style="color:#64748B;font-size:0.7rem">Ref: ${t.accountRef}</p>`:''}
+        ${t.accountNumber?`<p style="color:#64748B;font-size:0.7rem">Acc: ${t.accountNumber}</p>`:''}
       </div>
       <div style="text-align:right">
-        <p style="font-weight:700;color:${t.type==='deposit'?'#22C55E':'#EF4444'}">${t.type==='deposit'?'+':'-'}${t.amount} ETB</p>
-        <span style="font-size:0.7rem;padding:2px 8px;border-radius:50px;font-weight:700;background:${t.status==='pending'?'#FEF9C3':t.status==='approved'?'#DCFCE7':'#FEE2E2'};color:${t.status==='pending'?'#F59E0B':t.status==='approved'?'#22C55E':'#EF4444'}">${t.status}</span>
+        <p style="font-weight:700;color:${t.type==='deposit'?'#22C55E':'#EF4444'};font-size:0.95rem">${t.type==='deposit'?'+':'-'}${t.amount} ETB</p>
+        <span style="font-size:0.68rem;padding:3px 9px;border-radius:50px;font-weight:700;
+          background:${t.status==='pending'?'rgba(245,158,11,0.15)':t.status==='approved'?'rgba(34,197,94,0.15)':'rgba(239,68,68,0.15)'};
+          color:${t.status==='pending'?'#F59E0B':t.status==='approved'?'#22C55E':'#EF4444'}">
+          ${t.status.toUpperCase()}
+        </span>
       </div>
     </div>`).join('');
-  } catch (e) { console.error(e); }
 }
 
 // ===== VIP =====
@@ -337,28 +537,38 @@ async function loadVIP(user) {
   if (!container) return;
   const currentVIP = await getUserVIP(user.uid);
   const balance = await getWalletBalance(user.uid);
+
   container.innerHTML = Object.entries(VIP_PLANS).map(([key, plan]) => {
     const isCurrent = key === currentVIP;
     const canAfford = balance >= plan.fee;
     return `
-    <div class="vip-card" style="border-color:${plan.color};${isCurrent?'box-shadow:0 0 20px '+plan.color+'44':''}">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="vip-card" style="border-color:${plan.color};${isCurrent?'box-shadow:0 0 24px '+plan.color+'44;border-width:2px':''}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
         <div class="vip-badge" style="background:${plan.color}">${plan.badge} ${plan.name}</div>
-        ${isCurrent?'<span style="background:#DCFCE7;color:#22C55E;padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:700">✅ ACTIVE</span>':''}
+        ${isCurrent?`<span style="background:rgba(34,197,94,0.15);color:#22C55E;padding:4px 12px;border-radius:50px;font-size:0.7rem;font-weight:700">✅ ACTIVE</span>`:''}
+      </div>
+      <div style="background:${plan.color}18;border-radius:10px;padding:12px;margin-bottom:12px">
+        <p style="font-size:1.3rem;font-weight:800;color:${plan.color}">
+          ${plan.fee===0?'FREE':'ETB '+plan.fee}<span style="font-size:0.75rem;font-weight:500;color:#64748B">${plan.fee>0?'/month':' forever'}</span>
+        </p>
       </div>
       <ul class="vip-features">
-        <li>💰 ${plan.fee===0?'<strong>Free forever</strong>':'<strong>'+plan.fee+' ETB</strong>/month'}</li>
-        <li>📋 <strong>${plan.listings===999?'Unlimited':plan.listings}</strong> equipment listings</li>
-        <li>💸 Only <strong>${plan.commission}%</strong> commission per rental</li>
-        <li>🏅 ${plan.name} verified seller badge</li>
+        ${plan.features.map(f => `<li>✔️ ${f}</li>`).join('')}
       </ul>
       ${!isCurrent && plan.fee > 0 ? `
-      <div style="margin-top:12px">
-        <button class="action-btn" style="background:${plan.color}" onclick="activateVIP('${key}','${plan.name}',${plan.fee})">
-          ${canAfford ? '✅ Activate '+plan.name : '💳 Deposit '+plan.fee+' ETB to unlock'}
-        </button>
-        ${!canAfford ? '<button class="action-btn" style="background:#8B5CF6;margin-top:8px" onclick="showSection(\'wallet\')">⬆️ Deposit Now</button>' : ''}
-      </div>` : isCurrent ? '' : '<p style="color:#22C55E;font-size:0.85rem;margin-top:10px;font-weight:600">✅ Your current free plan</p>'}
+        <div style="margin-top:14px">
+          <button class="action-btn" style="background:${plan.color};box-shadow:0 4px 15px ${plan.color}44"
+            onclick="activateVIP('${key}','${plan.name}',${plan.fee})">
+            ${canAfford ? '💎 Activate '+plan.name : '💳 Deposit '+plan.fee+' ETB first'}
+          </button>
+          ${!canAfford ? `
+            <button class="action-btn" style="background:#8B5CF6;margin-top:8px"
+              onclick="showSection('wallet')">
+              ⬆️ Go to Wallet
+            </button>` : ''}
+        </div>` :
+        isCurrent ? `<p style="color:#22C55E;font-size:0.82rem;margin-top:12px;font-weight:600;text-align:center">✅ This is your current plan</p>` :
+        `<p style="color:#94A3B8;font-size:0.82rem;margin-top:12px;text-align:center">✅ Free forever</p>`}
     </div>`;
   }).join('');
 }
@@ -368,14 +578,18 @@ window.activateVIP = async function(planKey, planName, fee) {
   if (!user) return;
   const balance = await getWalletBalance(user.uid);
   if (balance < fee) {
-    const goDeposit = confirm(`❌ Insufficient balance!\n\nYou need: ${fee} ETB\nYour balance: ${balance} ETB\nShortfall: ${fee-balance} ETB\n\nGo to Wallet to deposit?`);
-    if (goDeposit) showSection('wallet');
+    const go = confirm(`❌ Insufficient balance!\n\nYou need: ${fee} ETB\nYour balance: ${balance} ETB\nShortfall: ${fee - balance} ETB\n\nGo to Wallet to deposit?`);
+    if (go) showSection('wallet');
     return;
   }
-  if (!confirm(`Activate ${planName}?\n💰 Cost: ${fee} ETB/month\nThis will be deducted from your wallet.\n\nConfirm?`)) return;
+  if (!confirm(`Activate ${planName} for ${fee} ETB/month?\nThis will be deducted from your wallet.`)) return;
   const result = await upgradeVIP(user.uid, planKey);
-  alert(result.success ? '🎉 ' + result.message : '❌ ' + result.message);
-  if (result.success) await loadAll(user);
+  if (result.success) {
+    showSuccessToast('🎉 ' + result.message);
+    await loadAll(user);
+  } else {
+    alert('❌ ' + result.message);
+  }
 };
 
 // ===== EARNINGS =====
@@ -383,43 +597,45 @@ async function loadEarnings(user) {
   try {
     let total = 0, pending = 0, completed = 0;
     const snap = await getDocs(query(collection(db, 'rentals'), where('ownerId', '==', user.uid)));
-    const histContainer = document.getElementById('earningsHistoryList');
-    if (snap.empty) {
-      if (histContainer) histContainer.innerHTML = '<div class="empty-state" style="padding:20px"><p>💰</p><p style="font-size:0.85rem">No rental earnings yet</p><p style="color:#64748B;font-size:0.78rem;margin-top:8px">List equipment to start earning!</p><button class="action-btn" style="margin-top:12px;max-width:200px" onclick="showSection(\'listings\')">📦 List Equipment</button></div>';
-      el('totalEarnings', '0 ETB');
-      el('pendingEarnings', '0 ETB');
-      el('completedRentals', '0');
-      el('commissionPaid', '0 ETB');
-      el('earnings', '0 ETB');
-      return;
-    }
-    let html = '';
     const vipLevel = await getUserVIP(user.uid);
     const commission = VIP_PLANS[vipLevel].commission;
+    const histEl = document.getElementById('earningsHistoryList');
+    let html = '';
+
     snap.forEach(d => {
       const r = d.data();
       const earn = r.ownerEarnings || Math.round(r.totalPrice * (1 - commission/100));
       if (r.status === 'completed') { total += earn; completed++; }
-      if (r.status === 'active') pending += (r.totalPrice||0);
+      if (r.status === 'active') pending += (r.totalPrice || 0);
+      const colors = {pending:'#F59E0B',active:'#22C55E',completed:'#06B6D4',cancelled:'#EF4444'};
       html += `
-      <div class="transaction-item">
-        <div>
-          <p style="font-weight:600;font-size:0.85rem">📦 ${r.equipmentName}</p>
-          <p style="color:#64748B;font-size:0.75rem">${r.days} day(s) • ${new Date(r.createdAt).toLocaleDateString()}</p>
-        </div>
-        <div style="text-align:right">
-          <p style="font-weight:700;color:#22C55E">+${earn} ETB</p>
-          <span style="font-size:0.7rem;padding:2px 8px;border-radius:50px;font-weight:700;background:${r.status==='completed'?'#DCFCE7':r.status==='active'?'#DBEAFE':'#FEF9C3'};color:${r.status==='completed'?'#22C55E':r.status==='active'?'#3B82F6':'#F59E0B'}">${r.status}</span>
-        </div>
-      </div>`;
+        <div class="transaction-item">
+          <div>
+            <p style="font-weight:600;font-size:0.85rem">📦 ${r.equipmentName}</p>
+            <p style="color:#64748B;font-size:0.73rem;margin-top:2px">${r.days} day(s) • ${new Date(r.createdAt).toLocaleDateString()}</p>
+          </div>
+          <div style="text-align:right">
+            <p style="font-weight:700;color:#22C55E">+${earn} ETB</p>
+            <span style="font-size:0.68rem;padding:3px 9px;border-radius:50px;font-weight:700;background:${colors[r.status]||'#64748B'}22;color:${colors[r.status]||'#64748B'}">${r.status}</span>
+          </div>
+        </div>`;
     });
-    if (histContainer) histContainer.innerHTML = html;
-    el('totalEarnings', total + ' ETB');
-    el('earnings', total + ' ETB');
-    el('pendingEarnings', pending + ' ETB');
-    el('completedRentals', completed);
-    el('commissionPaid', Math.round(total * commission / (100 - commission)) + ' ETB');
-  } catch (e) { console.error(e); }
+
+    const userSnap = await getDoc(doc(db, 'users', user.uid));
+    const refEarnings = userSnap.exists() ? (userSnap.data().referralEarnings || 0) : 0;
+    if (refEarnings > 0) {
+      html = `<div class="transaction-item"><div><p style="font-weight:600;font-size:0.85rem">🎁 Referral Earnings</p><p style="color:#64748B;font-size:0.73rem">From successful referrals</p></div><div style="text-align:right"><p style="font-weight:700;color:#22C55E">+${refEarnings} ETB</p></div></div>` + html;
+    }
+
+    if (histEl) histEl.innerHTML = html || '<div class="empty-state" style="padding:20px"><p>💰</p><p style="font-size:0.85rem">No earnings yet</p><button class="action-btn" style="margin-top:12px;max-width:200px" onclick="showSection(\'listings\')">📦 List Equipment</button></div>';
+
+    setEl('totalEarnings', (total + refEarnings) + ' ETB');
+    setEl('earnings', (total + refEarnings) + ' ETB');
+    setEl('pendingEarnings', pending + ' ETB');
+    setEl('completedRentals', completed);
+    setEl('referralEarnings', refEarnings + ' ETB');
+    setEl('commissionPaid', Math.round(total * commission / (100 - commission)) + ' ETB');
+  } catch(e) { console.error(e); }
 }
 
 // ===== PROFILE =====
@@ -427,86 +643,70 @@ async function loadProfile(user) {
   try {
     const snap = await getDoc(doc(db, 'users', user.uid));
     if (snap.exists()) {
-      const data = snap.data();
-      const fields = {profileName:'displayName', profilePhone:'phone', profileCity:'city', profileReferralInput:'usedReferral'};
-      Object.entries(fields).forEach(([elId, key]) => {
-        const el = document.getElementById(elId);
-        if (el && data[key]) el.value = data[key];
+      const d = snap.data();
+      const fields = {profileName:'fullName',profileFatherName:'fatherName',profilePhone:'phone',profileCity:'city'};
+      Object.entries(fields).forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if (el && d[key]) el.value = d[key];
       });
+      if (d.fullName) setEl('profileFullName', d.fullName);
     }
-  } catch (e) { console.error(e); }
+  } catch(e) { console.error(e); }
 }
 
 // ===== FORMS =====
 function setupForms(user) {
   document.getElementById('addListingBtn')?.addEventListener('click', () => {
-    const form = document.getElementById('addListingForm');
-    if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    const f = document.getElementById('addListingForm');
+    if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
   });
 
   document.getElementById('submitListing')?.addEventListener('click', async () => {
-    const name = document.getElementById('equipName')?.value;
+    const name = document.getElementById('equipName')?.value.trim();
+    const category = document.getElementById('equipCategory')?.value;
     const price = document.getElementById('equipPrice')?.value;
     const location = document.getElementById('equipLocation')?.value.trim();
     const desc = document.getElementById('equipDesc')?.value.trim();
-    if (!name||!price||!location) { alert('⚠️ Please fill all required fields.'); return; }
+    if (!name || !price || !location) { alert('⚠️ Please fill all required fields.'); return; }
     try {
       await addDoc(collection(db, 'equipment'), {
         name, category, pricePerDay: Number(price),
         location, description: desc,
         ownerId: user.uid, ownerEmail: user.email,
-        availability: 'available', createdAt: new Date().toISOString()
+        availability: 'available',
+        createdAt: new Date().toISOString()
       });
-      alert('✅ Equipment listed successfully!');
+      showSuccessToast('✅ Equipment listed successfully!');
       document.getElementById('addListingForm').style.display = 'none';
       ['equipName','equipPrice','equipLocation','equipDesc'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
+        const el = document.getElementById(id); if (el) el.value = '';
       });
       await loadMyListings(user);
       await loadBrowse();
       await loadStats(user);
-    } catch (e) { alert('❌ Error: ' + e.message); }
+    } catch(e) { alert('❌ Error: ' + e.message); }
   });
 
-  document.getElementById('depositBtn')?.addEventListener('click', async () => {
-    const banks = ['CBE','Awash Bank','Dashen Bank','Abyssinia Bank','Telebirr','M-Pesa'];
-    const bankChoice = prompt('🏦 Select bank/service:\n1. CBE\n2. Awash Bank\n3. Dashen Bank\n4. Abyssinia Bank\n5. Telebirr\n6. M-Pesa\n\nEnter number (1-6):');
-    if (!bankChoice || isNaN(bankChoice) || bankChoice < 1 || bankChoice > 6) { alert('Invalid selection'); return; }
-    const bankName = banks[Number(bankChoice) - 1];
-    const amount = prompt(`💰 Deposit via ${bankName}\n\nEnter amount (minimum 100 ETB):`);
-    if (!amount || isNaN(amount) || Number(amount) < 100) { alert('❌ Minimum deposit is 100 ETB'); return; }
-    const ref = prompt(`📋 Enter your ${bankName} transaction reference number:`);
-    if (!ref) { alert('❌ Transaction reference is required'); return; }
-    const result = await requestDeposit(user.uid, amount, bankName, ref);
-    alert(result.success ? `✅ Deposit request submitted!\n\nBank: ${bankName}\nAmount: ${amount} ETB\nRef: ${ref}\n\nAdmin will verify and credit your wallet within 24 hours.` : '❌ ' + result.message);
-    if (result.success) await loadWallet(user);
+  document.getElementById('depositBtn')?.addEventListener('click', () => {
+    showBankSelect('deposit');
   });
 
-  document.getElementById('withdrawBtn')?.addEventListener('click', async () => {
-    const balance = await getWalletBalance(user.uid);
-    if (balance < 200) { alert(`❌ Minimum withdrawal is 200 ETB.\nYour balance: ${balance} ETB`); return; }
-    const banks = ['CBE','Awash Bank','Dashen Bank','Abyssinia Bank','Telebirr','M-Pesa'];
-    const bankChoice = prompt('🏦 Withdraw to:\n1. CBE\n2. Awash Bank\n3. Dashen Bank\n4. Abyssinia Bank\n5. Telebirr\n6. M-Pesa\n\nEnter number (1-6):');
-    if (!bankChoice || isNaN(bankChoice) || bankChoice < 1 || bankChoice > 6) return;
-    const bankName = banks[Number(bankChoice) - 1];
-    const accountNo = prompt(`Enter your ${bankName} account number:`);
-    if (!accountNo) return;
-    const amount = prompt(`💰 Withdraw from wallet\nBalance: ${balance} ETB\nMinimum: 200 ETB\n\nEnter amount:`);
-    if (!amount || isNaN(amount) || Number(amount) < 200) { alert('❌ Minimum withdrawal is 200 ETB'); return; }
-    if (Number(amount) > balance) { alert(`❌ Insufficient balance. Max: ${balance} ETB`); return; }
-    const result = await requestWithdrawal(user.uid, amount, bankName, accountNo);
-    alert(result.success ? `✅ Withdrawal requested!\n\nBank: ${bankName}\nAccount: ${accountNo}\nAmount: ${amount} ETB\n\nWill be processed within 24 hours.` : '❌ ' + result.message);
-    if (result.success) await loadWallet(user);
+  document.getElementById('withdrawBtn')?.addEventListener('click', () => {
+    showBankSelect('withdraw');
   });
 
   document.getElementById('saveProfile')?.addEventListener('click', async () => {
     const name = document.getElementById('profileName')?.value;
+    const father = document.getElementById('profileFatherName')?.value;
     const phone = document.getElementById('profilePhone')?.value;
     const city = document.getElementById('profileCity')?.value;
     try {
-      await setDoc(doc(db, 'users', user.uid), { displayName: name, phone, city }, { merge: true });
-      alert('✅ Profile saved!');
-    } catch (e) { alert('❌ Error: ' + e.message); }
+      await setDoc(doc(db, 'users', user.uid), {
+        fullName: name, fatherName: father,
+        displayName: name, phone, city
+      }, { merge: true });
+      showSuccessToast('✅ Profile saved successfully!');
+      if (name) setEl('profileFullName', name);
+    } catch(e) { alert('❌ Error: ' + e.message); }
   });
 }
