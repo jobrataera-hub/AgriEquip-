@@ -496,3 +496,13 @@ body{font-family:'Poppins',sans-serif;background:var(--light);color:var(--text);
   .quick-stats{grid-template-columns:repeat(2,1fr)}
   .page-content{padding:15px}
 }
+
+/* ===== SWIPE GESTURE HINT ===== */
+.swipe-hint{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.2);
+  color:rgba(255,255,255,0.5);padding:6px 14px;border-radius:50px;
+  font-size:0.7rem;pointer-events:none;z-index:500;
+  animation:fadeIn 0.5s ease,fadeOut 0.5s ease 2s forwards;
+}
+@keyframes fadeOut{from{opacity:1}to{opacity:0;visibility:hidden}}

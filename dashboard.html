@@ -400,6 +400,37 @@
 
 <script type="module" src="js/auth.js"></script>
 <script type="module" src="js/dashboard.js"></script>
+
+<script>
+// Swipe gesture navigation
+(function() {
+  let startX = 0, startY = 0;
+  const sections = ['home','browse','bookings','listings','wallet','vip','earnings','teffai','profile','settings','about'];
+
+  document.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, {passive:true});
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx) * 0.8) return;
+    // Only trigger from left/right edges
+    if (startX > 40 && startX < window.innerWidth - 40) return;
+    if (dx > 60 && startX < 40) {
+      // Swipe right from left edge = go back
+      const btn = document.getElementById('backBtn');
+      if (btn && btn.style.opacity !== '0.25') btn.click();
+    } else if (dx < -60 && startX > window.innerWidth - 40) {
+      // Swipe left from right edge = go forward
+      const btn = document.getElementById('fwdBtn');
+      if (btn && btn.style.opacity !== '0.25') btn.click();
+    }
+  }, {passive:true});
+})();
+</script>
+
 </body>
 </html>
 <!-- BANK MODAL -->

@@ -3,57 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#22C55E">
-  <link rel="manifest" href="manifest.json">
   <title>AgriEquip — Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--p:#22C55E;--a:#06B6D4;--d:#0F172A}
     body{
       font-family:'Poppins',sans-serif;min-height:100vh;
       background:linear-gradient(145deg,#0a1628 0%,#0d2818 40%,#0a1628 100%);
       display:flex;align-items:center;justify-content:center;
-      padding:16px;position:relative;overflow-x:hidden;
+      padding:16px;overflow-x:hidden;
     }
     @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
     @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
     @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.5)}70%{box-shadow:0 0 0 18px rgba(34,197,94,0)}}
-    @keyframes particleUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:0.5}90%{opacity:0.3}100%{transform:translateY(-80px) scale(1);opacity:0}}
-    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+    @keyframes particleUp{0%{transform:translateY(100vh);opacity:0}10%{opacity:0.4}90%{opacity:0.2}100%{transform:translateY(-80px);opacity:0}}
 
     .particles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-    .p{position:absolute;border-radius:50%;background:rgba(34,197,94,0.15);animation:particleUp linear infinite}
+    .p{position:absolute;border-radius:50%;background:rgba(34,197,94,0.12);animation:particleUp linear infinite}
 
     .card{
       background:rgba(255,255,255,0.04);
       backdrop-filter:blur(24px);
       border:1px solid rgba(255,255,255,0.08);
-      border-radius:24px;padding:30px 24px;
+      border-radius:24px;padding:28px 22px;
       width:100%;max-width:400px;
       position:relative;z-index:1;
       animation:fadeUp 0.65s ease;
-      box-shadow:0 24px 64px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow:0 24px 64px rgba(0,0,0,0.5);
     }
 
-    .logo{text-align:center;margin-bottom:24px}
+    .logo{text-align:center;margin-bottom:22px}
     .logo-box{
-      width:68px;height:68px;margin:0 auto 12px;
+      width:64px;height:64px;margin:0 auto 12px;
       background:linear-gradient(135deg,#22C55E,#06B6D4);
       border-radius:18px;
       display:flex;align-items:center;justify-content:center;
       animation:float 3.5s ease-in-out infinite, pulse 2.5s ease-in-out infinite;
     }
     .logo-name{
-      font-family:'Fraunces',serif;font-size:1.9rem;font-weight:900;
+      font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;
       background:linear-gradient(135deg,#22C55E,#06B6D4);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     }
-    .logo-tag{color:rgba(255,255,255,0.35);font-size:0.73rem;margin-top:3px;letter-spacing:0.5px}
+    .logo-tag{color:rgba(255,255,255,0.3);font-size:0.72rem;margin-top:3px;letter-spacing:0.5px}
 
     .tabs{
       display:flex;background:rgba(255,255,255,0.05);
-      border-radius:12px;padding:3px;margin-bottom:20px;gap:3px;
+      border-radius:12px;padding:3px;margin-bottom:18px;gap:3px;
     }
     .tab{
       flex:1;padding:9px;border:none;background:none;
@@ -64,14 +60,9 @@
     .tab.active{background:#22C55E;color:white;box-shadow:0 4px 12px rgba(34,197,94,0.35)}
 
     .fg{margin-bottom:12px;position:relative}
-    .lbl{color:rgba(255,255,255,0.6);font-size:0.75rem;font-weight:500;margin-bottom:5px;display:block}
-    .ico{position:absolute;left:12px;font-size:0.85rem;pointer-events:none}
-    .ico-right{
-      position:absolute;right:12px;
-      background:none;border:none;cursor:pointer;
-      font-size:1rem;padding:0;
-      transition:all 0.2s;
-    }
+    .lbl{color:rgba(255,255,255,0.55);font-size:0.73rem;font-weight:500;margin-bottom:5px;display:block}
+    .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:0.85rem;pointer-events:none;margin-top:11px}
+    .ico-right{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;padding:0;margin-top:11px}
     .fi{
       width:100%;padding:11px 14px 11px 36px;
       background:rgba(255,255,255,0.06);
@@ -80,12 +71,16 @@
       font-size:0.85rem;font-family:'Poppins',sans-serif;
       outline:none;transition:all 0.3s;
     }
-    .fi.has-right{padding-right:40px}
+    .fi.pr{padding-right:40px}
     .fi::placeholder{color:rgba(255,255,255,0.2)}
     .fi:focus{border-color:#22C55E;background:rgba(34,197,94,0.07);box-shadow:0 0 0 3px rgba(34,197,94,0.1)}
-    /* Dynamic icon top positioning */
-    .fg .ico{top:50%;transform:translateY(-50%)}
-    .fg:has(.lbl) .ico{top:calc(50% + 10px)}
+
+    .sec-lbl{
+      font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;
+      color:rgba(255,255,255,0.2);margin:14px 0 8px;
+      display:flex;align-items:center;gap:6px;
+    }
+    .sec-lbl::before,.sec-lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07)}
 
     .btn{
       width:100%;padding:13px;margin-top:4px;
@@ -93,8 +88,7 @@
       border:none;border-radius:12px;
       color:white;font-size:0.9rem;font-weight:700;
       font-family:'Poppins',sans-serif;cursor:pointer;
-      transition:all 0.3s;
-      box-shadow:0 4px 18px rgba(34,197,94,0.4);
+      transition:all 0.3s;box-shadow:0 4px 18px rgba(34,197,94,0.4);
     }
     .btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(34,197,94,0.5)}
     .btn:active{transform:translateY(0)}
@@ -103,56 +97,34 @@
     .msg{
       padding:11px 14px;border-radius:10px;
       font-size:0.8rem;text-align:center;
-      margin-top:10px;display:none;
-      animation:fadeUp 0.3s ease;line-height:1.5;
+      margin-top:10px;display:none;line-height:1.5;
     }
     .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5}
     .msg.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC}
-    .msg.info{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);color:#67E8F9}
 
-    .steps{
-      background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.15);
-      border-radius:11px;padding:12px 14px;margin-top:10px;
-      color:rgba(255,255,255,0.55);font-size:0.78rem;line-height:1.9;display:none;
-    }
+    .forgot{text-align:center;margin-top:10px;color:rgba(255,255,255,0.3);font-size:0.73rem;cursor:pointer;transition:color 0.2s}
+    .forgot:hover{color:#22C55E}
 
-    .divider{text-align:center;color:rgba(255,255,255,0.2);font-size:0.72rem;margin:14px 0;position:relative}
+    .divider{text-align:center;color:rgba(255,255,255,0.2);font-size:0.7rem;margin:14px 0;position:relative}
     .divider::before,.divider::after{content:'';position:absolute;top:50%;width:36%;height:1px;background:rgba(255,255,255,0.07)}
     .divider::before{left:0}.divider::after{right:0}
 
-    .feats{display:flex;justify-content:space-around;margin-top:14px}
-    .feat{text-align:center;color:rgba(255,255,255,0.3);font-size:0.68rem}
-    .feat span{display:block;font-size:1.1rem;margin-bottom:3px}
-
-    .forgot{
-      text-align:center;margin-top:10px;
-      color:rgba(255,255,255,0.3);font-size:0.75rem;cursor:pointer;
-      transition:color 0.2s;
-    }
-    .forgot:hover{color:#22C55E}
-
-    .section-title{
-      font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;
-      color:rgba(255,255,255,0.25);margin:14px 0 8px;
-      display:flex;align-items:center;gap:6px;
-    }
-    .section-title::before,.section-title::after{
-      content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);
-    }
+    .feats{display:flex;justify-content:space-around;margin-top:12px}
+    .feat{text-align:center;color:rgba(255,255,255,0.28);font-size:0.67rem}
+    .feat span{display:block;font-size:1rem;margin-bottom:2px}
   </style>
 </head>
 <body>
   <div class="particles" id="particles"></div>
-
   <div class="card">
     <div class="logo">
       <div class="logo-box">
-        <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
-          <rect width="42" height="42" rx="12" fill="rgba(0,0,0,0.2)"/>
-          <path d="M8 30 L15 22 L20 27 L28 16 L35 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="33" cy="12" r="4" fill="white" opacity="0.8"/>
-          <path d="M8 33 L35 33" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
-          <path d="M8 37 L28 37" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.2"/>
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="10" fill="rgba(0,0,0,0.2)"/>
+          <path d="M6 28 L13 20 L18 25 L26 14 L34 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="32" cy="10" r="4" fill="white" opacity="0.8"/>
+          <path d="M6 32 L34 32" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+          <path d="M6 36 L26 36" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.18"/>
         </svg>
       </div>
       <div class="logo-name">AgriEquip</div>
@@ -164,82 +136,70 @@
       <button class="tab" id="registerTab" onclick="switchTab('register')">Register</button>
     </div>
 
-    <!-- LOGIN FORM -->
+    <!-- LOGIN -->
     <div id="loginForm">
       <div class="fg">
         <label class="lbl">Email Address</label>
-        <span class="ico" style="top:calc(50% + 10px)">✉️</span>
+        <span class="ico">✉️</span>
         <input type="email" id="loginEmail" class="fi" placeholder="your@email.com">
       </div>
       <div class="fg">
         <label class="lbl">Password</label>
-        <span class="ico" style="top:calc(50% + 10px)">🔒</span>
-        <input type="password" id="loginPassword" class="fi has-right" placeholder="••••••••">
-        <button type="button" class="ico-right" style="top:calc(50% + 10px)" onclick="togglePwd('loginPassword',this)">🙈</button>
+        <span class="ico">🔒</span>
+        <input type="password" id="loginPassword" class="fi pr" placeholder="••••••••">
+        <button type="button" class="ico-right" onclick="togglePwd('loginPassword',this)">🙈</button>
       </div>
       <button class="btn" id="loginBtn" onclick="handleLogin()">Sign In →</button>
       <p class="forgot" onclick="showForgotPassword()">Forgot password? Reset it →</p>
     </div>
 
-    <!-- REGISTER FORM -->
+    <!-- REGISTER -->
     <div id="registerForm" style="display:none">
-      <div class="section-title">Personal Information</div>
+      <div class="sec-lbl">Personal Info</div>
       <div class="fg">
         <label class="lbl">Full Name *</label>
-        <span class="ico" style="top:calc(50% + 10px)">👤</span>
+        <span class="ico">👤</span>
         <input type="text" id="regFullName" class="fi" placeholder="e.g. Abebe Kebede">
       </div>
       <div class="fg">
         <label class="lbl">Father's Name *</label>
-        <span class="ico" style="top:calc(50% + 10px)">👨</span>
+        <span class="ico">👨</span>
         <input type="text" id="regFatherName" class="fi" placeholder="e.g. Kebede Tadesse">
       </div>
-
-      <div class="section-title">Account Details</div>
+      <div class="sec-lbl">Account Details</div>
       <div class="fg">
         <label class="lbl">Email Address *</label>
-        <span class="ico" style="top:calc(50% + 10px)">✉️</span>
+        <span class="ico">✉️</span>
         <input type="email" id="regEmail" class="fi" placeholder="your@email.com">
       </div>
       <div class="fg">
         <label class="lbl">Password * (min 6 chars)</label>
-        <span class="ico" style="top:calc(50% + 10px)">🔒</span>
-        <input type="password" id="regPassword" class="fi has-right" placeholder="Create a strong password">
-        <button type="button" class="ico-right" style="top:calc(50% + 10px)" onclick="togglePwd('regPassword',this)">🙈</button>
+        <span class="ico">🔒</span>
+        <input type="password" id="regPassword" class="fi pr" placeholder="Create a strong password">
+        <button type="button" class="ico-right" onclick="togglePwd('regPassword',this)">🙈</button>
       </div>
       <div class="fg">
         <label class="lbl">Confirm Password *</label>
-        <span class="ico" style="top:calc(50% + 10px)">🔐</span>
-        <input type="password" id="regConfirm" class="fi has-right" placeholder="Repeat your password">
-        <button type="button" class="ico-right" style="top:calc(50% + 10px)" onclick="togglePwd('regConfirm',this)">🙈</button>
+        <span class="ico">🔐</span>
+        <input type="password" id="regConfirm" class="fi pr" placeholder="Repeat your password">
+        <button type="button" class="ico-right" onclick="togglePwd('regConfirm',this)">🙈</button>
       </div>
-
-      <div class="section-title">Optional</div>
+      <div class="sec-lbl">Optional</div>
       <div class="fg">
-        <label class="lbl">Referral Code</label>
-        <span class="ico" style="top:calc(50% + 10px)">🎁</span>
-        <input type="text" id="regReferral" class="fi" placeholder="AGR-XXXXXX (if someone invited you)">
+        <label class="lbl">Referral Code (if invited)</label>
+        <span class="ico">🎁</span>
+        <input type="text" id="regReferral" class="fi" placeholder="AGR-XXXXXX">
       </div>
-
       <button class="btn" id="registerBtn" onclick="handleRegister()">Create Account →</button>
-      <div class="steps" id="verifySteps">
-        <strong style="color:#86EFAC">✅ Account created successfully!</strong><br><br>
-        <strong>Next steps:</strong><br>
-        1️⃣ Check your email inbox<br>
-        2️⃣ Click the verification link<br>
-        3️⃣ Return here and Sign In<br><br>
-        <span style="color:rgba(255,255,255,0.35);font-size:0.72rem">💡 Check spam/junk if not found</span>
-      </div>
     </div>
 
     <div class="msg" id="message"></div>
-
     <div class="divider">Secure • Trusted • Ethiopian</div>
     <div class="feats">
       <div class="feat"><span>🚜</span>Rent</div>
       <div class="feat"><span>💰</span>Earn</div>
       <div class="feat"><span>💎</span>VIP</div>
-      <div class="feat"><span>🤖</span>AI</div>
+      <div class="feat"><span>🤖</span>Teff AI</div>
       <div class="feat"><span>🛡️</span>Safe</div>
     </div>
   </div>
@@ -247,13 +207,17 @@
   <script type="module">
     import { auth, db } from './firebase.js';
     import {
-      signInWithEmailAndPassword, createUserWithEmailAndPassword,
-      sendEmailVerification, sendPasswordResetEmail, onAuthStateChanged
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail,
+      onAuthStateChanged
     } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-    import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+    import {
+      doc, setDoc, collection, query, where, getDocs, updateDoc, increment
+    } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
     // Particles
-    for(let i=0;i<16;i++){
+    for(let i=0;i<14;i++){
       const el=document.createElement('div');
       el.className='p';
       const s=4+Math.random()*10;
@@ -261,11 +225,9 @@
       document.getElementById('particles').appendChild(el);
     }
 
-    // Auto redirect if logged in
+    // Auto redirect if already logged in
     onAuthStateChanged(auth, (user) => {
-      if (user && user.emailVerified) {
-        window.location.href = 'index.html';
-      }
+      if (user) window.location.href = 'dashboard.html';
     });
 
     window.switchTab = function(tab) {
@@ -274,19 +236,12 @@
       document.getElementById('loginTab').classList.toggle('active', tab==='login');
       document.getElementById('registerTab').classList.toggle('active', tab==='register');
       document.getElementById('message').style.display = 'none';
-      const steps = document.getElementById('verifySteps');
-      if (steps) steps.style.display = 'none';
     };
 
     window.togglePwd = function(id, btn) {
       const input = document.getElementById(id);
-      if (input.type === 'password') {
-        input.type = 'text';
-        btn.textContent = '🐵';
-      } else {
-        input.type = 'password';
-        btn.textContent = '🙈';
-      }
+      input.type = input.type === 'password' ? 'text' : 'password';
+      btn.textContent = input.type === 'password' ? '🙈' : '🐵';
     };
 
     function showMsg(text, type) {
@@ -297,12 +252,12 @@
     }
 
     function cleanErr(msg) {
-      if (msg.includes('wrong-password') || msg.includes('invalid-credential')) return '❌ Wrong email or password.';
+      if (msg.includes('wrong-password')||msg.includes('invalid-credential')) return '❌ Wrong email or password.';
       if (msg.includes('user-not-found')) return '❌ No account found with this email.';
       if (msg.includes('email-already-in-use')) return '❌ Email already registered. Try signing in.';
-      if (msg.includes('weak-password')) return '❌ Password is too weak. Use at least 6 characters.';
+      if (msg.includes('weak-password')) return '❌ Password too weak. Use at least 6 characters.';
       if (msg.includes('invalid-email')) return '❌ Invalid email address.';
-      if (msg.includes('too-many-requests')) return '❌ Too many attempts. Please wait a few minutes.';
+      if (msg.includes('too-many-requests')) return '❌ Too many attempts. Please wait.';
       return '❌ ' + msg.replace('Firebase: ','').split('(')[0];
     }
 
@@ -310,21 +265,15 @@
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
       const btn = document.getElementById('loginBtn');
-      if (!email || !password) { showMsg('⚠️ Please fill all fields.', 'error'); return; }
-      btn.disabled = true; btn.textContent = 'Signing in...';
+      if (!email||!password) { showMsg('⚠️ Please fill all fields.','error'); return; }
+      btn.disabled=true; btn.textContent='Signing in...';
       try {
-        const cred = await signInWithEmailAndPassword(auth, email, password);
-        if (!cred.user.emailVerified) {
-          showMsg('⚠️ Email not verified. Check your inbox and click the verification link.<br><br><small style="opacity:0.7">Click below to resend verification email.</small>', 'info');
-          await sendEmailVerification(cred.user);
-          btn.disabled = false; btn.textContent = 'Sign In →';
-          return;
-        }
-        showMsg('✅ Welcome back! Redirecting...', 'success');
-        setTimeout(() => window.location.href = 'index.html', 900);
+        await signInWithEmailAndPassword(auth, email, password);
+        showMsg('✅ Welcome back! Redirecting...','success');
+        setTimeout(()=>window.location.href='dashboard.html', 800);
       } catch(e) {
-        showMsg(cleanErr(e.message), 'error');
-        btn.disabled = false; btn.textContent = 'Sign In →';
+        showMsg(cleanErr(e.message),'error');
+        btn.disabled=false; btn.textContent='Sign In →';
       }
     };
 
@@ -337,71 +286,60 @@
       const referral = document.getElementById('regReferral').value.trim().toUpperCase();
       const btn = document.getElementById('registerBtn');
 
-      if (!fullName || !fatherName || !email || !password) {
-        showMsg('⚠️ Please fill all required fields.', 'error'); return;
+      if (!fullName||!fatherName||!email||!password) {
+        showMsg('⚠️ Please fill all required fields.','error'); return;
       }
       if (password.length < 6) {
-        showMsg('⚠️ Password must be at least 6 characters.', 'error'); return;
+        showMsg('⚠️ Password must be at least 6 characters.','error'); return;
       }
       if (password !== confirm) {
-        showMsg('⚠️ Passwords do not match.', 'error'); return;
+        showMsg('⚠️ Passwords do not match.','error'); return;
       }
 
-      btn.disabled = true; btn.textContent = 'Creating account...';
-
+      btn.disabled=true; btn.textContent='Creating account...';
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await sendEmailVerification(cred.user);
+        const referralCode = 'AGR-' + cred.user.uid.substring(0,6).toUpperCase();
 
-        // Generate unique referral code
-        const myReferralCode = 'AGR-' + cred.user.uid.substring(0, 6).toUpperCase();
-
-        // Save to Firestore
-        await setDoc(doc(db, 'users', cred.user.uid), {
-          email,
-          fullName,
-          fatherName,
+        await setDoc(doc(db,'users',cred.user.uid), {
+          email, fullName, fatherName,
           displayName: fullName,
           vipLevel: 'free',
           walletBalance: 0,
-          referralCode: myReferralCode,
-          usedReferral: referral || null,
+          referralCode,
+          usedReferral: referral||null,
           referralCount: 0,
           referralEarnings: 0,
           createdAt: new Date().toISOString()
         });
 
-        // Credit referrer if valid code
+        // Credit referrer
         if (referral && referral.startsWith('AGR-')) {
-          const q = query(collection(db, 'users'), where('referralCode', '==', referral));
+          const q = query(collection(db,'users'), where('referralCode','==',referral));
           const snap = await getDocs(q);
           if (!snap.empty) {
-            const referrerDoc = snap.docs[0];
-            await updateDoc(doc(db, 'users', referrerDoc.id), {
+            await updateDoc(doc(db,'users',snap.docs[0].id), {
               referralCount: increment(1),
               referralEarnings: increment(50)
             });
           }
         }
 
-        document.getElementById('verifySteps').style.display = 'block';
-        showMsg('✅ Account created! Verification email sent to ' + email, 'success');
-        btn.textContent = '✉️ Check your email!';
+        showMsg('✅ Account created successfully! Signing you in...','success');
+        setTimeout(()=>window.location.href='dashboard.html', 1000);
       } catch(e) {
-        showMsg(cleanErr(e.message), 'error');
-        btn.disabled = false; btn.textContent = 'Create Account →';
+        showMsg(cleanErr(e.message),'error');
+        btn.disabled=false; btn.textContent='Create Account →';
       }
     };
 
     window.showForgotPassword = async function() {
-      const email = prompt('Enter your registered email address:');
+      const email = prompt('Enter your registered email:');
       if (!email) return;
       try {
         await sendPasswordResetEmail(auth, email);
-        alert('✅ Password reset email sent!\nCheck your inbox.');
-      } catch(e) {
-        alert(cleanErr(e.message));
-      }
+        alert('✅ Password reset email sent! Check your inbox.');
+      } catch(e) { alert(cleanErr(e.message)); }
     };
   </script>
 </body>
