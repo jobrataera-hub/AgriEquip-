@@ -16,264 +16,521 @@
     }
 
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     @keyframes progress{from{width:0%}to{width:100%}}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-    @keyframes bgBreath{0%,100%{opacity:0.4}50%{opacity:1}}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+    @keyframes bgBreath{0%,100%{opacity:0.5}50%{opacity:1}}
 
-    /* Logo part animations */
-    @keyframes tractorDrive{
-      0%{transform:translateX(-30px);opacity:0}
-      30%{transform:translateX(0);opacity:1}
-      85%{transform:translateX(0)}
-      100%{transform:translateX(5px)}
+    /* Walking stick entrance from left */
+    @keyframes stickEnter{
+      0%{transform:translateX(-200px) rotate(-15deg);opacity:0}
+      60%{transform:translateX(10px) rotate(2deg);opacity:1}
+      75%{transform:translateX(-5px) rotate(-1deg)}
+      85%{transform:translateX(3px) rotate(0.5deg)}
+      100%{transform:translateX(0) rotate(0deg);opacity:1}
     }
-    @keyframes wheelSpin{
-      from{transform-origin:center;transform:rotate(0deg)}
-      to{transform-origin:center;transform:rotate(360deg)}
+    /* Thump bounce */
+    @keyframes thump{
+      0%,100%{transform:translateY(0)}
+      25%{transform:translateY(-8px)}
+      50%{transform:translateY(0)}
+      75%{transform:translateY(-4px)}
     }
-    @keyframes wheatSway{
-      0%,100%{transform:rotate(-3deg);transform-origin:bottom center}
-      50%{transform:rotate(3deg);transform-origin:bottom center}
+    /* Stick waking up tilt */
+    @keyframes wakeUp{
+      0%{transform:rotate(0deg)}
+      30%{transform:rotate(-20deg)}
+      60%{transform:rotate(5deg)}
+      80%{transform:rotate(-3deg)}
+      100%{transform:rotate(0deg)}
     }
-    @keyframes sunRise{
-      0%{transform:translateY(20px);opacity:0}
-      40%{transform:translateY(0);opacity:1}
-      100%{transform:translateY(0);opacity:1}
+    /* Inspection left-right lean */
+    @keyframes inspect{
+      0%{transform:rotate(0deg)}
+      20%{transform:rotate(-25deg)}
+      40%{transform:rotate(-25deg)}
+      60%{transform:rotate(25deg)}
+      80%{transform:rotate(25deg)}
+      100%{transform:rotate(0deg)}
     }
-    @keyframes sunGlow{
-      0%,100%{filter:drop-shadow(0 0 8px rgba(255,200,0,0.4))}
-      50%{filter:drop-shadow(0 0 20px rgba(255,200,0,0.8))}
+    /* Eyebrow arch */
+    @keyframes eyebrowArch{
+      0%{transform:scaleY(1) translateY(0)}
+      50%{transform:scaleY(0.3) translateY(-4px)}
+      100%{transform:scaleY(1.8) translateY(-8px)}
     }
-    @keyframes logoScale{
-      0%{transform:scale(0.5);opacity:0}
-      60%{transform:scale(1.08)}
+    /* Eyes widen */
+    @keyframes eyesWiden{
+      0%,80%{transform:scaleY(1)}
+      90%{transform:scaleY(2.5)}
+      100%{transform:scaleY(1.5)}
+    }
+    /* Thought bubble pop */
+    @keyframes bubblePop{
+      0%{transform:scale(0);opacity:0}
+      60%{transform:scale(1.15)}
+      80%{transform:scale(0.95)}
       100%{transform:scale(1);opacity:1}
     }
-    @keyframes orbit1{
-      from{transform:rotate(0deg) translateX(80px) rotate(0deg)}
-      to{transform:rotate(360deg) translateX(80px) rotate(-360deg)}
+    /* Approval nod */
+    @keyframes nod{
+      0%{transform:rotate(0deg)}
+      20%{transform:rotate(-15deg)}
+      40%{transform:rotate(5deg)}
+      60%{transform:rotate(-10deg)}
+      80%{transform:rotate(3deg)}
+      100%{transform:rotate(0deg)}
     }
-    @keyframes orbit2{
-      from{transform:rotate(180deg) translateX(62px) rotate(-180deg)}
-      to{transform:rotate(540deg) translateX(62px) rotate(-540deg)}
+    /* Dissolve into light */
+    @keyframes dissolve{
+      0%{opacity:1;transform:scale(1)}
+      50%{opacity:0.5;transform:scale(1.3);filter:brightness(3)}
+      100%{opacity:0;transform:scale(0);filter:brightness(5)}
     }
-    @keyframes floatLogo{
+    /* Logo appear */
+    @keyframes logoAppear{
+      0%{opacity:0;transform:scale(0.8) translateY(10px)}
+      100%{opacity:1;transform:scale(1) translateY(0)}
+    }
+    /* Thought icons */
+    @keyframes oxFloat{
       0%,100%{transform:translateY(0)}
-      50%{transform:translateY(-12px)}
+      50%{transform:translateY(-3px)}
     }
-    @keyframes glowLogo{
-      0%,100%{filter:drop-shadow(0 0 15px rgba(34,197,94,0.4))}
-      50%{filter:drop-shadow(0 0 40px rgba(34,197,94,0.9))}
+    /* Pffft puff */
+    @keyframes puff{
+      0%{transform:scale(0.3) translateY(0);opacity:0.8}
+      100%{transform:scale(2) translateY(-20px);opacity:0}
     }
-    @keyframes cloudFloat{
-      0%,100%{transform:translateX(0)}
-      50%{transform:translateX(8px)}
+    /* Green burst */
+    @keyframes greenBurst{
+      0%{transform:scale(0);opacity:1}
+      100%{transform:scale(4);opacity:0}
     }
-    @keyframes grassGrow{
-      from{transform:scaleY(0);transform-origin:bottom}
-      to{transform:scaleY(1);transform-origin:bottom}
+    @keyframes glowPulse{
+      0%,100%{box-shadow:0 0 20px rgba(34,197,94,0.3)}
+      50%{box-shadow:0 0 50px rgba(34,197,94,0.8)}
     }
 
     .bg{
       position:fixed;inset:0;
-      background:
-        radial-gradient(ellipse at 20% 30%,rgba(34,197,94,0.09) 0%,transparent 55%),
-        radial-gradient(ellipse at 80% 70%,rgba(6,182,212,0.07) 0%,transparent 55%);
+      background:radial-gradient(ellipse at 25% 35%,rgba(34,197,94,0.08),transparent 55%),
+                radial-gradient(ellipse at 75% 65%,rgba(6,182,212,0.07),transparent 55%);
       animation:bgBreath 4s ease-in-out infinite;
     }
 
-    .wrap{text-align:center;position:relative;z-index:10;padding:20px}
-
-    .orbit-system{
-      position:relative;width:180px;height:180px;
-      margin:0 auto 28px;
+    .scene{
+      position:relative;
+      width:320px;height:320px;
+      margin:0 auto 20px;
+      display:flex;align-items:center;justify-content:center;
     }
-    .logo-svg{
+
+    /* ===== WALKING STICK (Gultsila) ===== */
+    .stick-wrap{
+      position:absolute;
+      width:80px;
+      animation:stickEnter 1s cubic-bezier(0.34,1.4,0.64,1) 0.3s both;
+      transform-origin:bottom center;
+      z-index:10;
+    }
+    .stick-body{
+      position:relative;
+      transform-origin:bottom center;
+    }
+    .stick-body.wake{animation:wakeUp 1.5s ease 1.5s both}
+    .stick-body.inspect{animation:inspect 2s ease 3s both}
+    .stick-body.nod{animation:nod 0.8s ease 5.5s both}
+    .stick-body.dissolve{animation:dissolve 0.8s ease 6.5s forwards}
+
+    /* Stick shaft */
+    .shaft{
+      width:12px;height:180px;
+      background:linear-gradient(180deg,#8B4513 0%,#A0522D 30%,#6B3410 70%,#4A2506 100%);
+      border-radius:6px;margin:0 auto;
+      box-shadow:inset -3px 0 6px rgba(0,0,0,0.3),2px 0 4px rgba(255,255,255,0.1);
+      position:relative;
+    }
+    /* Wood grain lines */
+    .shaft::after{
+      content:'';position:absolute;
+      inset:0;border-radius:6px;
+      background:repeating-linear-gradient(180deg,transparent 0,transparent 12px,rgba(0,0,0,0.08) 12px,rgba(0,0,0,0.08) 14px);
+    }
+
+    /* Ornate top - the "head" */
+    .stick-top{
+      width:70px;height:70px;
+      background:linear-gradient(135deg,#C8860A,#F0A500,#8B6000);
+      border-radius:50%;margin:0 auto;
+      position:relative;
+      box-shadow:0 0 20px rgba(240,165,0,0.4),inset -5px -5px 15px rgba(0,0,0,0.3),inset 3px 3px 8px rgba(255,255,255,0.2);
+      border:3px solid #F0A500;
+      display:flex;align-items:center;justify-content:center;
+      flex-direction:column;
+      animation:glowPulse 2s ease-in-out 1.5s infinite;
+    }
+    /* Decorative ring around top */
+    .stick-ring{
+      position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+      width:18px;height:8px;
+      background:linear-gradient(180deg,#F0C040,#C8860A);
+      border-radius:4px;
+    }
+
+    /* The wise face */
+    .wise-face{
+      width:54px;height:54px;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      gap:3px;
+      opacity:0;
+      animation:fadeIn 0.6s ease 1.3s forwards;
+    }
+
+    /* Eyebrows */
+    .brows{
+      display:flex;gap:8px;margin-bottom:2px;
+    }
+    .brow{
+      width:16px;height:5px;
+      background:#4A2506;border-radius:3px;
+      position:relative;
+      transform-origin:center;
+      animation:eyebrowArch 1.5s ease 2s both;
+    }
+    .brow.left{transform:rotate(-15deg)}
+    .brow.right{transform:rotate(15deg)}
+    /* Bushy brow texture */
+    .brow::after{
+      content:'';position:absolute;
+      inset:-2px;border-radius:4px;
+      background:repeating-linear-gradient(90deg,#4A2506 0,#4A2506 2px,#6B3410 2px,#6B3410 4px);
+    }
+
+    /* Eyes */
+    .eyes{
+      display:flex;gap:10px;
+    }
+    .eye{
+      width:12px;height:10px;
+      background:#1a0a00;border-radius:50%;
+      position:relative;
+      overflow:hidden;
+      animation:eyesWiden 1.5s ease 4.8s both;
+    }
+    .eye::after{
+      content:'';position:absolute;
+      top:2px;left:3px;
+      width:4px;height:4px;
+      background:white;border-radius:50%;
+    }
+    /* Heavy eyelids */
+    .eyelid{
+      position:absolute;top:0;left:0;right:0;
+      height:60%;background:#C8860A;border-radius:50% 50% 0 0;
+      animation:fadeIn 0.5s ease 1.3s both;
+    }
+
+    /* Mouth - slight smug curve */
+    .mouth{
+      width:18px;height:6px;
+      border-bottom:3px solid #4A2506;
+      border-radius:0 0 10px 10px;
+      margin-top:2px;
+    }
+
+    /* Decorative dots on the head */
+    .dot{
+      position:absolute;width:4px;height:4px;
+      background:rgba(255,255,255,0.3);border-radius:50%;
+    }
+
+    /* Thump particles */
+    .thump-wrap{
+      position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+      animation:stickEnter 1s cubic-bezier(0.34,1.4,0.64,1) 0.3s both;
+    }
+    .thump{
+      font-size:0.7rem;color:#22C55E;font-weight:700;
+      opacity:0;
+      animation:thumpText 0.5s ease 0.8s forwards, thumpText 0.5s ease 0.9s forwards;
+    }
+    @keyframes thumpText{
+      0%{opacity:0;transform:translateY(0)}
+      50%{opacity:1;transform:translateY(-15px)}
+      100%{opacity:0;transform:translateY(-25px)}
+    }
+
+    /* AgriEquip logo */
+    .logo-center{
       position:absolute;top:50%;left:50%;
       transform:translate(-50%,-50%);
-      width:130px;height:130px;
-      animation:logoScale 1s cubic-bezier(0.34,1.4,0.64,1) 0.3s both,
-                floatLogo 3.5s ease-in-out 1.5s infinite,
-                glowLogo 3s ease-in-out 1.5s infinite;
+      text-align:center;
+      z-index:5;
     }
-
-    /* Animated SVG parts */
-    .tractor-group{animation:tractorDrive 1.2s cubic-bezier(0.34,1.2,0.64,1) 0.8s both}
-    .wheel-big{
-      transform-origin:25px 86px;
-      animation:wheelSpin 1s linear 0.8s infinite;
+    .logo-icon-wrap{
+      width:90px;height:90px;
+      background:linear-gradient(135deg,#22C55E,#06B6D4);
+      border-radius:22px;
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 8px;
+      opacity:0;
+      animation:logoAppear 0.8s ease 0.2s forwards;
+      box-shadow:0 8px 30px rgba(34,197,94,0.3);
     }
-    .wheel-small{
-      transform-origin:54px 83px;
-      animation:wheelSpin 0.8s linear 0.8s infinite;
-    }
-    .wheat1{
-      transform-origin:74px 86px;
-      animation:wheatSway 2s ease-in-out 1.3s infinite;
-    }
-    .wheat2{
-      transform-origin:84px 86px;
-      animation:wheatSway 2s ease-in-out 1.5s infinite;
-    }
-    .wheat3{
-      transform-origin:94px 86px;
-      animation:wheatSway 2s ease-in-out 1.7s infinite;
-    }
-    .sun-group{animation:sunRise 1.2s ease 0.5s both,sunGlow 2.5s ease-in-out 2s infinite}
-    .cloud1{animation:cloudFloat 4s ease-in-out 2s infinite}
-    .cloud2{animation:cloudFloat 5s ease-in-out 2.5s infinite reverse}
-
-    .orb{
-      position:absolute;top:50%;left:50%;
-      border-radius:50%;opacity:0;
-    }
-    .orb1{
-      width:11px;height:11px;background:#22C55E;
-      box-shadow:0 0 12px #22C55E;margin:-5.5px 0 0 -5.5px;
-      animation:orbit1 3.5s linear 1.5s infinite,fadeIn 0.5s ease 1.5s forwards;
-    }
-    .orb2{
-      width:8px;height:8px;background:#06B6D4;
-      box-shadow:0 0 10px #06B6D4;margin:-4px 0 0 -4px;
-      animation:orbit2 2.5s linear 1.7s infinite,fadeIn 0.5s ease 1.7s forwards;
-    }
-    .orb3{
-      width:6px;height:6px;background:#F59E0B;
-      box-shadow:0 0 8px #F59E0B;margin:-3px 0 0 -3px;
-      animation:orbit1 5s linear 1.9s infinite reverse,fadeIn 0.5s ease 1.9s forwards;
-    }
-
-    .name{
-      font-family:'Fraunces',serif;font-size:3rem;font-weight:900;
+    .logo-txt{
+      font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900;
       background:linear-gradient(135deg,#22C55E,#06B6D4);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
       background-clip:text;
-      animation:slideUp 0.6s ease 0.9s both;
-      letter-spacing:-1px;
-    }
-    .sub{
-      color:rgba(255,255,255,0.4);font-size:0.76rem;
-      letter-spacing:2.5px;text-transform:uppercase;
-      margin-top:6px;animation:slideUp 0.5s ease 1.1s both;
-    }
-    .country{
-      color:rgba(255,255,255,0.2);font-size:0.7rem;
-      margin-top:5px;animation:slideUp 0.5s ease 1.2s both;
+      opacity:0;
+      animation:fadeIn 0.6s ease 0.5s forwards;
     }
 
-    .bar-outer{
-      width:160px;height:3px;background:rgba(255,255,255,0.07);
-      border-radius:3px;margin:28px auto 0;overflow:hidden;
-      animation:slideUp 0.5s ease 1.3s both;
+    /* Thought bubble */
+    .thought-bubble{
+      position:absolute;top:20px;right:10px;
+      width:130px;
+      background:rgba(255,255,255,0.95);
+      border-radius:16px;padding:10px;
+      opacity:0;
+      display:none;
+      z-index:20;
+      box-shadow:0 8px 24px rgba(0,0,0,0.3);
     }
-    .bar-inner{
-      height:100%;
-      background:linear-gradient(90deg,#22C55E,#06B6D4,#22C55E);
-      border-radius:3px;
-      animation:progress 3.5s ease 1.4s both;
+    .thought-bubble.show{
+      display:block;
+      animation:bubblePop 0.5s cubic-bezier(0.34,1.4,0.64,1) forwards;
     }
-    .loading-txt{
-      color:rgba(255,255,255,0.2);font-size:0.7rem;
-      margin-top:10px;
-      animation:pulse 1s infinite 1.6s,slideUp 0.5s ease 1.4s both;
+    /* Bubble tail dots */
+    .bubble-tail{
+      position:absolute;bottom:-10px;left:20px;
+      display:flex;gap:3px;
     }
-    .version{position:fixed;bottom:14px;color:rgba(255,255,255,0.1);font-size:0.65rem;letter-spacing:1px}
+    .bubble-dot{
+      background:rgba(255,255,255,0.9);border-radius:50%;
+    }
+    .thought-content{
+      display:flex;align-items:center;justify-content:space-around;
+      gap:6px;
+    }
+    .thought-old{
+      text-align:center;font-size:1.3rem;
+      animation:oxFloat 1s ease-in-out infinite;
+    }
+    .thought-vs{font-size:0.65rem;font-weight:700;color:#EF4444;padding:2px 4px;background:rgba(239,68,68,0.1);border-radius:4px}
+    .thought-new{text-align:center;font-size:1.3rem}
+    .thought-label{font-size:0.55rem;color:#64748B;text-align:center;margin-top:3px}
+
+    /* Pffft puff */
+    .pffft{
+      position:absolute;top:50px;right:50px;
+      font-size:0.65rem;font-weight:700;color:rgba(100,116,139,0.8);
+      opacity:0;display:none;z-index:25;
+    }
+    .pffft.show{
+      display:block;
+      animation:puff 0.8s ease forwards;
+    }
+
+    /* Green burst effect */
+    .green-burst{
+      position:absolute;
+      width:80px;height:80px;
+      background:radial-gradient(circle,rgba(34,197,94,0.8),transparent);
+      border-radius:50%;
+      top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+      opacity:0;display:none;z-index:30;
+    }
+    .green-burst.show{
+      display:block;
+      animation:greenBurst 0.8s ease forwards;
+    }
+
+    /* Bottom text */
+    .app-name{
+      font-family:'Fraunces',serif;font-size:2.5rem;font-weight:900;
+      background:linear-gradient(135deg,#22C55E,#06B6D4);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+      text-align:center;
+      animation:slideUp 0.6s ease 0.7s both;
+      letter-spacing:-1px;
+    }
+    .app-sub{color:rgba(255,255,255,0.35);font-size:0.74rem;letter-spacing:2px;text-transform:uppercase;text-align:center;animation:slideUp 0.5s ease 0.9s both;margin-top:4px}
+    .app-country{color:rgba(255,255,255,0.18);font-size:0.68rem;text-align:center;animation:slideUp 0.5s ease 1s both;margin-top:3px}
+
+    .bar-outer{width:150px;height:2px;background:rgba(255,255,255,0.07);border-radius:2px;margin:22px auto 0;overflow:hidden;animation:slideUp 0.5s ease 1.1s both}
+    .bar-inner{height:100%;background:linear-gradient(90deg,#22C55E,#06B6D4);animation:progress 6s ease 1.2s both}
+    .loading-txt{color:rgba(255,255,255,0.2);font-size:0.68rem;text-align:center;margin-top:8px;animation:blink 1s infinite 1.4s,slideUp 0.5s ease 1.2s both}
+    .version{position:fixed;bottom:12px;color:rgba(255,255,255,0.1);font-size:0.64rem;letter-spacing:1px}
   </style>
 </head>
 <body>
   <div class="bg"></div>
-  <div class="wrap">
-    <div class="orbit-system">
-      <svg class="logo-svg" viewBox="0 0 115 115" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="lg1" x1="0" y1="0" x2="115" y2="115" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#22C55E"/><stop offset="1" stop-color="#06B6D4"/>
-          </linearGradient>
-        </defs>
-        <!-- Background -->
-        <rect width="115" height="115" rx="26" fill="url(#lg1)"/>
-        <rect x="6" y="6" width="103" height="103" rx="22" fill="rgba(0,0,0,0.12)"/>
-        <!-- Sky -->
-        <rect x="10" y="10" width="95" height="52" rx="16" fill="rgba(255,255,255,0.05)"/>
-        <!-- Sun (animated) -->
-        <g class="sun-group">
-          <circle cx="22" cy="26" r="10" fill="rgba(255,255,255,0.18)"/>
-          <circle cx="22" cy="26" r="6" fill="rgba(255,255,255,0.6)"/>
-          <line x1="22" y1="12" x2="22" y2="9" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="31" y1="16" x2="33" y2="14" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="34" y1="26" x2="37" y2="26" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="31" y1="36" x2="33" y2="38" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round"/>
-        </g>
-        <!-- Clouds -->
-        <g class="cloud1">
-          <ellipse cx="60" cy="20" rx="12" ry="5" fill="rgba(255,255,255,0.12)"/>
-          <ellipse cx="55" cy="22" rx="8" ry="4" fill="rgba(255,255,255,0.1)"/>
-        </g>
-        <g class="cloud2">
-          <ellipse cx="85" cy="18" rx="10" ry="4" fill="rgba(255,255,255,0.08)"/>
-        </g>
-        <!-- Tractor group (animated) -->
-        <g class="tractor-group">
-          <!-- Tractor body -->
-          <rect x="12" y="62" width="45" height="24" rx="7" fill="rgba(255,255,255,0.88)"/>
-          <!-- Cab -->
-          <rect x="40" y="52" width="22" height="18" rx="6" fill="rgba(255,255,255,0.72)"/>
-          <!-- Window -->
-          <rect x="43" y="55" width="16" height="10" rx="3" fill="rgba(6,182,212,0.45)"/>
-          <!-- Exhaust pipe -->
-          <rect x="58" y="48" width="3" height="8" rx="1.5" fill="rgba(255,255,255,0.6)"/>
-          <ellipse cx="59.5" cy="47" rx="3" ry="2" fill="rgba(255,255,255,0.3)"/>
-          <!-- Big wheel (spinning) -->
-          <circle class="wheel-big" cx="25" cy="86" r="14" fill="rgba(10,22,40,0.85)" stroke="rgba(255,255,255,0.9)" stroke-width="2.5"/>
-          <circle cx="25" cy="86" r="6" fill="rgba(255,255,255,0.2)"/>
-          <line x1="25" y1="72" x2="25" y2="100" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-          <line x1="11" y1="86" x2="39" y2="86" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-          <!-- Small wheel (spinning) -->
-          <circle class="wheel-small" cx="54" cy="83" r="9" fill="rgba(10,22,40,0.85)" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
-          <circle cx="54" cy="83" r="4" fill="rgba(255,255,255,0.2)"/>
-        </g>
-        <!-- Wheat stalks (swaying) -->
-        <g class="wheat1">
-          <line x1="74" y1="86" x2="74" y2="36" stroke="rgba(255,255,255,0.82)" stroke-width="2.5" stroke-linecap="round"/>
-          <ellipse cx="74" cy="30" rx="5" ry="11" fill="rgba(255,255,255,0.82)" transform="rotate(-12 74 30)"/>
-          <line x1="70" y1="50" x2="74" y2="50" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="70" y1="60" x2="74" y2="60" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-        </g>
-        <g class="wheat2">
-          <line x1="84" y1="86" x2="84" y2="40" stroke="rgba(255,255,255,0.72)" stroke-width="2" stroke-linecap="round"/>
-          <ellipse cx="84" cy="34" rx="4.5" ry="10" fill="rgba(255,255,255,0.72)" transform="rotate(10 84 34)"/>
-          <line x1="80" y1="54" x2="84" y2="54" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-        </g>
-        <g class="wheat3">
-          <line x1="94" y1="86" x2="94" y2="38" stroke="rgba(255,255,255,0.62)" stroke-width="2" stroke-linecap="round"/>
-          <ellipse cx="94" cy="32" rx="4" ry="9" fill="rgba(255,255,255,0.62)" transform="rotate(-6 94 32)"/>
-        </g>
-        <!-- Ground -->
-        <rect x="10" y="88" width="95" height="5" rx="2.5" fill="rgba(255,255,255,0.22)"/>
-        <rect x="10" y="97" width="95" height="4" rx="2" fill="rgba(255,255,255,0.13)"/>
-        <rect x="10" y="105" width="95" height="3" rx="1.5" fill="rgba(255,255,255,0.07)"/>
-      </svg>
-      <div class="orb orb1"></div>
-      <div class="orb orb2"></div>
-      <div class="orb orb3"></div>
+
+  <div class="scene" id="scene">
+
+    <!-- AgriEquip Logo (center, appears first) -->
+    <div class="logo-center">
+      <div class="logo-icon-wrap">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+          <rect width="60" height="60" rx="16" fill="rgba(0,0,0,0.15)"/>
+          <!-- Tractor -->
+          <rect x="6" y="32" width="28" height="16" rx="4" fill="rgba(255,255,255,0.85)"/>
+          <rect x="24" y="26" width="14" height="11" rx="3" fill="rgba(255,255,255,0.7)"/>
+          <circle cx="14" cy="48" r="8" fill="rgba(10,22,40,0.85)" stroke="white" stroke-width="1.5"/>
+          <circle cx="14" cy="48" r="3.5" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="32" cy="46" r="5" fill="rgba(10,22,40,0.85)" stroke="white" stroke-width="1.5"/>
+          <!-- Wheat -->
+          <line x1="42" y1="50" x2="42" y2="18" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="42" cy="14" rx="3.5" ry="8" fill="rgba(255,255,255,0.8)" transform="rotate(-10 42 14)"/>
+          <line x1="50" y1="50" x2="50" y2="22" stroke="rgba(255,255,255,0.65)" stroke-width="1.5" stroke-linecap="round"/>
+          <ellipse cx="50" cy="18" rx="3" ry="7" fill="rgba(255,255,255,0.65)" transform="rotate(8 50 18)"/>
+          <!-- Sun -->
+          <circle cx="12" cy="14" r="7" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="12" cy="14" r="4" fill="rgba(255,255,255,0.6)"/>
+          <!-- Ground -->
+          <rect x="4" y="52" width="54" height="3" rx="1.5" fill="rgba(255,255,255,0.2)"/>
+        </svg>
+      </div>
+      <div class="logo-txt">AgriEquip</div>
     </div>
 
-    <div class="name">AgriEquip</div>
-    <div class="sub">Agricultural Rental Marketplace</div>
-    <div class="country">🇪🇹 Made in Ethiopia</div>
+    <!-- Walking Stick - positioned to the side -->
+    <div class="stick-wrap" id="stickWrap" style="position:absolute;left:30px;bottom:20px">
+      <div class="stick-body" id="stickBody">
+        <!-- Ornate top / head -->
+        <div class="stick-top" id="stickTop">
+          <div class="stick-ring"></div>
+          <!-- Decorative dots -->
+          <div class="dot" style="top:6px;left:8px"></div>
+          <div class="dot" style="top:6px;right:8px"></div>
+          <div class="dot" style="bottom:8px;left:50%;transform:translateX(-50%)"></div>
+          <!-- Wise face -->
+          <div class="wise-face" id="wiseFace">
+            <!-- Eyebrows -->
+            <div class="brows">
+              <div class="brow left" id="browLeft"></div>
+              <div class="brow right" id="browRight"></div>
+            </div>
+            <!-- Eyes with heavy lids -->
+            <div class="eyes">
+              <div class="eye" id="eyeLeft">
+                <div class="eyelid"></div>
+              </div>
+              <div class="eye" id="eyeRight">
+                <div class="eyelid"></div>
+              </div>
+            </div>
+            <!-- Smug mouth -->
+            <div class="mouth"></div>
+          </div>
+        </div>
+        <!-- Shaft -->
+        <div class="shaft"></div>
+      </div>
+    </div>
 
-    <div class="bar-outer"><div class="bar-inner"></div></div>
-    <div class="loading-txt">Loading platform...</div>
+    <!-- Thought bubble -->
+    <div class="thought-bubble" id="thoughtBubble">
+      <div class="thought-content">
+        <div>
+          <div class="thought-old">🐂</div>
+          <div class="thought-label">Old way</div>
+        </div>
+        <div class="thought-vs">VS</div>
+        <div>
+          <div class="thought-new">🚜</div>
+          <div class="thought-label">AgriEquip</div>
+        </div>
+      </div>
+      <div class="bubble-tail">
+        <div class="bubble-dot" style="width:8px;height:8px"></div>
+        <div class="bubble-dot" style="width:5px;height:5px;margin-top:3px"></div>
+        <div class="bubble-dot" style="width:3px;height:3px;margin-top:5px"></div>
+      </div>
+    </div>
+
+    <!-- Pffft text -->
+    <div class="pffft" id="pffft">pffft! 💨</div>
+
+    <!-- Green burst -->
+    <div class="green-burst" id="greenBurst"></div>
+
   </div>
+
+  <div class="app-name">AgriEquip</div>
+  <div class="app-sub">Agricultural Rental Marketplace</div>
+  <div class="app-country">🇪🇹 Made in Ethiopia</div>
+  <div class="bar-outer"><div class="bar-inner"></div></div>
+  <div class="loading-txt" id="loadingTxt">Summoning wisdom...</div>
   <div class="version">v1.0.0</div>
 
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
-    sessionStorage.setItem('splashSeen', '1');
-    setTimeout(() => { window.location.href = 'login.html'; }, 5000);
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+    sessionStorage.setItem('splashSeen','1');
+
+    const stick = document.getElementById('stickBody');
+    const bubble = document.getElementById('thoughtBubble');
+    const pffft = document.getElementById('pffft');
+    const burst = document.getElementById('greenBurst');
+    const txt = document.getElementById('loadingTxt');
+    const browL = document.getElementById('browLeft');
+    const browR = document.getElementById('browRight');
+
+    // Timeline
+    // 0-1s: entrance (CSS)
+    // 1-1.5s: face appears (CSS)
+    // 1.5-3s: wake up
+    setTimeout(() => {
+      stick.style.animation = 'wakeUp 1.5s ease forwards';
+      txt.textContent = 'The elder awakens...';
+    }, 1500);
+
+    // 3-5s: inspection
+    setTimeout(() => {
+      stick.style.animation = 'inspect 2s ease forwards';
+      txt.textContent = 'Inspecting with wisdom...';
+      // Eyebrow goes way up
+      browL.style.animation = 'eyebrowArch 1.5s ease forwards';
+      browR.style.animation = 'eyebrowArch 1.5s ease 0.1s forwards';
+    }, 3000);
+
+    // 5s: thought bubble
+    setTimeout(() => {
+      bubble.classList.add('show');
+      txt.textContent = 'A moment of realization...';
+      // Eyes widen
+      document.getElementById('eyeLeft').style.animation = 'eyesWiden 0.8s ease forwards';
+      document.getElementById('eyeRight').style.animation = 'eyesWiden 0.8s ease 0.1s forwards';
+    }, 5000);
+
+    // 5.5s: pffft
+    setTimeout(() => {
+      pffft.classList.add('show');
+    }, 5500);
+
+    // 5.8s: approval nod
+    setTimeout(() => {
+      stick.style.animation = 'nod 0.8s ease forwards';
+      txt.textContent = 'Wise approval granted! ✓';
+      bubble.style.opacity = '0';
+      bubble.style.transition = 'opacity 0.3s';
+    }, 5800);
+
+    // 6.5s: dissolve into light
+    setTimeout(() => {
+      stick.style.animation = 'dissolve 0.8s ease forwards';
+      burst.classList.add('show');
+      txt.textContent = 'Loading AgriEquip...';
+    }, 6500);
+
+    // 7s: redirect
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 7300);
   </script>
 </body>
 </html>

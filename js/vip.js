@@ -10,10 +10,11 @@ export const VIP_PLANS = {
     badge: '⚪',
     color: '#94A3B8',
     features: [
-      'Up to 2 equipment listings',
+      '2 equipment listings',
       '10% commission per rental',
       'Basic search visibility',
-      'Standard support'
+      'Community support',
+      'Referral program access'
     ]
   },
   vip1: {
@@ -24,11 +25,11 @@ export const VIP_PLANS = {
     badge: '🟡',
     color: '#F59E0B',
     features: [
-      'Up to 5 equipment listings',
+      '5 equipment listings',
       '8% commission per rental',
-      'Standard badge on listings',
+      '🟡 Standard seller badge',
       'Priority search placement',
-      'Email support'
+      'Email support priority'
     ]
   },
   vip2: {
@@ -39,9 +40,9 @@ export const VIP_PLANS = {
     badge: '🟠',
     color: '#F97316',
     features: [
-      'Up to 10 equipment listings',
+      '10 equipment listings',
       '7% commission per rental',
-      'Featured listings badge',
+      '🟠 Featured listings badge',
       'Higher search ranking',
       'Priority email support'
     ]
@@ -54,11 +55,11 @@ export const VIP_PLANS = {
     badge: '🔵',
     color: '#3B82F6',
     features: [
-      'Up to 20 equipment listings',
+      '20 equipment listings',
       '6% commission per rental',
-      'Blue verified badge',
+      '🔵 Blue verified badge',
       'Top search ranking',
-      'Priority phone support'
+      'Phone support access'
     ]
   },
   vip4: {
@@ -69,10 +70,10 @@ export const VIP_PLANS = {
     badge: '🟣',
     color: '#8B5CF6',
     features: [
-      'Up to 50 equipment listings',
+      '50 equipment listings',
       '5% commission per rental',
-      'Purple elite badge',
-      'Featured homepage placement',
+      '🟣 Purple elite badge',
+      'Homepage featured spot',
       'Dedicated account manager'
     ]
   },
@@ -86,9 +87,9 @@ export const VIP_PLANS = {
     features: [
       'Unlimited equipment listings',
       'Only 4% commission per rental',
-      'Diamond verified badge',
+      '💎 Diamond verified badge',
       'Premium homepage spotlight',
-      '24/7 VIP support',
+      '24/7 VIP support line',
       'Advanced earnings analytics'
     ]
   }
@@ -106,7 +107,8 @@ export async function upgradeVIP(userId, planKey) {
     const plan = VIP_PLANS[planKey];
     const userRef = doc(db, 'users', userId);
     const snap = await getDoc(userRef);
-    const wallet = snap.exists() ? (snap.data().walletBalance || 0) : 0;
+    if (!snap.exists()) return { success: false, message: 'User not found.' };
+    const wallet = snap.data().walletBalance || 0;
     if (wallet < plan.fee) {
       return { success: false, message: `Need ${plan.fee} ETB. Your balance: ${wallet} ETB.` };
     }
@@ -115,7 +117,7 @@ export async function upgradeVIP(userId, planKey) {
       walletBalance: wallet - plan.fee,
       vipUpgradedAt: new Date().toISOString()
     });
-    return { success: true, message: `Successfully upgraded to ${plan.name}!` };
+    return { success: true, message: `Successfully upgraded to ${plan.name}! 🎉` };
   } catch(e) { return { success: false, message: e.message }; }
 }
 
