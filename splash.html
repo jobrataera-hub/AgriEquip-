@@ -4,533 +4,603 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AgriEquip</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,900;1,700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{
-      background:#0a1628;
-      display:flex;flex-direction:column;
-      align-items:center;justify-content:center;
-      min-height:100vh;overflow:hidden;
-      font-family:'Poppins',sans-serif;
-    }
+    html,body{width:100%;height:100%;overflow:hidden;background:#000}
 
+    /* ===== KEYFRAMES ===== */
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeOut{from{opacity:1}to{opacity:0;visibility:hidden}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
     @keyframes progress{from{width:0%}to{width:100%}}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-    @keyframes bgBreath{0%,100%{opacity:0.5}50%{opacity:1}}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 
-    /* Walking stick entrance from left */
-    @keyframes stickEnter{
-      0%{transform:translateX(-200px) rotate(-15deg);opacity:0}
-      60%{transform:translateX(10px) rotate(2deg);opacity:1}
-      75%{transform:translateX(-5px) rotate(-1deg)}
-      85%{transform:translateX(3px) rotate(0.5deg)}
-      100%{transform:translateX(0) rotate(0deg);opacity:1}
+    /* Logo animations */
+    @keyframes lightAppear{
+      0%{transform:scale(0);opacity:0;filter:blur(20px)}
+      60%{transform:scale(1.4);opacity:1;filter:blur(0)}
+      100%{transform:scale(1);opacity:1;filter:blur(0)}
     }
-    /* Thump bounce */
-    @keyframes thump{
-      0%,100%{transform:translateY(0)}
-      25%{transform:translateY(-8px)}
-      50%{transform:translateY(0)}
-      75%{transform:translateY(-4px)}
+    @keyframes logoBounce{
+      0%{transform:scale(0.5) translateY(40px);opacity:0}
+      50%{transform:scale(1.08) translateY(-12px);opacity:1}
+      70%{transform:scale(0.97) translateY(4px)}
+      85%{transform:scale(1.03) translateY(-2px)}
+      100%{transform:scale(1) translateY(0);opacity:1}
     }
-    /* Stick waking up tilt */
-    @keyframes wakeUp{
-      0%{transform:rotate(0deg)}
-      30%{transform:rotate(-20deg)}
-      60%{transform:rotate(5deg)}
-      80%{transform:rotate(-3deg)}
-      100%{transform:rotate(0deg)}
+    @keyframes logoRotate{
+      0%{transform:rotate(0deg) scale(1)}
+      25%{transform:rotate(5deg) scale(1.03)}
+      50%{transform:rotate(-3deg) scale(1)}
+      75%{transform:rotate(2deg) scale(1.01)}
+      100%{transform:rotate(0deg) scale(1)}
     }
-    /* Inspection left-right lean */
-    @keyframes inspect{
-      0%{transform:rotate(0deg)}
-      20%{transform:rotate(-25deg)}
-      40%{transform:rotate(-25deg)}
-      60%{transform:rotate(25deg)}
-      80%{transform:rotate(25deg)}
-      100%{transform:rotate(0deg)}
+    @keyframes logoPulse{
+      0%,100%{box-shadow:0 0 40px rgba(34,197,94,0.4),0 0 80px rgba(34,197,94,0.2),0 20px 60px rgba(0,0,0,0.5)}
+      50%{box-shadow:0 0 60px rgba(34,197,94,0.7),0 0 120px rgba(34,197,94,0.4),0 20px 60px rgba(0,0,0,0.5)}
     }
-    /* Eyebrow arch */
-    @keyframes eyebrowArch{
-      0%{transform:scaleY(1) translateY(0)}
-      50%{transform:scaleY(0.3) translateY(-4px)}
-      100%{transform:scaleY(1.8) translateY(-8px)}
+    @keyframes graphDraw{
+      0%{stroke-dashoffset:200}
+      100%{stroke-dashoffset:0}
     }
-    /* Eyes widen */
-    @keyframes eyesWiden{
-      0%,80%{transform:scaleY(1)}
-      90%{transform:scaleY(2.5)}
-      100%{transform:scaleY(1.5)}
+    @keyframes graphGlow{
+      0%,100%{filter:drop-shadow(0 0 3px rgba(255,255,255,0.5))}
+      50%{filter:drop-shadow(0 0 8px rgba(255,255,255,1))}
     }
-    /* Thought bubble pop */
-    @keyframes bubblePop{
-      0%{transform:scale(0);opacity:0}
-      60%{transform:scale(1.15)}
-      80%{transform:scale(0.95)}
-      100%{transform:scale(1);opacity:1}
+    /* Particles */
+    @keyframes particleFloat{
+      0%{transform:translateY(0) translateX(0) scale(1);opacity:0.7}
+      33%{transform:translateY(-30px) translateX(15px) scale(1.2);opacity:1}
+      66%{transform:translateY(-60px) translateX(-10px) scale(0.8);opacity:0.5}
+      100%{transform:translateY(-100px) translateX(5px) scale(0.3);opacity:0}
     }
-    /* Approval nod */
-    @keyframes nod{
-      0%{transform:rotate(0deg)}
-      20%{transform:rotate(-15deg)}
-      40%{transform:rotate(5deg)}
-      60%{transform:rotate(-10deg)}
-      80%{transform:rotate(3deg)}
-      100%{transform:rotate(0deg)}
+    @keyframes orbitFloat{
+      0%{transform:rotate(0deg) translateX(80px) rotate(0deg);opacity:0.8}
+      100%{transform:rotate(360deg) translateX(80px) rotate(-360deg);opacity:0.8}
     }
-    /* Dissolve into light */
-    @keyframes dissolve{
-      0%{opacity:1;transform:scale(1)}
-      50%{opacity:0.5;transform:scale(1.3);filter:brightness(3)}
-      100%{opacity:0;transform:scale(0);filter:brightness(5)}
+    @keyframes orbitFloat2{
+      0%{transform:rotate(180deg) translateX(110px) rotate(-180deg);opacity:0.6}
+      100%{transform:rotate(540deg) translateX(110px) rotate(-540deg);opacity:0.6}
     }
-    /* Logo appear */
-    @keyframes logoAppear{
-      0%{opacity:0;transform:scale(0.8) translateY(10px)}
-      100%{opacity:1;transform:scale(1) translateY(0)}
+    @keyframes orbitFloat3{
+      0%{transform:rotate(60deg) translateX(55px) rotate(-60deg);opacity:0.9}
+      100%{transform:rotate(420deg) translateX(55px) rotate(-420deg);opacity:0.9}
     }
-    /* Thought icons */
-    @keyframes oxFloat{
-      0%,100%{transform:translateY(0)}
-      50%{transform:translateY(-3px)}
+    /* Wheat sway */
+    @keyframes wheatSway{
+      0%,100%{transform:rotate(-4deg) scaleX(1)}
+      50%{transform:rotate(4deg) scaleX(-1)}
     }
-    /* Pffft puff */
-    @keyframes puff{
-      0%{transform:scale(0.3) translateY(0);opacity:0.8}
-      100%{transform:scale(2) translateY(-20px);opacity:0}
+    @keyframes leafSway{
+      0%,100%{transform:rotate(0deg) translateY(0)}
+      50%{transform:rotate(8deg) translateY(-5px)}
     }
-    /* Green burst */
-    @keyframes greenBurst{
-      0%{transform:scale(0);opacity:1}
-      100%{transform:scale(4);opacity:0}
+    /* Light rays */
+    @keyframes rayPulse{
+      0%,100%{opacity:0.04;transform:scaleY(1)}
+      50%{opacity:0.09;transform:scaleY(1.05)}
     }
-    @keyframes glowPulse{
-      0%,100%{box-shadow:0 0 20px rgba(34,197,94,0.3)}
-      50%{box-shadow:0 0 50px rgba(34,197,94,0.8)}
+    /* Text effects */
+    @keyframes textGlow{
+      0%,100%{text-shadow:0 0 20px rgba(34,197,94,0.3)}
+      50%{text-shadow:0 0 40px rgba(34,197,94,0.6),0 0 60px rgba(34,197,94,0.3)}
+    }
+    /* Final fade to login */
+    @keyframes screenFadeOut{
+      0%{opacity:1}
+      100%{opacity:0}
+    }
+    /* Mountain shimmer */
+    @keyframes mountainGlow{
+      0%,100%{opacity:0.06}
+      50%{opacity:0.1}
     }
 
+    /* ===== BACKGROUND ===== */
     .bg{
-      position:fixed;inset:0;
-      background:radial-gradient(ellipse at 25% 35%,rgba(34,197,94,0.08),transparent 55%),
-                radial-gradient(ellipse at 75% 65%,rgba(6,182,212,0.07),transparent 55%);
-      animation:bgBreath 4s ease-in-out infinite;
+      position:fixed;inset:0;z-index:0;
+      background:radial-gradient(ellipse at 50% 30%,
+        #0a2e1a 0%,
+        #061428 35%,
+        #020b18 65%,
+        #000 100%
+      );
+    }
+    /* Subtle gradient overlay for depth */
+    .bg-overlay{
+      position:fixed;inset:0;z-index:1;
+      background:
+        radial-gradient(ellipse at 30% 60%,rgba(34,197,94,0.06) 0%,transparent 50%),
+        radial-gradient(ellipse at 70% 40%,rgba(6,182,212,0.04) 0%,transparent 50%),
+        radial-gradient(ellipse at 50% 50%,rgba(34,197,94,0.03) 0%,transparent 70%);
+      animation:rayPulse 4s ease-in-out infinite;
     }
 
-    .scene{
-      position:relative;
-      width:320px;height:320px;
-      margin:0 auto 20px;
-      display:flex;align-items:center;justify-content:center;
+    /* ===== LIGHT RAYS ===== */
+    .rays{
+      position:fixed;inset:0;z-index:2;
+      overflow:hidden;
+      pointer-events:none;
     }
-
-    /* ===== WALKING STICK (Gultsila) ===== */
-    .stick-wrap{
+    .ray{
       position:absolute;
-      width:80px;
-      animation:stickEnter 1s cubic-bezier(0.34,1.4,0.64,1) 0.3s both;
-      transform-origin:bottom center;
-      z-index:10;
-    }
-    .stick-body{
-      position:relative;
-      transform-origin:bottom center;
-    }
-    .stick-body.wake{animation:wakeUp 1.5s ease 1.5s both}
-    .stick-body.inspect{animation:inspect 2s ease 3s both}
-    .stick-body.nod{animation:nod 0.8s ease 5.5s both}
-    .stick-body.dissolve{animation:dissolve 0.8s ease 6.5s forwards}
-
-    /* Stick shaft */
-    .shaft{
-      width:12px;height:180px;
-      background:linear-gradient(180deg,#8B4513 0%,#A0522D 30%,#6B3410 70%,#4A2506 100%);
-      border-radius:6px;margin:0 auto;
-      box-shadow:inset -3px 0 6px rgba(0,0,0,0.3),2px 0 4px rgba(255,255,255,0.1);
-      position:relative;
-    }
-    /* Wood grain lines */
-    .shaft::after{
-      content:'';position:absolute;
-      inset:0;border-radius:6px;
-      background:repeating-linear-gradient(180deg,transparent 0,transparent 12px,rgba(0,0,0,0.08) 12px,rgba(0,0,0,0.08) 14px);
+      top:0;
+      width:2px;
+      height:100%;
+      background:linear-gradient(180deg,
+        transparent 0%,
+        rgba(34,197,94,0.06) 30%,
+        rgba(34,197,94,0.08) 50%,
+        rgba(34,197,94,0.06) 70%,
+        transparent 100%
+      );
+      transform-origin:top center;
+      animation:rayPulse 3s ease-in-out infinite;
     }
 
-    /* Ornate top - the "head" */
-    .stick-top{
-      width:70px;height:70px;
-      background:linear-gradient(135deg,#C8860A,#F0A500,#8B6000);
-      border-radius:50%;margin:0 auto;
-      position:relative;
-      box-shadow:0 0 20px rgba(240,165,0,0.4),inset -5px -5px 15px rgba(0,0,0,0.3),inset 3px 3px 8px rgba(255,255,255,0.2);
-      border:3px solid #F0A500;
-      display:flex;align-items:center;justify-content:center;
-      flex-direction:column;
-      animation:glowPulse 2s ease-in-out 1.5s infinite;
-    }
-    /* Decorative ring around top */
-    .stick-ring{
-      position:absolute;top:-4px;left:50%;transform:translateX(-50%);
-      width:18px;height:8px;
-      background:linear-gradient(180deg,#F0C040,#C8860A);
-      border-radius:4px;
+    /* ===== AGRICULTURAL BG ELEMENTS ===== */
+    .agri-bg{
+      position:fixed;inset:0;z-index:3;
+      pointer-events:none;
+      opacity:0;
+      animation:fadeIn 1s ease 1.5s forwards;
     }
 
-    /* The wise face */
-    .wise-face{
-      width:54px;height:54px;
+    /* Mountains silhouette */
+    .mountains{
+      position:absolute;bottom:0;left:0;right:0;
+      animation:mountainGlow 5s ease-in-out infinite;
+    }
+
+    /* Wheat elements */
+    .wheat-elem{
+      position:absolute;
+      font-size:2rem;
+      opacity:0.07;
+    }
+    .wheat-1{bottom:15%;left:5%;animation:wheatSway 3s ease-in-out infinite;animation-delay:0s}
+    .wheat-2{bottom:20%;right:6%;animation:wheatSway 3.5s ease-in-out infinite;animation-delay:0.5s}
+    .wheat-3{bottom:12%;left:18%;animation:wheatSway 2.8s ease-in-out infinite;animation-delay:1s}
+    .wheat-4{bottom:18%;right:20%;animation:wheatSway 4s ease-in-out infinite;animation-delay:0.3s}
+
+    /* Leaf elements */
+    .leaf-elem{
+      position:absolute;
+      opacity:0.06;
+      font-size:1.5rem;
+    }
+    .leaf-1{top:15%;left:8%;animation:leafSway 4s ease-in-out infinite}
+    .leaf-2{top:20%;right:10%;animation:leafSway 3.5s ease-in-out infinite;animation-delay:1s}
+    .leaf-3{top:35%;left:4%;animation:leafSway 5s ease-in-out infinite;animation-delay:0.5s}
+    .leaf-4{top:30%;right:5%;animation:leafSway 4.5s ease-in-out infinite;animation-delay:1.5s}
+
+    /* ===== FLOATING PARTICLES ===== */
+    .particles{
+      position:fixed;inset:0;z-index:4;
+      pointer-events:none;
+      opacity:0;
+      animation:fadeIn 0.8s ease 1s forwards;
+    }
+    .particle{
+      position:absolute;
+      border-radius:50%;
+      animation:particleFloat linear infinite;
+    }
+
+    /* Orbit particles */
+    .orbit-system{
+      position:absolute;
+      top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      width:0;height:0;
+      opacity:0;
+      animation:fadeIn 0.5s ease 2.5s forwards;
+    }
+    .orb{
+      position:absolute;
+      border-radius:50%;
+      top:0;left:0;
+    }
+    .orb1{
+      width:8px;height:8px;
+      background:radial-gradient(circle,#22C55E,#16A34A);
+      box-shadow:0 0 12px #22C55E;
+      margin:-4px 0 0 -4px;
+      animation:orbitFloat 4s linear infinite;
+    }
+    .orb2{
+      width:5px;height:5px;
+      background:radial-gradient(circle,#06B6D4,#0891B2);
+      box-shadow:0 0 8px #06B6D4;
+      margin:-2.5px 0 0 -2.5px;
+      animation:orbitFloat2 6s linear infinite;
+    }
+    .orb3{
+      width:6px;height:6px;
+      background:radial-gradient(circle,#F59E0B,#D97706);
+      box-shadow:0 0 10px #F59E0B;
+      margin:-3px 0 0 -3px;
+      animation:orbitFloat3 3s linear infinite;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .content{
+      position:fixed;inset:0;z-index:10;
       display:flex;flex-direction:column;
       align-items:center;justify-content:center;
-      gap:3px;
+      padding:20px;
+    }
+
+    /* Central light source */
+    .light-source{
+      position:absolute;
+      top:50%;left:50%;
+      transform:translate(-50%,-65%);
+      width:4px;height:4px;
+      background:#22C55E;
+      border-radius:50%;
+      box-shadow:0 0 0 0 rgba(34,197,94,0);
       opacity:0;
-      animation:fadeIn 0.6s ease 1.3s forwards;
+      animation:lightAppear 0.8s cubic-bezier(0.34,1.6,0.64,1) 0.5s both;
     }
 
-    /* Eyebrows */
-    .brows{
-      display:flex;gap:8px;margin-bottom:2px;
-    }
-    .brow{
-      width:16px;height:5px;
-      background:#4A2506;border-radius:3px;
+    /* Logo container */
+    .logo-wrap{
       position:relative;
-      transform-origin:center;
-      animation:eyebrowArch 1.5s ease 2s both;
+      margin-bottom:40px;
+      opacity:0;
+      animation:logoBounce 1.2s cubic-bezier(0.34,1.4,0.64,1) 1s forwards;
     }
-    .brow.left{transform:rotate(-15deg)}
-    .brow.right{transform:rotate(15deg)}
-    /* Bushy brow texture */
-    .brow::after{
-      content:'';position:absolute;
-      inset:-2px;border-radius:4px;
-      background:repeating-linear-gradient(90deg,#4A2506 0,#4A2506 2px,#6B3410 2px,#6B3410 4px);
+    .logo-wrap.rotate{
+      animation:logoRotate 1.5s ease 2.5s both;
+    }
+    .logo-wrap.pulse{
+      animation:logoPulse 2s ease-in-out 4s infinite;
     }
 
-    /* Eyes */
-    .eyes{
-      display:flex;gap:10px;
-    }
-    .eye{
-      width:12px;height:10px;
-      background:#1a0a00;border-radius:50%;
+    /* The actual logo icon */
+    .logo-icon{
+      width:130px;height:130px;
+      border-radius:32px;
       position:relative;
       overflow:hidden;
-      animation:eyesWiden 1.5s ease 4.8s both;
-    }
-    .eye::after{
-      content:'';position:absolute;
-      top:2px;left:3px;
-      width:4px;height:4px;
-      background:white;border-radius:50%;
-    }
-    /* Heavy eyelids */
-    .eyelid{
-      position:absolute;top:0;left:0;right:0;
-      height:60%;background:#C8860A;border-radius:50% 50% 0 0;
-      animation:fadeIn 0.5s ease 1.3s both;
-    }
-
-    /* Mouth - slight smug curve */
-    .mouth{
-      width:18px;height:6px;
-      border-bottom:3px solid #4A2506;
-      border-radius:0 0 10px 10px;
-      margin-top:2px;
+      /* 3D glassmorphism effect */
+      background:linear-gradient(145deg,
+        rgba(34,197,94,0.9) 0%,
+        rgba(22,163,74,0.95) 40%,
+        rgba(16,122,55,0.98) 100%
+      );
+      box-shadow:
+        0 0 40px rgba(34,197,94,0.5),
+        0 0 80px rgba(34,197,94,0.25),
+        0 25px 60px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        inset 0 -2px 4px rgba(0,0,0,0.2);
+      border:1.5px solid rgba(255,255,255,0.2);
     }
 
-    /* Decorative dots on the head */
-    .dot{
-      position:absolute;width:4px;height:4px;
-      background:rgba(255,255,255,0.3);border-radius:50%;
-    }
-
-    /* Thump particles */
-    .thump-wrap{
-      position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
-      animation:stickEnter 1s cubic-bezier(0.34,1.4,0.64,1) 0.3s both;
-    }
-    .thump{
-      font-size:0.7rem;color:#22C55E;font-weight:700;
-      opacity:0;
-      animation:thumpText 0.5s ease 0.8s forwards, thumpText 0.5s ease 0.9s forwards;
-    }
-    @keyframes thumpText{
-      0%{opacity:0;transform:translateY(0)}
-      50%{opacity:1;transform:translateY(-15px)}
-      100%{opacity:0;transform:translateY(-25px)}
-    }
-
-    /* AgriEquip logo */
-    .logo-center{
-      position:absolute;top:50%;left:50%;
-      transform:translate(-50%,-50%);
-      text-align:center;
-      z-index:5;
-    }
-    .logo-icon-wrap{
-      width:90px;height:90px;
-      background:linear-gradient(135deg,#22C55E,#06B6D4);
-      border-radius:22px;
-      display:flex;align-items:center;justify-content:center;
-      margin:0 auto 8px;
-      opacity:0;
-      animation:logoAppear 0.8s ease 0.2s forwards;
-      box-shadow:0 8px 30px rgba(34,197,94,0.3);
-    }
-    .logo-txt{
-      font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900;
-      background:linear-gradient(135deg,#22C55E,#06B6D4);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;
-      opacity:0;
-      animation:fadeIn 0.6s ease 0.5s forwards;
-    }
-
-    /* Thought bubble */
-    .thought-bubble{
-      position:absolute;top:20px;right:10px;
-      width:130px;
-      background:rgba(255,255,255,0.95);
-      border-radius:16px;padding:10px;
-      opacity:0;
-      display:none;
-      z-index:20;
-      box-shadow:0 8px 24px rgba(0,0,0,0.3);
-    }
-    .thought-bubble.show{
-      display:block;
-      animation:bubblePop 0.5s cubic-bezier(0.34,1.4,0.64,1) forwards;
-    }
-    /* Bubble tail dots */
-    .bubble-tail{
-      position:absolute;bottom:-10px;left:20px;
-      display:flex;gap:3px;
-    }
-    .bubble-dot{
-      background:rgba(255,255,255,0.9);border-radius:50%;
-    }
-    .thought-content{
-      display:flex;align-items:center;justify-content:space-around;
-      gap:6px;
-    }
-    .thought-old{
-      text-align:center;font-size:1.3rem;
-      animation:oxFloat 1s ease-in-out infinite;
-    }
-    .thought-vs{font-size:0.65rem;font-weight:700;color:#EF4444;padding:2px 4px;background:rgba(239,68,68,0.1);border-radius:4px}
-    .thought-new{text-align:center;font-size:1.3rem}
-    .thought-label{font-size:0.55rem;color:#64748B;text-align:center;margin-top:3px}
-
-    /* Pffft puff */
-    .pffft{
-      position:absolute;top:50px;right:50px;
-      font-size:0.65rem;font-weight:700;color:rgba(100,116,139,0.8);
-      opacity:0;display:none;z-index:25;
-    }
-    .pffft.show{
-      display:block;
-      animation:puff 0.8s ease forwards;
-    }
-
-    /* Green burst effect */
-    .green-burst{
+    /* Glossy highlight on top */
+    .logo-icon::before{
+      content:'';
       position:absolute;
-      width:80px;height:80px;
-      background:radial-gradient(circle,rgba(34,197,94,0.8),transparent);
+      top:0;left:0;right:0;
+      height:55%;
+      background:linear-gradient(180deg,
+        rgba(255,255,255,0.25) 0%,
+        rgba(255,255,255,0.08) 50%,
+        transparent 100%
+      );
+      border-radius:32px 32px 50% 50%;
+      z-index:2;
+    }
+
+    /* Bottom reflection */
+    .logo-icon::after{
+      content:'';
+      position:absolute;
+      bottom:0;left:0;right:0;
+      height:30%;
+      background:linear-gradient(0deg,
+        rgba(0,0,0,0.25) 0%,
+        transparent 100%
+      );
+      z-index:2;
+    }
+
+    /* Logo SVG */
+    .logo-svg{
+      position:relative;z-index:3;
+      width:100%;height:100%;
+      display:flex;align-items:center;justify-content:center;
+      padding:22px;
+    }
+
+    /* Side glow rings */
+    .glow-ring{
+      position:absolute;
       border-radius:50%;
-      top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
-      opacity:0;display:none;z-index:30;
+      border:1px solid rgba(34,197,94,0.2);
+      top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
     }
-    .green-burst.show{
-      display:block;
-      animation:greenBurst 0.8s ease forwards;
-    }
+    .ring1{width:170px;height:170px;animation:logoPulse 2s ease-in-out infinite}
+    .ring2{width:210px;height:210px;border-color:rgba(34,197,94,0.1);animation:logoPulse 2s ease-in-out 0.3s infinite}
+    .ring3{width:260px;height:260px;border-color:rgba(34,197,94,0.05);animation:logoPulse 2s ease-in-out 0.6s infinite}
 
-    /* Bottom text */
-    .app-name{
-      font-family:'Fraunces',serif;font-size:2.5rem;font-weight:900;
-      background:linear-gradient(135deg,#22C55E,#06B6D4);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;
+    /* Text */
+    .logo-name{
+      font-family:'Fraunces',serif;
+      font-size:2.6rem;font-weight:900;
+      color:white;
+      letter-spacing:-0.5px;
       text-align:center;
-      animation:slideUp 0.6s ease 0.7s both;
-      letter-spacing:-1px;
+      opacity:0;
+      animation:slideUp 0.8s ease 2.2s both,textGlow 3s ease-in-out 3s infinite;
+      text-shadow:0 2px 20px rgba(34,197,94,0.4);
     }
-    .app-sub{color:rgba(255,255,255,0.35);font-size:0.74rem;letter-spacing:2px;text-transform:uppercase;text-align:center;animation:slideUp 0.5s ease 0.9s both;margin-top:4px}
-    .app-country{color:rgba(255,255,255,0.18);font-size:0.68rem;text-align:center;animation:slideUp 0.5s ease 1s both;margin-top:3px}
+    .logo-sub{
+      font-family:'Poppins',sans-serif;
+      font-size:0.75rem;
+      font-weight:400;
+      color:rgba(255,255,255,0.5);
+      letter-spacing:4px;
+      text-transform:uppercase;
+      text-align:center;
+      margin-top:8px;
+      opacity:0;
+      animation:slideUp 0.7s ease 2.5s both;
+    }
+    .logo-tagline{
+      font-family:'Poppins',sans-serif;
+      font-size:0.72rem;
+      font-weight:300;
+      color:rgba(255,255,255,0.35);
+      letter-spacing:2px;
+      text-align:center;
+      margin-top:4px;
+      opacity:0;
+      animation:slideUp 0.6s ease 2.7s both;
+    }
+    .dot-sep{color:#22C55E;opacity:0.7}
 
-    .bar-outer{width:150px;height:2px;background:rgba(255,255,255,0.07);border-radius:2px;margin:22px auto 0;overflow:hidden;animation:slideUp 0.5s ease 1.1s both}
-    .bar-inner{height:100%;background:linear-gradient(90deg,#22C55E,#06B6D4);animation:progress 6s ease 1.2s both}
-    .loading-txt{color:rgba(255,255,255,0.2);font-size:0.68rem;text-align:center;margin-top:8px;animation:blink 1s infinite 1.4s,slideUp 0.5s ease 1.2s both}
-    .version{position:fixed;bottom:12px;color:rgba(255,255,255,0.1);font-size:0.64rem;letter-spacing:1px}
+    /* Loading bar */
+    .bar-section{
+      margin-top:48px;
+      opacity:0;
+      animation:fadeIn 0.5s ease 2.8s forwards;
+    }
+    .bar-outer{
+      width:180px;height:2px;
+      background:rgba(255,255,255,0.08);
+      border-radius:2px;overflow:hidden;
+    }
+    .bar-inner{
+      height:100%;
+      background:linear-gradient(90deg,#22C55E,#06B6D4,#22C55E);
+      background-size:200%;
+      border-radius:2px;
+      animation:progress 4.5s ease 3s both;
+    }
+    .bar-txt{
+      color:rgba(255,255,255,0.2);
+      font-size:0.62rem;letter-spacing:2px;
+      text-transform:uppercase;text-align:center;
+      margin-top:10px;
+      font-family:'Poppins',sans-serif;
+      animation:blink 1.5s infinite 3.2s;
+    }
+
+    /* Country badge */
+    .country{
+      position:fixed;bottom:18px;
+      font-family:'Poppins',sans-serif;
+      font-size:0.62rem;
+      color:rgba(255,255,255,0.15);
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      opacity:0;
+      animation:fadeIn 0.5s ease 3s forwards;
+    }
+
+    /* Full screen fade out at end */
+    .screen-fade{
+      position:fixed;inset:0;z-index:999;
+      background:#000;
+      opacity:0;pointer-events:none;
+      animation:fadeIn 0.8s ease 7.5s forwards;
+    }
   </style>
 </head>
 <body>
+  <!-- Background layers -->
   <div class="bg"></div>
+  <div class="bg-overlay"></div>
 
-  <div class="scene" id="scene">
+  <!-- Light rays -->
+  <div class="rays" id="rays"></div>
 
-    <!-- AgriEquip Logo (center, appears first) -->
-    <div class="logo-center">
-      <div class="logo-icon-wrap">
-        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-          <rect width="60" height="60" rx="16" fill="rgba(0,0,0,0.15)"/>
-          <!-- Tractor -->
-          <rect x="6" y="32" width="28" height="16" rx="4" fill="rgba(255,255,255,0.85)"/>
-          <rect x="24" y="26" width="14" height="11" rx="3" fill="rgba(255,255,255,0.7)"/>
-          <circle cx="14" cy="48" r="8" fill="rgba(10,22,40,0.85)" stroke="white" stroke-width="1.5"/>
-          <circle cx="14" cy="48" r="3.5" fill="rgba(255,255,255,0.2)"/>
-          <circle cx="32" cy="46" r="5" fill="rgba(10,22,40,0.85)" stroke="white" stroke-width="1.5"/>
-          <!-- Wheat -->
-          <line x1="42" y1="50" x2="42" y2="18" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round"/>
-          <ellipse cx="42" cy="14" rx="3.5" ry="8" fill="rgba(255,255,255,0.8)" transform="rotate(-10 42 14)"/>
-          <line x1="50" y1="50" x2="50" y2="22" stroke="rgba(255,255,255,0.65)" stroke-width="1.5" stroke-linecap="round"/>
-          <ellipse cx="50" cy="18" rx="3" ry="7" fill="rgba(255,255,255,0.65)" transform="rotate(8 50 18)"/>
-          <!-- Sun -->
-          <circle cx="12" cy="14" r="7" fill="rgba(255,255,255,0.2)"/>
-          <circle cx="12" cy="14" r="4" fill="rgba(255,255,255,0.6)"/>
-          <!-- Ground -->
-          <rect x="4" y="52" width="54" height="3" rx="1.5" fill="rgba(255,255,255,0.2)"/>
-        </svg>
-      </div>
-      <div class="logo-txt">AgriEquip</div>
-    </div>
-
-    <!-- Walking Stick - positioned to the side -->
-    <div class="stick-wrap" id="stickWrap" style="position:absolute;left:30px;bottom:20px">
-      <div class="stick-body" id="stickBody">
-        <!-- Ornate top / head -->
-        <div class="stick-top" id="stickTop">
-          <div class="stick-ring"></div>
-          <!-- Decorative dots -->
-          <div class="dot" style="top:6px;left:8px"></div>
-          <div class="dot" style="top:6px;right:8px"></div>
-          <div class="dot" style="bottom:8px;left:50%;transform:translateX(-50%)"></div>
-          <!-- Wise face -->
-          <div class="wise-face" id="wiseFace">
-            <!-- Eyebrows -->
-            <div class="brows">
-              <div class="brow left" id="browLeft"></div>
-              <div class="brow right" id="browRight"></div>
-            </div>
-            <!-- Eyes with heavy lids -->
-            <div class="eyes">
-              <div class="eye" id="eyeLeft">
-                <div class="eyelid"></div>
-              </div>
-              <div class="eye" id="eyeRight">
-                <div class="eyelid"></div>
-              </div>
-            </div>
-            <!-- Smug mouth -->
-            <div class="mouth"></div>
-          </div>
-        </div>
-        <!-- Shaft -->
-        <div class="shaft"></div>
-      </div>
-    </div>
-
-    <!-- Thought bubble -->
-    <div class="thought-bubble" id="thoughtBubble">
-      <div class="thought-content">
-        <div>
-          <div class="thought-old">🐂</div>
-          <div class="thought-label">Old way</div>
-        </div>
-        <div class="thought-vs">VS</div>
-        <div>
-          <div class="thought-new">🚜</div>
-          <div class="thought-label">AgriEquip</div>
-        </div>
-      </div>
-      <div class="bubble-tail">
-        <div class="bubble-dot" style="width:8px;height:8px"></div>
-        <div class="bubble-dot" style="width:5px;height:5px;margin-top:3px"></div>
-        <div class="bubble-dot" style="width:3px;height:3px;margin-top:5px"></div>
-      </div>
-    </div>
-
-    <!-- Pffft text -->
-    <div class="pffft" id="pffft">pffft! 💨</div>
-
-    <!-- Green burst -->
-    <div class="green-burst" id="greenBurst"></div>
-
+  <!-- Agricultural background -->
+  <div class="agri-bg">
+    <!-- Mountain SVG -->
+    <svg class="mountains" viewBox="0 0 400 120" preserveAspectRatio="none" style="height:160px">
+      <defs>
+        <linearGradient id="mtGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#22C55E" stop-opacity="0.08"/>
+          <stop offset="100%" stop-color="#22C55E" stop-opacity="0.02"/>
+        </linearGradient>
+      </defs>
+      <path d="M0 120 L40 60 L80 90 L130 30 L180 70 L220 20 L270 65 L310 35 L360 75 L400 45 L400 120 Z" fill="url(#mtGrad)"/>
+      <path d="M0 120 L60 80 L100 95 L150 55 L200 85 L250 50 L300 80 L350 60 L400 80 L400 120 Z" fill="rgba(34,197,94,0.04)"/>
+    </svg>
+    <!-- Wheat -->
+    <div class="wheat-elem wheat-1">🌾</div>
+    <div class="wheat-elem wheat-2">🌾</div>
+    <div class="wheat-elem wheat-3">🌿</div>
+    <div class="wheat-elem wheat-4">🌿</div>
+    <!-- Leaves -->
+    <div class="leaf-elem leaf-1">🍃</div>
+    <div class="leaf-elem leaf-2">🍃</div>
+    <div class="leaf-elem leaf-3">🌱</div>
+    <div class="leaf-elem leaf-4">🌱</div>
   </div>
 
-  <div class="app-name">AgriEquip</div>
-  <div class="app-sub">Agricultural Rental Marketplace</div>
-  <div class="app-country">🇪🇹 Made in Ethiopia</div>
-  <div class="bar-outer"><div class="bar-inner"></div></div>
-  <div class="loading-txt" id="loadingTxt">Summoning wisdom...</div>
-  <div class="version">v1.0.0</div>
+  <!-- Floating particles -->
+  <div class="particles" id="particles">
+    <div class="orbit-system">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="content">
+    <div class="light-source" id="lightSource"></div>
+
+    <div class="logo-wrap" id="logoWrap">
+      <!-- Glow rings -->
+      <div class="glow-ring ring1"></div>
+      <div class="glow-ring ring2"></div>
+      <div class="glow-ring ring3"></div>
+
+      <!-- Logo icon -->
+      <div class="logo-icon">
+        <div class="logo-svg">
+          <svg width="86" height="86" viewBox="0 0 86 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Grid lines (glassmorphism) -->
+            <line x1="0" y1="65" x2="86" y2="65" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <line x1="0" y1="43" x2="86" y2="43" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="0" y1="22" x2="86" y2="22" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+            <!-- Graph area fill -->
+            <defs>
+              <linearGradient id="graphFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.25)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Filled area under graph -->
+            <path d="M10 72 L22 58 L34 48 L44 36 L58 24 L72 14 L76 14 L76 72 Z"
+              fill="url(#graphFill)"/>
+
+            <!-- Graph line (animated) -->
+            <polyline
+              id="graphLine"
+              points="10,72 22,58 34,48 44,36 58,24 72,14"
+              stroke="white"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+              filter="url(#glow)"
+              stroke-dasharray="200"
+              stroke-dashoffset="200"
+              style="animation:graphDraw 1.5s ease 1.8s forwards,graphGlow 2s ease-in-out 3.5s infinite"
+            />
+
+            <!-- Data points -->
+            <circle cx="22" cy="58" r="4" fill="white" opacity="0" style="animation:fadeIn 0.3s ease 2.5s forwards"/>
+            <circle cx="34" cy="48" r="4" fill="white" opacity="0" style="animation:fadeIn 0.3s ease 2.7s forwards"/>
+            <circle cx="44" cy="36" r="4" fill="white" opacity="0" style="animation:fadeIn 0.3s ease 2.9s forwards"/>
+            <circle cx="58" cy="24" r="4" fill="white" opacity="0" style="animation:fadeIn 0.3s ease 3.1s forwards"/>
+            <circle cx="72" cy="14" r="5" fill="white" opacity="0" style="animation:fadeIn 0.3s ease 3.3s forwards"/>
+
+            <!-- Arrow tip at top -->
+            <path d="M66 8 L72 14 L78 8" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0" style="animation:fadeIn 0.4s ease 3.4s forwards"/>
+
+            <!-- Bottom axis -->
+            <line x1="10" y1="72" x2="76" y2="72" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+
+            <!-- Small wheat icon bottom-left -->
+            <text x="6" y="84" font-size="10" opacity="0.5" style="animation:fadeIn 0.4s ease 3.5s forwards;opacity:0">🌾</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- App name -->
+    <div class="logo-name">AgriEquip</div>
+    <div class="logo-sub">Grow <span class="dot-sep">•</span> Invest <span class="dot-sep">•</span> Prosper</div>
+    <div class="logo-tagline">Agricultural Rental Marketplace</div>
+
+    <!-- Loading -->
+    <div class="bar-section">
+      <div class="bar-outer">
+        <div class="bar-inner"></div>
+      </div>
+      <div class="bar-txt">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Country badge -->
+  <div class="country">🇪🇹 Ethiopia</div>
+
+  <!-- Fade to black before transition -->
+  <div class="screen-fade"></div>
 
   <script>
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
-    sessionStorage.setItem('splashSeen','1');
 
-    const stick = document.getElementById('stickBody');
-    const bubble = document.getElementById('thoughtBubble');
-    const pffft = document.getElementById('pffft');
-    const burst = document.getElementById('greenBurst');
-    const txt = document.getElementById('loadingTxt');
-    const browL = document.getElementById('browLeft');
-    const browR = document.getElementById('browRight');
+    // Generate light rays
+    const raysEl = document.getElementById('rays');
+    for (let i = 0; i < 12; i++) {
+      const ray = document.createElement('div');
+      ray.className = 'ray';
+      ray.style.cssText = `
+        left:${5 + i * 8}%;
+        transform:rotate(${(i - 6) * 3}deg);
+        animation-delay:${i * 0.2}s;
+        opacity:${0.03 + Math.random() * 0.05};
+      `;
+      raysEl.appendChild(ray);
+    }
 
-    // Timeline
-    // 0-1s: entrance (CSS)
-    // 1-1.5s: face appears (CSS)
-    // 1.5-3s: wake up
+    // Generate floating particles
+    const particlesEl = document.getElementById('particles');
+    const colors = ['#22C55E','#16A34A','#06B6D4','#F59E0B','#86EFAC'];
+    for (let i = 0; i < 25; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 2 + Math.random() * 5;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      p.style.cssText = `
+        width:${size}px;height:${size}px;
+        background:${color};
+        left:${Math.random() * 100}%;
+        top:${30 + Math.random() * 50}%;
+        opacity:${0.3 + Math.random() * 0.5};
+        animation-duration:${3 + Math.random() * 5}s;
+        animation-delay:${Math.random() * 4}s;
+        box-shadow:0 0 ${size * 2}px ${color};
+      `;
+      particlesEl.appendChild(p);
+    }
+
+    // Animate logo stages
+    const logoWrap = document.getElementById('logoWrap');
+
+    // Stage 2: rotation after bounce
     setTimeout(() => {
-      stick.style.animation = 'wakeUp 1.5s ease forwards';
-      txt.textContent = 'The elder awakens...';
-    }, 1500);
+      logoWrap.style.animation = 'logoRotate 1.5s ease forwards';
+    }, 2500);
 
-    // 3-5s: inspection
+    // Stage 3: pulse after rotation
     setTimeout(() => {
-      stick.style.animation = 'inspect 2s ease forwards';
-      txt.textContent = 'Inspecting with wisdom...';
-      // Eyebrow goes way up
-      browL.style.animation = 'eyebrowArch 1.5s ease forwards';
-      browR.style.animation = 'eyebrowArch 1.5s ease 0.1s forwards';
-    }, 3000);
+      logoWrap.style.animation = 'logoPulse 2s ease-in-out infinite';
+    }, 4200);
 
-    // 5s: thought bubble
-    setTimeout(() => {
-      bubble.classList.add('show');
-      txt.textContent = 'A moment of realization...';
-      // Eyes widen
-      document.getElementById('eyeLeft').style.animation = 'eyesWiden 0.8s ease forwards';
-      document.getElementById('eyeRight').style.animation = 'eyesWiden 0.8s ease 0.1s forwards';
-    }, 5000);
-
-    // 5.5s: pffft
-    setTimeout(() => {
-      pffft.classList.add('show');
-    }, 5500);
-
-    // 5.8s: approval nod
-    setTimeout(() => {
-      stick.style.animation = 'nod 0.8s ease forwards';
-      txt.textContent = 'Wise approval granted! ✓';
-      bubble.style.opacity = '0';
-      bubble.style.transition = 'opacity 0.3s';
-    }, 5800);
-
-    // 6.5s: dissolve into light
-    setTimeout(() => {
-      stick.style.animation = 'dissolve 0.8s ease forwards';
-      burst.classList.add('show');
-      txt.textContent = 'Loading AgriEquip...';
-    }, 6500);
-
-    // 7s: redirect
+       // Redirect
+    sessionStorage.setItem('splashSeen', '1');
     setTimeout(() => {
       window.location.href = 'login.html';
-    }, 7300);
+    }, 8200);
   </script>
 </body>
 </html>
