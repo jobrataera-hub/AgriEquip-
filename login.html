@@ -1,346 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgriEquip — Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{
-      font-family:'Poppins',sans-serif;min-height:100vh;
-      background:linear-gradient(145deg,#0a1628 0%,#0d2818 40%,#0a1628 100%);
-      display:flex;align-items:center;justify-content:center;
-      padding:16px;overflow-x:hidden;
-    }
-    @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.5)}70%{box-shadow:0 0 0 18px rgba(34,197,94,0)}}
-    @keyframes particleUp{0%{transform:translateY(100vh);opacity:0}10%{opacity:0.4}90%{opacity:0.2}100%{transform:translateY(-80px);opacity:0}}
-
-    .particles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-    .p{position:absolute;border-radius:50%;background:rgba(34,197,94,0.12);animation:particleUp linear infinite}
-
-    .card{
-      background:rgba(255,255,255,0.04);
-      backdrop-filter:blur(24px);
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:24px;padding:28px 22px;
-      width:100%;max-width:400px;
-      position:relative;z-index:1;
-      animation:fadeUp 0.65s ease;
-      box-shadow:0 24px 64px rgba(0,0,0,0.5);
-    }
-
-    .logo{text-align:center;margin-bottom:22px}
-    .logo-box{
-      width:64px;height:64px;margin:0 auto 12px;
-      background:linear-gradient(135deg,#22C55E,#06B6D4);
-      border-radius:18px;
-      display:flex;align-items:center;justify-content:center;
-      animation:float 3.5s ease-in-out infinite, pulse 2.5s ease-in-out infinite;
-    }
-    .logo-name{
-      font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;
-      background:linear-gradient(135deg,#22C55E,#06B6D4);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    }
-    .logo-tag{color:rgba(255,255,255,0.3);font-size:0.72rem;margin-top:3px;letter-spacing:0.5px}
-
-    .tabs{
-      display:flex;background:rgba(255,255,255,0.05);
-      border-radius:12px;padding:3px;margin-bottom:18px;gap:3px;
-    }
-    .tab{
-      flex:1;padding:9px;border:none;background:none;
-      color:rgba(255,255,255,0.4);cursor:pointer;
-      font-family:'Poppins',sans-serif;font-size:0.82rem;font-weight:600;
-      border-radius:10px;transition:all 0.3s;
-    }
-    .tab.active{background:#22C55E;color:white;box-shadow:0 4px 12px rgba(34,197,94,0.35)}
-
-    .fg{margin-bottom:12px;position:relative}
-    .lbl{color:rgba(255,255,255,0.55);font-size:0.73rem;font-weight:500;margin-bottom:5px;display:block}
-    .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:0.85rem;pointer-events:none;margin-top:11px}
-    .ico-right{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;padding:0;margin-top:11px}
-    .fi{
-      width:100%;padding:11px 14px 11px 36px;
-      background:rgba(255,255,255,0.06);
-      border:1.5px solid rgba(255,255,255,0.09);
-      border-radius:11px;color:white;
-      font-size:0.85rem;font-family:'Poppins',sans-serif;
-      outline:none;transition:all 0.3s;
-    }
-    .fi.pr{padding-right:40px}
-    .fi::placeholder{color:rgba(255,255,255,0.2)}
-    .fi:focus{border-color:#22C55E;background:rgba(34,197,94,0.07);box-shadow:0 0 0 3px rgba(34,197,94,0.1)}
-
-    .sec-lbl{
-      font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;
-      color:rgba(255,255,255,0.2);margin:14px 0 8px;
-      display:flex;align-items:center;gap:6px;
-    }
-    .sec-lbl::before,.sec-lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07)}
-
-    .btn{
-      width:100%;padding:13px;margin-top:4px;
-      background:linear-gradient(135deg,#22C55E,#16A34A);
-      border:none;border-radius:12px;
-      color:white;font-size:0.9rem;font-weight:700;
-      font-family:'Poppins',sans-serif;cursor:pointer;
-      transition:all 0.3s;box-shadow:0 4px 18px rgba(34,197,94,0.4);
-    }
-    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(34,197,94,0.5)}
-    .btn:active{transform:translateY(0)}
-    .btn:disabled{opacity:0.55;cursor:not-allowed;transform:none}
-
-    .msg{
-      padding:11px 14px;border-radius:10px;
-      font-size:0.8rem;text-align:center;
-      margin-top:10px;display:none;line-height:1.5;
-    }
-    .msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5}
-    .msg.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC}
-
-    .forgot{text-align:center;margin-top:10px;color:rgba(255,255,255,0.3);font-size:0.73rem;cursor:pointer;transition:color 0.2s}
-    .forgot:hover{color:#22C55E}
-
-    .divider{text-align:center;color:rgba(255,255,255,0.2);font-size:0.7rem;margin:14px 0;position:relative}
-    .divider::before,.divider::after{content:'';position:absolute;top:50%;width:36%;height:1px;background:rgba(255,255,255,0.07)}
-    .divider::before{left:0}.divider::after{right:0}
-
-    .feats{display:flex;justify-content:space-around;margin-top:12px}
-    .feat{text-align:center;color:rgba(255,255,255,0.28);font-size:0.67rem}
-    .feat span{display:block;font-size:1rem;margin-bottom:2px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriEquip — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;min-height:100vh;background:linear-gradient(145deg,#0a1628 0%,#0d2818 40%,#0a1628 100%);display:flex;align-items:center;justify-content:center;padding:16px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.card{background:rgba(255,255,255,0.04);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:28px 22px;width:100%;max-width:400px;animation:fadeUp 0.65s ease;box-shadow:0 24px 64px rgba(0,0,0,0.5)}
+.logo{text-align:center;margin-bottom:22px}
+.logo-box{width:64px;height:64px;margin:0 auto 12px;background:linear-gradient(135deg,#22C55E,#06B6D4);border-radius:18px;display:flex;align-items:center;justify-content:center;animation:float 3.5s ease-in-out infinite}
+.logo-name{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,#22C55E,#06B6D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-tag{color:rgba(255,255,255,0.3);font-size:0.72rem;margin-top:3px}
+.tabs{display:flex;background:rgba(255,255,255,0.05);border-radius:12px;padding:3px;margin-bottom:18px;gap:3px}
+.tab{flex:1;padding:9px;border:none;background:none;color:rgba(255,255,255,0.4);cursor:pointer;font-family:'Poppins',sans-serif;font-size:0.82rem;font-weight:600;border-radius:10px}
+.tab.active{background:#22C55E;color:white}
+.fg{margin-bottom:12px;position:relative}
+.lbl{color:rgba(255,255,255,0.55);font-size:0.73rem;font-weight:500;margin-bottom:5px;display:block}
+.ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:0.85rem;pointer-events:none;margin-top:11px}
+.ico-right{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;padding:0;margin-top:11px}
+.fi{width:100%;padding:11px 14px 11px 36px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.09);border-radius:11px;color:white;font-size:0.85rem;font-family:'Poppins',sans-serif;outline:none}
+.fi.pr{padding-right:40px}
+.fi::placeholder{color:rgba(255,255,255,0.2)}
+.fi:focus{border-color:#22C55E;background:rgba(34,197,94,0.07)}
+.sec-lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.2);margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.sec-lbl::before,.sec-lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07)}
+.btn{width:100%;padding:13px;margin-top:4px;background:linear-gradient(135deg,#22C55E,#16A34A);border:none;border-radius:12px;color:white;font-size:0.9rem;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer}
+.google-btn{width:100%;padding:12px;margin-top:10px;background:white;border:none;border-radius:12px;color:#1E293B;font-size:0.88rem;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.or-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:rgba(255,255,255,0.25);font-size:0.75rem}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
+.msg{padding:11px 14px;border-radius:10px;font-size:0.8rem;text-align:center;margin-top:10px;display:none;line-height:1.5}
+.msg.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5}
+.msg.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86EFAC}
+.forgot{text-align:center;margin-top:10px;color:rgba(255,255,255,0.3);font-size:0.73rem;cursor:pointer}
+</style>
 </head>
 <body>
-  <div class="particles" id="particles"></div>
-  <div class="card">
-    <div class="logo">
-      <div class="logo-box">
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-          <rect width="40" height="40" rx="10" fill="rgba(0,0,0,0.2)"/>
-          <path d="M6 28 L13 20 L18 25 L26 14 L34 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="32" cy="10" r="4" fill="white" opacity="0.8"/>
-          <path d="M6 32 L34 32" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
-          <path d="M6 36 L26 36" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.18"/>
-        </svg>
-      </div>
-      <div class="logo-name">AgriEquip</div>
-      <div class="logo-tag">🇪🇹 Agricultural Rental Marketplace</div>
+<div class="card">
+  <div class="logo">
+    <div class="logo-box">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="10" fill="rgba(0,0,0,0.2)"/>
+        <path d="M6 28 L13 20 L18 25 L26 14 L34 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="32" cy="10" r="4" fill="white" opacity="0.8"/>
+      </svg>
     </div>
-
-    <div class="tabs">
-      <button class="tab active" id="loginTab" onclick="switchTab('login')">Sign In</button>
-      <button class="tab" id="registerTab" onclick="switchTab('register')">Register</button>
-    </div>
-
-    <!-- LOGIN -->
-    <div id="loginForm">
-      <div class="fg">
-        <label class="lbl">Email Address</label>
-        <span class="ico">✉️</span>
-        <input type="email" id="loginEmail" class="fi" placeholder="your@email.com">
-      </div>
-      <div class="fg">
-        <label class="lbl">Password</label>
-        <span class="ico">🔒</span>
-        <input type="password" id="loginPassword" class="fi pr" placeholder="••••••••">
-        <button type="button" class="ico-right" onclick="togglePwd('loginPassword',this)">🙈</button>
-      </div>
-      <button class="btn" id="loginBtn" onclick="handleLogin()">Sign In →</button>
-      <p class="forgot" onclick="showForgotPassword()">Forgot password? Reset it →</p>
-    </div>
-
-    <!-- REGISTER -->
-    <div id="registerForm" style="display:none">
-      <div class="sec-lbl">Personal Info</div>
-      <div class="fg">
-        <label class="lbl">Full Name *</label>
-        <span class="ico">👤</span>
-        <input type="text" id="regFullName" class="fi" placeholder="e.g. Abebe Kebede">
-      </div>
-      <div class="fg">
-        <label class="lbl">Father's Name *</label>
-        <span class="ico">👨</span>
-        <input type="text" id="regFatherName" class="fi" placeholder="e.g. Kebede Tadesse">
-      </div>
-      <div class="sec-lbl">Account Details</div>
-      <div class="fg">
-        <label class="lbl">Email Address *</label>
-        <span class="ico">✉️</span>
-        <input type="email" id="regEmail" class="fi" placeholder="your@email.com">
-      </div>
-      <div class="fg">
-        <label class="lbl">Password * (min 6 chars)</label>
-        <span class="ico">🔒</span>
-        <input type="password" id="regPassword" class="fi pr" placeholder="Create a strong password">
-        <button type="button" class="ico-right" onclick="togglePwd('regPassword',this)">🙈</button>
-      </div>
-      <div class="fg">
-        <label class="lbl">Confirm Password *</label>
-        <span class="ico">🔐</span>
-        <input type="password" id="regConfirm" class="fi pr" placeholder="Repeat your password">
-        <button type="button" class="ico-right" onclick="togglePwd('regConfirm',this)">🙈</button>
-      </div>
-      <div class="sec-lbl">Optional</div>
-      <div class="fg">
-        <label class="lbl">Referral Code (if invited)</label>
-        <span class="ico">🎁</span>
-        <input type="text" id="regReferral" class="fi" placeholder="AGR-XXXXXX">
-      </div>
-      <button class="btn" id="registerBtn" onclick="handleRegister()">Create Account →</button>
-    </div>
-
-    <div class="msg" id="message"></div>
-    <div class="divider">Secure • Trusted • Ethiopian</div>
-    <div class="feats">
-      <div class="feat"><span>🚜</span>Rent</div>
-      <div class="feat"><span>💰</span>Earn</div>
-      <div class="feat"><span>💎</span>VIP</div>
-      <div class="feat"><span>🤖</span>Teff AI</div>
-      <div class="feat"><span>🛡️</span>Safe</div>
-    </div>
+    <div class="logo-name">AgriEquip</div>
+    <div class="logo-tag">🇪🇹 Smart Agriculture OS</div>
   </div>
+  <div class="tabs">
+    <button class="tab active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+    <button class="tab" id="registerTab" onclick="switchTab('register')">Register</button>
+  </div>
+  <div id="loginForm">
+    <button class="google-btn" onclick="handleGoogle()">
+      <svg width="20" height="20" viewBox="0 0 48 48">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      Continue with Google
+    </button>
+    <div class="or-divider">or sign in with email</div>
+    <div class="fg"><label class="lbl">Email</label><span class="ico">✉️</span><input type="email" id="loginEmail" class="fi" placeholder="your@email.com"></div>
+    <div class="fg"><label class="lbl">Password</label><span class="ico">🔒</span><input type="password" id="loginPassword" class="fi pr" placeholder="••••••••"><button type="button" class="ico-right" onclick="togglePwd('loginPassword',this)">🙈</button></div>
+    <button class="btn" id="loginBtn" onclick="handleLogin()">Sign In →</button>
+    <p class="forgot" onclick="showForgotPassword()">Forgot password?</p>
+  </div>
+  <div id="registerForm" style="display:none">
+    <button class="google-btn" onclick="handleGoogle()">
+      <svg width="20" height="20" viewBox="0 0 48 48">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      Register with Google
+    </button>
+    <div class="or-divider">or register with email</div>
+    <div class="sec-lbl">Personal Info</div>
+    <div class="fg"><label class="lbl">Full Name *</label><span class="ico">👤</span><input type="text" id="regFullName" class="fi" placeholder="e.g. Abebe Kebede"></div>
+    <div class="fg"><label class="lbl">Father's Name *</label><span class="ico">👨</span><input type="text" id="regFatherName" class="fi" placeholder="e.g. Kebede Tadesse"></div>
+    <div class="sec-lbl">Account</div>
+    <div class="fg"><label class="lbl">Email *</label><span class="ico">✉️</span><input type="email" id="regEmail" class="fi" placeholder="your@email.com"></div>
+    <div class="fg"><label class="lbl">Password * (min 6)</label><span class="ico">🔒</span><input type="password" id="regPassword" class="fi pr" placeholder="Create password"><button type="button" class="ico-right" onclick="togglePwd('regPassword',this)">🙈</button></div>
+    <div class="fg"><label class="lbl">Confirm Password *</label><span class="ico">🔐</span><input type="password" id="regConfirm" class="fi pr" placeholder="Repeat password"><button type="button" class="ico-right" onclick="togglePwd('regConfirm',this)">🙈</button></div>
+    <div class="sec-lbl">Optional</div>
+    <div class="fg"><label class="lbl">Referral Code</label><span class="ico">🎁</span><input type="text" id="regReferral" class="fi" placeholder="AGR-XXXXXX"></div>
+    <button class="btn" id="registerBtn" onclick="handleRegister()">Create Account →</button>
+  </div>
+  <div class="msg" id="message"></div>
+</div>
+<script type="module">
+import { auth, db } from './firebase.js';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, increment, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
-  <script type="module">
-    import { auth, db } from './firebase.js';
-    import {
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
-      sendPasswordResetEmail,
-      onAuthStateChanged
-    } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-    import {
-      doc, setDoc, collection, query, where, getDocs, updateDoc, increment
-    } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+onAuthStateChanged(auth, (user) => { if (user) window.location.href = 'dashboard.html'; });
 
-    // Particles
-    for(let i=0;i<14;i++){
-      const el=document.createElement('div');
-      el.className='p';
-      const s=4+Math.random()*10;
-      el.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${6+Math.random()*8}s;animation-delay:${Math.random()*6}s`;
-      document.getElementById('particles').appendChild(el);
-    }
-
-    // Auto redirect if already logged in
-    onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = 'dashboard.html';
+window.switchTab = function(tab) {
+  document.getElementById('loginForm').style.display = tab==='login'?'block':'none';
+  document.getElementById('registerForm').style.display = tab==='register'?'block':'none';
+  document.getElementById('loginTab').classList.toggle('active', tab==='login');
+  document.getElementById('registerTab').classList.toggle('active', tab==='register');
+  document.getElementById('message').style.display = 'none';
+};
+window.togglePwd = function(id, btn) {
+  const input = document.getElementById(id);
+  input.type = input.type==='password'?'text':'password';
+  btn.textContent = input.type==='password'?'🙈':'🐵';
+};
+function showMsg(text, type) {
+  const el = document.getElementById('message');
+  el.innerHTML = text; el.className = 'msg '+type; el.style.display = 'block';
+}
+function cleanErr(msg) {
+  if (msg.includes('wrong-password')||msg.includes('invalid-credential')) return '❌ Wrong email or password.';
+  if (msg.includes('user-not-found')) return '❌ No account with this email.';
+  if (msg.includes('email-already-in-use')) return '❌ Email already registered.';
+  if (msg.includes('weak-password')) return '❌ Password too weak (min 6 chars).';
+  if (msg.includes('invalid-email')) return '❌ Invalid email address.';
+  return '❌ ' + msg.replace('Firebase: ','').split('(')[0];
+}
+async function saveUserToFirestore(user, extra = {}) {
+  const ref = doc(db, 'users', user.uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) {
+    const referralCode = 'AGR-' + user.uid.substring(0,6).toUpperCase();
+    await setDoc(ref, {
+      uid: user.uid, email: user.email,
+      displayName: user.displayName || extra.fullName || '',
+      fullName: extra.fullName || user.displayName || '',
+      fatherName: extra.fatherName || '',
+      role: 'farmer', vipLevel: 'free',
+      rank: 'seedling', rankPoints: 0,
+      walletBalance: 0, referralCode,
+      usedReferral: extra.referral || null,
+      referralCount: 0, referralEarnings: 0,
+      verified: false, createdAt: serverTimestamp()
     });
-
-    window.switchTab = function(tab) {
-      document.getElementById('loginForm').style.display = tab==='login'?'block':'none';
-      document.getElementById('registerForm').style.display = tab==='register'?'block':'none';
-      document.getElementById('loginTab').classList.toggle('active', tab==='login');
-      document.getElementById('registerTab').classList.toggle('active', tab==='register');
-      document.getElementById('message').style.display = 'none';
-    };
-
-    window.togglePwd = function(id, btn) {
-      const input = document.getElementById(id);
-      input.type = input.type === 'password' ? 'text' : 'password';
-      btn.textContent = input.type === 'password' ? '🙈' : '🐵';
-    };
-
-    function showMsg(text, type) {
-      const el = document.getElementById('message');
-      el.innerHTML = text;
-      el.className = 'msg ' + type;
-      el.style.display = 'block';
+    if (extra.referral && extra.referral.startsWith('AGR-')) {
+      const q = query(collection(db,'users'), where('referralCode','==',extra.referral));
+      const rSnap = await getDocs(q);
+      if (!rSnap.empty) {
+        await updateDoc(doc(db,'users',rSnap.docs[0].id), { referralCount: increment(1), referralEarnings: increment(50) });
+      }
     }
-
-    function cleanErr(msg) {
-      if (msg.includes('wrong-password')||msg.includes('invalid-credential')) return '❌ Wrong email or password.';
-      if (msg.includes('user-not-found')) return '❌ No account found with this email.';
-      if (msg.includes('email-already-in-use')) return '❌ Email already registered. Try signing in.';
-      if (msg.includes('weak-password')) return '❌ Password too weak. Use at least 6 characters.';
-      if (msg.includes('invalid-email')) return '❌ Invalid email address.';
-      if (msg.includes('too-many-requests')) return '❌ Too many attempts. Please wait.';
-      return '❌ ' + msg.replace('Firebase: ','').split('(')[0];
-    }
-
-    window.handleLogin = async function() {
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginBtn');
-      if (!email||!password) { showMsg('⚠️ Please fill all fields.','error'); return; }
-      btn.disabled=true; btn.textContent='Signing in...';
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        showMsg('✅ Welcome back! Redirecting...','success');
-        setTimeout(()=>window.location.href='dashboard.html', 800);
-      } catch(e) {
-        showMsg(cleanErr(e.message),'error');
-        btn.disabled=false; btn.textContent='Sign In →';
-      }
-    };
-
-    window.handleRegister = async function() {
-      const fullName = document.getElementById('regFullName').value.trim();
-      const fatherName = document.getElementById('regFatherName').value.trim();
-      const email = document.getElementById('regEmail').value.trim();
-      const password = document.getElementById('regPassword').value;
-      const confirm = document.getElementById('regConfirm').value;
-      const referral = document.getElementById('regReferral').value.trim().toUpperCase();
-      const btn = document.getElementById('registerBtn');
-
-      if (!fullName||!fatherName||!email||!password) {
-        showMsg('⚠️ Please fill all required fields.','error'); return;
-      }
-      if (password.length < 6) {
-        showMsg('⚠️ Password must be at least 6 characters.','error'); return;
-      }
-      if (password !== confirm) {
-        showMsg('⚠️ Passwords do not match.','error'); return;
-      }
-
-      btn.disabled=true; btn.textContent='Creating account...';
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        const referralCode = 'AGR-' + cred.user.uid.substring(0,6).toUpperCase();
-
-        await setDoc(doc(db,'users',cred.user.uid), {
-          email, fullName, fatherName,
-          displayName: fullName,
-          vipLevel: 'free',
-          walletBalance: 0,
-          referralCode,
-          usedReferral: referral||null,
-          referralCount: 0,
-          referralEarnings: 0,
-          createdAt: new Date().toISOString()
-        });
-
-        // Credit referrer
-        if (referral && referral.startsWith('AGR-')) {
-          const q = query(collection(db,'users'), where('referralCode','==',referral));
-          const snap = await getDocs(q);
-          if (!snap.empty) {
-            await updateDoc(doc(db,'users',snap.docs[0].id), {
-              referralCount: increment(1),
-              referralEarnings: increment(50)
-            });
-          }
-        }
-
-        showMsg('✅ Account created successfully! Signing you in...','success');
-        setTimeout(()=>window.location.href='dashboard.html', 1000);
-      } catch(e) {
-        showMsg(cleanErr(e.message),'error');
-        btn.disabled=false; btn.textContent='Create Account →';
-      }
-    };
-
-    window.showForgotPassword = async function() {
-      const email = prompt('Enter your registered email:');
-      if (!email) return;
-      try {
-        await sendPasswordResetEmail(auth, email);
-        alert('✅ Password reset email sent! Check your inbox.');
-      } catch(e) { alert(cleanErr(e.message)); }
-    };
-  </script>
+  }
+}
+window.handleGoogle = async function() {
+  try {
+    const provider = new GoogleAuthProvider();
+    const cred = await signInWithPopup(auth, provider);
+    await saveUserToFirestore(cred.user);
+    showMsg('✅ Welcome! Redirecting...', 'success');
+    setTimeout(() => window.location.href = 'dashboard.html', 800);
+  } catch(e) { showMsg(cleanErr(e.message), 'error'); }
+};
+window.handleLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('loginBtn');
+  if (!email||!password) { showMsg('⚠️ Fill all fields.','error'); return; }
+  btn.disabled=true; btn.textContent='Signing in...';
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    showMsg('✅ Welcome back!','success');
+    setTimeout(()=>window.location.href='dashboard.html', 800);
+  } catch(e) { showMsg(cleanErr(e.message),'error'); btn.disabled=false; btn.textContent='Sign In →'; }
+};
+window.handleRegister = async function() {
+  const fullName = document.getElementById('regFullName').value.trim();
+  const fatherName = document.getElementById('regFatherName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirm').value;
+  const referral = document.getElementById('regReferral').value.trim().toUpperCase();
+  const btn = document.getElementById('registerBtn');
+  if (!fullName||!fatherName||!email||!password) { showMsg('⚠️ Fill all required fields.','error'); return; }
+  if (password.length<6) { showMsg('⚠️ Password min 6 characters.','error'); return; }
+  if (password!==confirm) { showMsg('⚠️ Passwords do not match.','error'); return; }
+  btn.disabled=true; btn.textContent='Creating account...';
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await saveUserToFirestore(cred.user, {fullName, fatherName, referral});
+    showMsg('✅ Account created!','success');
+    setTimeout(()=>window.location.href='dashboard.html', 800);
+  } catch(e) { showMsg(cleanErr(e.message),'error'); btn.disabled=false; btn.textContent='Create Account →'; }
+};
+window.showForgotPassword = async function() {
+  const email = prompt('Enter your registered email:');
+  if (!email) return;
+  try { await sendPasswordResetEmail(auth, email); alert('✅ Reset email sent!'); }
+  catch(e) { alert(cleanErr(e.message)); }
+};
+</script>
 </body>
 </html>
