@@ -1,3 +1,6 @@
+import { VIP_PLANS, getUserVIP, upgradeVIP } from './vipx.js';
+import { getWalletBalance, requestDeposit, requestWithdrawal, getTransactionHistory } from './walletx.js';
+import { initTeffAI } from './teffaix.js';
 import { auth, db } from '../firebase.js';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import {
