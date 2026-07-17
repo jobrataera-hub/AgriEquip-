@@ -1,6 +1,3 @@
-import { VIP_PLANS, getUserVIP, upgradeVIP } from './vipx.js';
-import { getWalletBalance, requestDeposit, requestWithdrawal, getTransactionHistory } from './walletx.js';
-import { initTeffAI } from './teffaix.js';
 import { auth, db } from '../firebase.js';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import {
@@ -8,9 +5,9 @@ import {
   collection, query, where, getDocs, orderBy, limit,
   serverTimestamp, increment
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
-import { VIP_PLANS, getUserVIP, upgradeVIP } from './vip.js';
-import { getWalletBalance, requestDeposit, requestWithdrawal, getTransactionHistory } from './wallet.js';
-import { initTeffAI } from './teffai.js';
+import { VIP_PLANS, getUserVIP, upgradeVIP } from './vipx.js';
+import { getWalletBalance, requestDeposit, requestWithdrawal, getTransactionHistory } from './walletx.js';
+import { initTeffAI } from './teffaix.js';
 
 (function initTheme() {
   const t = localStorage.getItem('agriequip-theme') || 'dark';
