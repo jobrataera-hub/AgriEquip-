@@ -1091,6 +1091,7 @@ function showToast(msg) {
   t._timer = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 3000);
 }
 window._app.showToast = showToast;
+window.showToast = showToast;
 
 // ─── XP helpers ──────────────────────────────────────────
 function getXP()         { return parseInt(localStorage.getItem('agriequip_xp') || '0'); }
