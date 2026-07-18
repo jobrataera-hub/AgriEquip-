@@ -219,7 +219,26 @@ function renderSection(id) {
             <button class="action-btn" onclick="showSection('academy')" style="background:linear-gradient(135deg,#F59E0B,#D97706)">🎓 Academy</button>
           </div>
         </div>
-
+        <div class="section-card">
+          <h3>📈 Live Market Prices</h3>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            ${[['🌾','Teff','8,200 ETB/qtl','+3.2%','#22C55E'],['☕','Coffee','12,400 ETB/qtl','+5.1%','#22C55E'],['🌽','Maize','2,900 ETB/qtl','-1.4%','#EF4444'],['🌾','Wheat','5,600 ETB/qtl','+0.8%','#22C55E']].map(([e,n,p,c,col])=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font-size:1.2rem">${e}</span><span style="font-size:.85rem;font-weight:600">${n}</span></div>
+              <div style="text-align:right"><div style="font-size:.85rem;font-weight:700">${p}</div><div style="font-size:.72rem;color:${col}">${c}</div></div>
+            </div>`).join('')}
+          </div>
+          <p style="color:#64748B;font-size:.7rem;margin-top:8px;text-align:center">Addis Ababa market · Updated today</p>
+        </div>
+        <div class="section-card">
+          <h3>🌱 My Farm Overview</h3>
+          <div class="quick-stats" style="margin:0">
+            <div class="stat-card" style="padding:12px"><div class="stat-icon">📏</div><h3 style="font-size:1rem" id="farmSize">—</h3><p>Farm Size</p></div>
+            <div class="stat-card" style="padding:12px"><div class="stat-icon">🌾</div><h3 style="font-size:1rem" id="farmCrops">—</h3><p>Crops</p></div>
+          </div>
+          <button class="action-btn" style="margin-top:10px;background:linear-gradient(135deg,#64748B,#475569)" onclick="showToast('🚧 Farm profile coming soon!')">✏️ Set Up Farm Profile</button>
+        </div>
+        
         <div class="section-card">
           <h3>🎁 Referral Program</h3>
           <p style="color:#64748B;font-size:.82rem;margin-bottom:12px">Invite friends — earn <strong style="color:#22C55E">50 ETB</strong> per referral!</p>
