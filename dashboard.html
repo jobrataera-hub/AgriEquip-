@@ -8,11 +8,50 @@
 <link rel="stylesheet" href="css/dashboard.css">
 <link rel="stylesheet" href="css/themes.css">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+
+<!-- BRIDGE: exposes module functions to global onclick handlers -->
+<script>
+  // These are called by onclick in HTML, they delegate to the loaded module
+  function showSection(id)       { if(window._app) window._app.showSection(id); }
+  function copyReferral()        { if(window._app) window._app.copyReferral(); }
+  function setTheme(t)           { if(window._app) window._app.setTheme(t); }
+  function askTeff(q)            { if(window._app) window._app.askTeff(q); }
+  function sendTeff()            { if(window._app) window._app.sendTeff(); }
+  function clearTeffChat()       { if(window._app) window._app.clearTeffChat(); }
+  function completeTask(id,xp)   { if(window._app) window._app.completeTask(id,xp); }
+  function activateVIP(n,f)      { if(window._app) window._app.activateVIP(n,f); }
+  function submitDeposit()       { if(window._app) window._app.submitDeposit(); }
+  function submitWithdraw()      { if(window._app) window._app.submitWithdraw(); }
+  function showDepositForm()     { if(window._app) window._app.showDepositForm(); }
+  function showWithdrawForm()    { if(window._app) window._app.showWithdrawForm(); }
+  function backToWallet()        { if(window._app) window._app.backToWallet(); }
+  function submitListing()       { if(window._app) window._app.submitListing(); }
+  function toggleListingForm()   { if(window._app) window._app.toggleListingForm(); }
+  function filterEquipment()     { if(window._app) window._app.filterEquipment(); }
+  function saveProfile()         { if(window._app) window._app.saveProfile(); }
+  function handleSignOut()       { if(window._app) window._app.handleSignOut(); }
+  function navBack()             { if(window._app) window._app.navBack(); }
+  function navForward()          { if(window._app) window._app.navForward(); }
+
+  // Error display
+  window.onerror = function(msg, url, line) {
+    const existing = document.getElementById('errBanner');
+    if (existing) existing.remove();
+    const d = document.createElement('div');
+    d.id = 'errBanner';
+    d.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#dc2626;color:white;padding:12px 16px;z-index:99999;font-size:11px;word-break:break-all;line-height:1.4';
+    d.textContent = 'ERROR: ' + msg + ' | ' + (url||'').split('/').pop() + ' L' + line;
+    document.body.prepend(d);
+    setTimeout(() => d.remove(), 8000);
+  };
+</script>
 </head>
 <body>
 
-<div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
+<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-profile">
     <div class="sidebar-avatar" id="sidebarInitial">?</div>
@@ -32,330 +71,61 @@
       </div>
       <span class="logo-text">AgriEquip</span>
     </div>
-    <button class="close-btn" id="menuToggle">✕</button>
+    <button class="close-btn" onclick="closeSidebar()">✕</button>
   </div>
   <nav class="nav-menu">
-    <a href="#" class="nav-link active" data-section="home"><span class="nav-icon">🏠</span> Home</a>
-    <a href="#" class="nav-link" data-section="browse"><span class="nav-icon">🔍</span> Browse Equipment</a>
-    <a href="#" class="nav-link" data-section="bookings"><span class="nav-icon">📅</span> My Bookings</a>
-    <a href="#" class="nav-link" data-section="listings"><span class="nav-icon">📦</span> My Listings</a>
-    <a href="#" class="nav-link" data-section="wallet"><span class="nav-icon">💳</span> Wallet</a>
-    <a href="#" class="nav-link" data-section="vip"><span class="nav-icon">💎</span> VIP Plans</a>
-    <a href="#" class="nav-link" data-section="earnings"><span class="nav-icon">💰</span> Earnings</a>
-    <a href="#" class="nav-link" data-section="tasks"><span class="nav-icon">🌱</span> Daily Tasks</a>
-    <a href="#" class="nav-link" data-section="academy"><span class="nav-icon">🎓</span> Academy</a>
-    <a href="#" class="nav-link" data-section="community"><span class="nav-icon">👥</span> Community</a>
-    <a href="#" class="nav-link" data-section="teffai"><span class="nav-icon">🤖</span> Teff AI</a>
-    <a href="#" class="nav-link" data-section="profile"><span class="nav-icon">👤</span> Profile</a>
-    <a href="#" class="nav-link" data-section="settings"><span class="nav-icon">⚙️</span> Settings</a>
-    <a href="#" class="nav-link" data-section="about"><span class="nav-icon">ℹ️</span> About & Legal</a>
+    <a href="#" class="nav-link active" data-section="home"     onclick="showSection('home');return false"><span class="nav-icon">🏠</span> Home</a>
+    <a href="#" class="nav-link" data-section="browse"          onclick="showSection('browse');return false"><span class="nav-icon">🔍</span> Browse Equipment</a>
+    <a href="#" class="nav-link" data-section="listings"        onclick="showSection('listings');return false"><span class="nav-icon">📦</span> My Listings</a>
+    <a href="#" class="nav-link" data-section="wallet"          onclick="showSection('wallet');return false"><span class="nav-icon">💳</span> Wallet</a>
+    <a href="#" class="nav-link" data-section="vip"             onclick="showSection('vip');return false"><span class="nav-icon">💎</span> VIP Plans</a>
+    <a href="#" class="nav-link" data-section="tasks"           onclick="showSection('tasks');return false"><span class="nav-icon">✅</span> Tasks</a>
+    <a href="#" class="nav-link" data-section="academy"         onclick="showSection('academy');return false"><span class="nav-icon">🎓</span> Academy</a>
+    <a href="#" class="nav-link" data-section="community"       onclick="showSection('community');return false"><span class="nav-icon">👥</span> Community</a>
+    <a href="#" class="nav-link" data-section="teffai"          onclick="showSection('teffai');return false"><span class="nav-icon">🤖</span> Teff AI</a>
+    <a href="#" class="nav-link" data-section="profile"         onclick="showSection('profile');return false"><span class="nav-icon">👤</span> Profile</a>
+    <a href="#" class="nav-link" data-section="settings"        onclick="showSection('settings');return false"><span class="nav-icon">⚙️</span> Settings</a>
+    <a href="#" class="nav-link" data-section="about"           onclick="showSection('about');return false"><span class="nav-icon">ℹ️</span> About & Legal</a>
   </nav>
-  <button class="logout-btn" id="logoutBtn">🚪 Sign Out</button>
+  <button class="logout-btn" onclick="handleSignOut()">🚪 Sign Out</button>
 </aside>
 
+<!-- MAIN -->
 <main class="main-content">
   <div class="topbar">
     <div class="topbar-left">
-      <button class="open-menu-btn" id="openMenu" style="background:rgba(255,255,255,0.08);border:none;width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px">
-        <span style="display:block;width:18px;height:2px;background:white;border-radius:2px"></span>
-        <span style="display:block;width:14px;height:2px;background:rgba(255,255,255,0.6);border-radius:2px"></span>
-        <span style="display:block;width:18px;height:2px;background:white;border-radius:2px"></span>
+      <button class="open-menu-btn" onclick="openSidebar()">
+        <span></span><span></span><span></span>
       </button>
-      <button id="backBtn" class="nav-arrow-btn">◀</button>
-      <button id="fwdBtn" class="nav-arrow-btn">▶</button>
+      <button class="nav-arrow-btn" onclick="navBack()">◀</button>
+      <button class="nav-arrow-btn" onclick="navForward()">▶</button>
       <span id="pageTitle" class="topbar-title">🏠 Home</span>
     </div>
     <div class="topbar-right">
-      <button class="notif-btn" id="notifBtn"><span>🔔</span><div class="notif-dot"></div></button>
-      <div class="user-pill" style="cursor:pointer" onclick="showSection('profile')">
+      <div class="user-pill" onclick="showSection('profile')">
         <div class="user-avatar" id="userInitial">?</div>
-        <span id="userEmail" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.7rem"></span>
+        <span id="userEmail"></span>
       </div>
     </div>
   </div>
 
-  <div class="page-content">
-
-    <!-- HOME -->
-    <div id="home" class="section">
-      <div class="welcome-card">
-        <div class="welcome-tag">🌍 Ethiopia's Smart Agriculture Platform</div>
-        <h2>Welcome to AgriEquip 👋</h2>
-        <p style="margin-top:6px;opacity:0.8;font-size:0.9rem">Rent equipment, complete tasks, learn, and grow with the community.</p>
-        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-          <button class="action-btn" style="width:auto;padding:10px 18px;font-size:0.82rem" onclick="showSection('browse')">🔍 Browse Now</button>
-          <button class="action-btn" style="width:auto;padding:10px 18px;font-size:0.82rem;background:rgba(255,255,255,0.15);box-shadow:none" onclick="showSection('teffai')">🤖 Ask Teff AI</button>
-        </div>
-      </div>
-
-      <div class="section-card">
-        <h3>🏆 Your Rank</h3>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <p id="rankDisplay" style="font-size:1.2rem;font-weight:700;color:#22C55E">🌱 Seedling</p>
-          <p id="rankPoints" style="color:#64748B;font-size:0.82rem">0 pts</p>
-        </div>
-        <div style="background:rgba(255,255,255,0.08);border-radius:20px;height:8px;overflow:hidden">
-          <div id="rankProgressBar" style="background:linear-gradient(90deg,#22C55E,#06B6D4);height:100%;width:0%;transition:width 0.5s"></div>
-        </div>
-        <p id="rankProgressTxt" style="color:#64748B;font-size:0.72rem;margin-top:6px;text-align:center">0/100 pts to next rank</p>
-        <button class="action-btn" style="margin-top:12px" onclick="showSection('tasks')">🌱 Complete Daily Tasks</button>
-      </div>
-
-      <div class="quick-stats">
-        <div class="stat-card" style="animation-delay:0.1s"><div class="stat-icon">📅</div><h3 id="totalBookings">0</h3><p>Total Bookings</p></div>
-        <div class="stat-card" style="animation-delay:0.2s"><div class="stat-icon">⚡</div><h3 id="activeBookings">0</h3><p>Active Rentals</p></div>
-        <div class="stat-card" style="animation-delay:0.3s"><div class="stat-icon">📦</div><h3 id="totalListings">0</h3><p>My Listings</p></div>
-        <div class="stat-card" style="animation-delay:0.4s"><div class="stat-icon">💰</div><h3 id="earnings">0 ETB</h3><p>Total Earned</p></div>
-      </div>
-
-      <div class="section-card">
-        <h3>⚡ Quick Actions</h3>
-        <div class="quick-actions">
-          <button class="action-btn" onclick="showSection('browse')">🔍 Browse Equipment</button>
-          <button class="action-btn" onclick="showSection('listings')" style="background:linear-gradient(135deg,#06B6D4,#0891B2)">📦 List My Equipment</button>
-          <button class="action-btn" onclick="showSection('wallet')" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED)">💳 My Wallet</button>
-          <button class="action-btn" onclick="showSection('academy')" style="background:linear-gradient(135deg,#F59E0B,#D97706)">🎓 Academy</button>
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-        <div class="section-card" style="cursor:pointer" onclick="showSection('vip')">
-          <div style="font-size:1.5rem;margin-bottom:6px">💎</div>
-          <p id="vipBadge" style="font-weight:700;color:#22C55E;font-size:0.9rem">⚪ Free</p>
-          <p style="font-size:0.75rem;color:#64748B;margin-top:3px">Commission: <span id="commissionRate">10</span>%</p>
-        </div>
-        <div class="section-card" style="cursor:pointer" onclick="showSection('wallet')">
-          <div style="font-size:1.5rem;margin-bottom:6px">💳</div>
-          <p id="walletBalanceHome" style="font-weight:700;color:#22C55E;font-size:0.9rem">0 ETB</p>
-          <p style="font-size:0.75rem;color:#64748B;margin-top:3px">Wallet Balance</p>
-        </div>
-      </div>
-
-      <div class="section-card">
-        <h3>🎁 Referral Program</h3>
-        <p style="color:#64748B;font-size:0.82rem;margin-bottom:12px">Invite friends and earn <strong style="color:#22C55E">50 ETB</strong> per referral!</p>
-        <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px">
-          <div><p style="color:#64748B;font-size:0.7rem;margin-bottom:2px">Your code</p><span id="referralCode" style="font-weight:700;font-size:1rem;letter-spacing:3px;color:#22C55E">Loading...</span></div>
-          <button class="action-btn" style="width:auto;padding:8px 14px;font-size:0.76rem" onclick="copyReferral()">📋 Copy</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- BROWSE -->
-    <div id="browse" class="section" style="display:none">
-      <div class="search-container">
-        <div class="search-bar">
-          <div class="search-input-wrap">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Search tractors, plows, harvesters...">
-          </div>
-          <select id="categoryFilter">
-            <option value="">🌐 All Categories</option>
-            <option value="tractor">🚜 Tractor</option>
-            <option value="plow">🔧 Plow</option>
-            <option value="harvester">🌾 Harvester</option>
-            <option value="pump">💧 Pump</option>
-            <option value="thresher">⚙️ Thresher</option>
-            <option value="other">📦 Other</option>
-          </select>
-        </div>
-      </div>
-      <div id="equipmentList" class="equipment-grid"></div>
-    </div>
-
-    <!-- BOOKINGS -->
-    <div id="bookings" class="section" style="display:none"><div id="bookingsList"></div></div>
-
-    <!-- LISTINGS -->
-    <div id="listings" class="section" style="display:none">
-      <button class="action-btn" id="addListingBtn" style="margin-bottom:16px">➕ Add New Equipment</button>
-      <div id="addListingForm" style="display:none" class="section-card">
-        <h3>➕ List Your Equipment</h3>
-        <input type="text" id="equipName" placeholder="Equipment name *" class="form-input">
-        <select id="equipCategory" class="form-input">
-          <option value="tractor">🚜 Tractor</option>
-          <option value="plow">🔧 Plow</option>
-          <option value="harvester">🌾 Harvester</option>
-          <option value="pump">💧 Pump</option>
-          <option value="thresher">⚙️ Thresher</option>
-          <option value="other">📦 Other</option>
-        </select>
-        <input type="number" id="equipPrice" placeholder="Price per day (ETB) *" class="form-input">
-        <input type="text" id="equipLocation" placeholder="Your city/location *" class="form-input">
-        <textarea id="equipDesc" placeholder="Describe your equipment..." class="form-input" rows="3"></textarea>
-        <button class="action-btn" id="submitListing">✅ Submit Listing (+30 pts)</button>
-        <button class="action-btn" style="background:#64748B;margin-top:8px" onclick="document.getElementById('addListingForm').style.display='none'">✕ Cancel</button>
-      </div>
-      <div id="myListings"></div>
-    </div>
-
-    <!-- WALLET -->
-    <div id="wallet" class="section" style="display:none">
-      <div class="wallet-card">
-        <p style="color:rgba(255,255,255,0.55);font-size:0.82rem">💳 Available Balance</p>
-        <div class="wallet-balance" id="walletBalance">0 ETB</div>
-        <p style="color:rgba(255,255,255,0.3);font-size:0.7rem;margin-top:4px">Min withdrawal: 200 ETB</p>
-        <div class="wallet-actions">
-          <button class="wallet-btn deposit" id="depositBtn">⬆️ Deposit</button>
-          <button class="wallet-btn withdraw" id="withdrawBtn">⬇️ Withdraw</button>
-        </div>
-      </div>
-      <div class="section-card">
-        <h3>🏦 Supported Banks</h3>
-        <div class="bank-grid">
-          <div class="bank-item">🏦<br>CBE</div><div class="bank-item">🏦<br>Awash</div>
-          <div class="bank-item">🏦<br>Dashen</div><div class="bank-item">🏦<br>Abyssinia</div>
-          <div class="bank-item">📱<br>Telebirr</div><div class="bank-item">📱<br>M-Pesa</div>
-        </div>
-      </div>
-      <div class="section-card"><h3>📊 Transaction History</h3><div id="transactionHistory"></div></div>
-    </div>
-
-    <!-- VIP -->
-    <div id="vip" class="section" style="display:none">
-      <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);color:white;margin-bottom:16px">
-        <h3 style="color:white">💎 VIP Membership Plans</h3>
-        <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;margin-top:8px">Lower commission and more listings with each tier.</p>
-      </div>
-      <div class="vip-grid" id="vipPlans"></div>
-    </div>
-
-    <!-- EARNINGS -->
-    <div id="earnings" class="section" style="display:none">
-      <div class="wallet-card" style="margin-bottom:16px">
-        <p style="color:rgba(255,255,255,0.55);font-size:0.82rem">💰 Total Earnings</p>
-        <div class="wallet-balance" id="totalEarnings">0 ETB</div>
-      </div>
-      <div class="quick-stats">
-        <div class="stat-card"><div class="stat-icon">⏳</div><h3 id="pendingEarnings">0 ETB</h3><p>Pending</p></div>
-        <div class="stat-card"><div class="stat-icon">✅</div><h3 id="completedRentals">0</h3><p>Completed</p></div>
-        <div class="stat-card"><div class="stat-icon">🎁</div><h3 id="referralEarnings">0 ETB</h3><p>Referrals</p></div>
-        <div class="stat-card"><div class="stat-icon">📦</div><h3 id="earningsListings">0</h3><p>Listings</p></div>
-      </div>
-      <div class="section-card"><h3>📊 Earnings History</h3><div id="earningsHistoryList"></div></div>
-    </div>
-
-    <!-- DAILY TASKS -->
-    <div id="tasks" class="section" style="display:none">
-      <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);color:white;margin-bottom:16px">
-        <h3 style="color:white">🌱 Daily Tasks</h3>
-        <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;margin-top:8px">Complete tasks daily to earn points and rank up!</p>
-      </div>
-      <div id="tasksList"></div>
-    </div>
-
-    <!-- ACADEMY -->
-    <div id="academy" class="section" style="display:none">
-      <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);color:white;margin-bottom:16px">
-        <h3 style="color:white">🎓 Farming Academy</h3>
-        <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;margin-top:8px">Learn modern farming and earn points!</p>
-      </div>
-      <div id="academyList"></div>
-    </div>
-
-    <!-- COMMUNITY -->
-    <div id="community" class="section" style="display:none">
-      <div class="section-card">
-        <h3>✍️ Share with Community</h3>
-        <textarea id="postContent" placeholder="Ask a question, share a tip, or post an update..." class="form-input" rows="3"></textarea>
-        <select id="postCategory" class="form-input">
-          <option value="tip">💡 Tip</option>
-          <option value="question">❓ Question</option>
-          <option value="photo">📷 Photo</option>
-          <option value="success">🎉 Success Story</option>
-        </select>
-        <button class="action-btn" id="submitPost">📤 Post (+10 pts)</button>
-      </div>
-      <div id="communityFeed"></div>
-    </div>
-
-    <!-- TEFF AI -->
-    <div id="teffai" class="section" style="display:none"><div id="teffaiContainer"></div></div>
-
-    <!-- PROFILE -->
-    <div id="profile" class="section" style="display:none">
-      <div class="section-card" style="text-align:center">
-        <div class="profile-avatar">👨‍🌾</div>
-        <p id="profileFullName" style="font-weight:700;font-size:1rem;margin-bottom:2px"></p>
-        <p id="profileEmail" style="color:#64748B;font-size:0.82rem;margin-bottom:4px"></p>
-        <p id="profileVIP" style="color:#22C55E;font-size:0.82rem">⚪ Free Member</p>
-        <p id="profileRank" style="color:#F59E0B;font-size:0.78rem;margin-top:2px">🌱 Seedling</p>
-      </div>
-      <div class="section-card">
-        <h3>✏️ Edit Profile</h3>
-        <input type="text" id="profileName" placeholder="Full name" class="form-input">
-        <input type="text" id="profileFatherName" placeholder="Father's name" class="form-input">
-        <input type="tel" id="profilePhone" placeholder="Phone (+251...)" class="form-input">
-        <input type="text" id="profileCity" placeholder="City" class="form-input">
-        <button class="action-btn" id="saveProfile">💾 Save Changes</button>
-      </div>
-    </div>
-
-    <!-- SETTINGS -->
-    <div id="settings" class="section" style="display:none">
-      <div class="section-card">
-        <h3>🎨 App Theme</h3>
-        <div class="theme-options">
-          <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')"><div class="theme-preview dark-preview"></div><span>Dark</span></button>
-          <button class="theme-btn" data-theme="light" onclick="setTheme('light')"><div class="theme-preview light-preview"></div><span>Light</span></button>
-          <button class="theme-btn" data-theme="black" onclick="setTheme('black')"><div class="theme-preview black-preview"></div><span>Black</span></button>
-          <button class="theme-btn" data-theme="green" onclick="setTheme('green')"><div class="theme-preview green-preview"></div><span>Nature</span></button>
-        </div>
-      </div>
-      <div class="section-card">
-        <h3>⚠️ Danger Zone</h3>
-        <button class="action-btn" style="background:#EF4444" onclick="if(confirm('Clear cache?'))location.reload()">🗑️ Clear Cache</button>
-      </div>
-    </div>
-
-    <!-- ABOUT -->
-    <div id="about" class="section" style="display:none">
-      <div class="welcome-card" style="text-align:center">
-        <h2>AgriEquip OS</h2>
-        <p style="margin-top:6px;opacity:0.6;font-size:0.82rem">v2.0 • Made in Ethiopia 🇪🇹</p>
-      </div>
-      <div class="section-card">
-        <h3>📞 Contact & Support</h3>
-        <ul style="list-style:none;color:#64748B;font-size:0.85rem;line-height:2.5">
-          <li>📧 <a href="mailto:support0agriequip.et@gmail.com" style="color:#22C55E">support0agriequip.et@gmail.com</a></li>
-          <li>📱 <a href="tel:+251993920750" style="color:#22C55E">+251 993 920 750</a></li>
-          <li>💬 <a href="https://wa.me/251993920750" style="color:#25D366">WhatsApp: +251 993 920 750</a></li>
-          <li>✈️ Telegram: @AgriEquipET</li>
-          <li>📸 Instagram: @agriequip.et</li>
-          <li>📠 FAX: +251 993 920 750</li>
-          <li>📍 Addis Ababa, Ethiopia</li>
-        </ul>
-      </div>
-      <div class="section-card">
-        <h3>⚖️ Legal</h3>
-        <p style="color:#64748B;font-size:0.8rem;line-height:1.8">AgriEquip connects farmers with equipment owners across Ethiopia. Commission taken per completed rental. Data secured via Firebase. © 2026 AgriEquip.</p>
-      </div>
-    </div>
-
-  </div>
+  <!-- All section content rendered here by JS -->
+  <div class="page-content" id="pageContent"></div>
 </main>
 
-<!-- BANK MODAL -->
-<div id="bankModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);align-items:flex-end;justify-content:center">
-  <div id="bankModalContent" style="background:#1E293B;border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;max-width:480px">
-    <div style="width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px"></div>
-    <h3 id="modalTitle" style="font-size:1.1rem;margin-bottom:6px;color:white">Select Bank</h3>
-    <p id="modalSubtitle" style="color:#64748B;font-size:0.8rem;margin-bottom:20px"></p>
-    <div id="modalBody"></div>
-  </div>
-</div>
+<!-- Teff AI floating button -->
+<button class="teff-fab" onclick="showSection('teffai')">
+  🤖<span class="teff-fab-label">Ask Teff AI</span>
+</button>
 
-<button class="teff-fab" onclick="showSection('teffai')">🤖<span class="teff-fab-label">Ask Teff AI</span></button>
+<!-- Sidebar open/close helpers (non-module, safe to call from onclick) -->
+<script>
+  function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('active'); }
+  function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('active'); }
+</script>
 
-<script type="module" src="js/auth.js"></script>
-  <script>
-window.onerror = function(msg, url, line, col, error) {
-  document.body.insertAdjacentHTML('afterbegin', 
-    '<div style="position:fixed;top:0;left:0;right:0;background:red;color:white;padding:15px;z-index:99999;font-size:12px;word-break:break-all">ERROR: ' + msg + ' | File: ' + url.split('/').pop() + ' | Line: ' + line + '</div>');
-};
-  </script>
-  <script type="module" src="js/authx.js"></script>
-<script type="module" src="js/dashboardx.js"></script>
-<script type="module" src="js/dashboard.js"></script>
+<!-- Load ONLY ONE dashboard module -->
+<script type="module" src="js/app.js"></script>
+
 </body>
 </html>
