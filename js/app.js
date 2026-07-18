@@ -212,12 +212,16 @@ function renderSection(id) {
 
         <div class="section-card">
           <h3>⚡ Quick Actions</h3>
-          <div class="quick-actions">
-            <button class="action-btn" onclick="showSection('browse')">🔍 Browse Equipment</button>
-            <button class="action-btn" onclick="showSection('listings')" style="background:linear-gradient(135deg,#06B6D4,#0891B2)">📦 List My Equipment</button>
-            <button class="action-btn" onclick="showSection('wallet')" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED)">💳 My Wallet</button>
-            <button class="action-btn" onclick="showSection('academy')" style="background:linear-gradient(135deg,#F59E0B,#D97706)">🎓 Academy</button>
-          </div>
+          <div class="quick-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+  <button class="action-btn" onclick="showSection('browse')">🚜 Rent Equipment</button>
+  <button class="action-btn" style="background:linear-gradient(135deg,#06B6D4,#0891B2)" onclick="showSection('teffai')">🤖 Ask AI</button>
+  <button class="action-btn" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED)" onclick="showSection('wallet')">💳 Wallet</button>
+  <button class="action-btn" style="background:linear-gradient(135deg,#F59E0B,#D97706)" onclick="showSection('academy')">🎓 Academy</button>
+  <button class="action-btn" style="background:linear-gradient(135deg,#64748B,#475569)" onclick="showToast('📷 Crop Scanner coming soon!')">📷 Scan Crop</button>
+  <button class="action-btn" style="background:linear-gradient(135deg,#64748B,#475569)" onclick="showToast('🌤 Weather coming soon!')">🌤 Weather</button>
+  <button class="action-btn" style="background:linear-gradient(135deg,#EF4444,#DC2626)" onclick="showToast('🆘 Emergency SOS coming soon!')">🆘 Emergency SOS</button>
+  <button class="action-btn" onclick="showSection('listings')">📦 My Listings</button>
+</div>
         </div>
         <div class="section-card">
           <h3>📈 Live Market Prices</h3>
