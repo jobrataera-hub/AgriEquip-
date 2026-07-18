@@ -937,30 +937,31 @@ function askTeff(q) {
   sendTeff();
 }
 
-async function sendTeff() {
+const TEFF_KB = [
+  { k:['deposit','add money','fund'], a:'💳 <strong>Deposit:</strong> Wallet → Deposit → send to CBE 1000123456789 or Telebirr +251993920750 → fill form with reference. Min 100 ETB, approved in 24hrs.' },
+  { k:['withdraw','cash out'], a:'💰 <strong>Withdraw:</strong> Wallet → Withdraw → enter bank details. Minimum 400 ETB, processed in 24hrs.' },
+  { k:['vip','upgrade','commission'], a:'💎 <strong>VIP Plans:</strong> Free(10%) → VIP1 200ETB(8%) → VIP2 500ETB(7%) → VIP3 1000ETB(6%) → VIP4 2000ETB(5%) → VIP5 4000ETB(4%). Higher tier = less commission!' },
+  { k:['task','xp','rank','level'], a:'✅ <strong>Tasks & Ranks:</strong> Complete daily tasks to earn XP. Ranks: 🌱Seedling→🌿Grower→🚜Specialist→🌾Harvest Master→🏅Expert→👑Legend' },
+  { k:['list','equipment','rent out'], a:'📦 <strong>List Equipment:</strong> My Listings → Add New Equipment → fill name, category, price, location → Submit (+30 XP)' },
+  { k:['crop','plant','season','maize','teff','coffee'], a:'🌱 For crop-specific advice, check the Academy section — lessons on Teff, Coffee, Maize, Soil Health, and Irrigation are available!' },
+  { k:['contact','support','phone','email'], a:'📞 <strong>Contact:</strong><br>📧 support0agriequip.et@gmail.com<br>📱 +251 993 920 750<br>✈️ Telegram: @AgriEquipET' },
+  { k:['salam','hello','hi'], a:'Salam! 👋 How can I help you today?' },
+  { k:['thank'], a:'Betam amesegnalehu! 🙏 Anything else?' },
+];
+function sendTeff() {
   const input = document.getElementById('teffInput');
   const msg   = input?.value?.trim();
   if (!msg) return;
   input.value = '';
   addTeffBubble(msg, 'user');
-  teffHistory.push({ role:'user', content:msg });
   const typing = addTypingBubble();
-  try {
-    const res  = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, system:TEFF_SYSTEM, messages:teffHistory })
-    });
-    const data  = await res.json();
-    const reply = data.content?.[0]?.text || 'Sorry, I had trouble responding. Please try again!';
+  setTimeout(() => {
     typing?.remove();
+    const lower = msg.toLowerCase();
+    const hit = TEFF_KB.find(t => t.k.some(w => lower.includes(w)));
+    const reply = hit ? hit.a : 'Betam good question! For this, please contact us: 📱 +251 993 920 750 or 📧 support0agriequip.et@gmail.com';
     addTeffBubble(reply, 'bot');
-    teffHistory.push({ role:'assistant', content:reply });
-    if (teffHistory.length > 20) teffHistory = teffHistory.slice(-16);
-  } catch(e) {
-    typing?.remove();
-    addTeffBubble('⚠️ Connection issue. Check your internet and try again.','bot');
-  }
+  }, 500);
 }
 
 function clearTeffChat() {
