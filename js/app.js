@@ -999,7 +999,7 @@ function addTypingBubble() {
 
 // ─── Toast ───────────────────────────────────────────────
 function showToast(msg) {
-  window._app.showToast && window._app.showToast(msg);
+
   let t = document.getElementById('toast');
   if (!t) {
     t = document.createElement('div');
