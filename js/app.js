@@ -640,45 +640,59 @@ function renderSection(id) {
 
     // ── ABOUT ────────────────────────────────────────────
     case 'about':
-      root.innerHTML = `
-        <div class="welcome-card" style="text-align:center">
-          <div style="font-size:2.5rem;margin-bottom:10px">🌾</div>
-          <h2>AgriEquip</h2>
-          <p style="margin-top:6px;opacity:.6;font-size:.82rem">v2.0 • Made in Ethiopia 🇪🇹</p>
-        </div>
-        <div class="section-card">
-          <h3>📞 Contact & Support</h3>
-          <ul style="list-style:none;color:#64748B;font-size:.85rem;line-height:2.5">
-            <li>📧 <a href="mailto:support0agriequip.et@gmail.com" style="color:#22C55E">support0agriequip.et@gmail.com</a></li>
-            <li>📱 <a href="tel:+251993920750" style="color:#22C55E">+251 993 920 750</a></li>
-            <li>💬 <a href="https://wa.me/251993920750" style="color:#25D366">WhatsApp: +251 993 920 750</a></li>
-            <li>✈️ Telegram: <a href="https://t.me/AgriEquipET" style="color:#22C55E">@AgriEquipET</a></li>
-            <li>📸 Instagram: @agriequip.et</li>
-            <li>📠 FAX: +251 993 920 750</li>
-            <li>📍 Addis Ababa, Ethiopia</li>
-            <li>🕐 Mon–Fri 8AM–6PM EAT</li>
-          </ul>
-        </div>
-        <div class="section-card">
-          <h3>⚖️ Legal & License</h3>
-          <p style="color:#64748B;font-size:.82rem;line-height:1.8;margin-bottom:12px">AgriEquip connects farmers with equipment owners across Ethiopia. Commission is taken per completed rental. All data is secured via Google Firebase. No guaranteed investment returns — all earnings come from real equipment rentals only.</p>
-          <p style="color:#64748B;font-size:.82rem;line-height:1.8">© 2026 AgriEquip. All rights reserved. Made in Ethiopia 🇪🇹</p>
-        </div>
-        <div class="section-card">
-          <h3>❓ FAQ</h3>
-          ${[
-            ['How do I deposit?','Go to Wallet → Deposit → Send to AgriEquip\'s account → Fill the form with your transaction reference.'],
-            ['Minimum withdrawal?','400 ETB. Processed within 24 hours on business days.'],
-            ['What is commission?','Free: 10% | VIP 1: 8% | VIP 2: 7% | VIP 3: 6% | VIP 4: 5% | VIP 5: 4%'],
-            ['How do I list equipment?','My Listings → Add New Equipment → Fill details → Submit.'],
-            ['What is Teff AI?','Your smart assistant for equipment, wallet, tasks, and farming advice.'],
-          ].map(([q,a])=>`
-          <div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-            <strong style="font-size:.85rem;display:block;margin-bottom:4px">Q: ${q}</strong>
-            <p style="color:#64748B;font-size:.82rem;line-height:1.6">${a}</p>
-          </div>`).join('')}
-        </div>`;
-      break;
+  root.innerHTML = `
+    <div class="welcome-card" style="text-align:center">
+      <div style="font-size:2.5rem;margin-bottom:10px">🌾</div>
+      <h2>AgriEquip</h2>
+      <p style="margin-top:6px;opacity:.6;font-size:.82rem">v2.0 • Made in Ethiopia 🇪🇹</p>
+    </div>
+    <div class="section-card">
+      <h3>📖 About AgriEquip</h3>
+      <p style="color:#64748B;font-size:.83rem;line-height:1.8">AgriEquip is Ethiopia's agricultural equipment rental marketplace, connecting equipment owners with farmers who need machinery. Beyond rentals, AgriEquip offers a Farming Academy, daily tasks and achievement ranks, a community space for farmers to share knowledge, and Teff AI — an assistant for farming and platform questions.</p>
+      <p style="color:#64748B;font-size:.83rem;line-height:1.8;margin-top:10px"><strong>Our mission:</strong> Make modern farming equipment and knowledge accessible to every Ethiopian farmer, regardless of location or farm size.</p>
+    </div>
+    <div class="section-card">
+      <h3>📞 Contact & Support</h3>
+      <ul style="list-style:none;color:#64748B;font-size:.85rem;line-height:2.5">
+        <li>📧 <a href="mailto:support0agriequip.et@gmail.com" style="color:#22C55E">support0agriequip.et@gmail.com</a></li>
+        <li>📱 <a href="tel:+251993920750" style="color:#22C55E">+251 993 920 750</a></li>
+        <li>💬 <a href="https://wa.me/251993920750" style="color:#25D366">WhatsApp: +251 993 920 750</a></li>
+        <li>✈️ Telegram: <a href="https://t.me/AgriEquipET" style="color:#22C55E">@AgriEquipET</a></li>
+        <li>📸 Instagram: @agriequip.et</li>
+        <li>📠 FAX: +251 993 920 750</li>
+        <li>📍 Addis Ababa, Ethiopia</li>
+        <li>🕐 Mon–Fri 8AM–6PM EAT</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <h3>⚖️ Legal & License</h3>
+      <p style="color:#64748B;font-size:.82rem;line-height:1.8;margin-bottom:12px">AgriEquip connects farmers with equipment owners across Ethiopia. Commission is taken per completed rental. All data is secured via Google Firebase. No guaranteed investment returns — all earnings come from real equipment rentals only.</p>
+      <p style="color:#64748B;font-size:.82rem;line-height:1.8">© 2026 AgriEquip. All rights reserved. Made in Ethiopia 🇪🇹</p>
+    </div>
+    <div class="section-card">
+      <h3>📋 Terms of Service</h3>
+      <p style="color:#64748B;font-size:.82rem;line-height:1.8">By using AgriEquip, you agree to list only equipment you own or have rights to rent, provide accurate information, and complete rentals in good faith. AgriEquip is a marketplace facilitator and is not liable for equipment condition, disputes between users, or crop outcomes from advice given.</p>
+    </div>
+    <div class="section-card">
+      <h3>🔒 Privacy Policy</h3>
+      <p style="color:#64748B;font-size:.82rem;line-height:1.8">We collect only information necessary to operate the platform: your name, contact details, farm information you provide, and transaction records. We never sell your data. Data is stored securely via Google Firebase.</p>
+    </div>
+    <div class="section-card">
+      <h3>❓ FAQ</h3>
+      ${[
+        ['How do I deposit?','Go to Wallet → Deposit → Send to AgriEquip\'s account → Fill the form with your transaction reference.'],
+        ['Minimum withdrawal?','400 ETB. Processed within 24 hours on business days.'],
+        ['What is commission?','Free: 10% | VIP 1: 8% | VIP 2: 7% | VIP 3: 6% | VIP 4: 5% | VIP 5: 4%'],
+        ['How do I list equipment?','My Listings → Add New Equipment → Fill details → Submit.'],
+        ['What is Teff AI?','Your smart assistant for equipment, wallet, tasks, and farming advice.'],
+        ['Is this an investment app?','No. AgriEquip is a rental marketplace. All earnings come from actual equipment rentals — never guaranteed returns.'],
+      ].map(([q,a])=>`
+      <div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+        <strong style="font-size:.85rem;display:block;margin-bottom:4px">Q: ${q}</strong>
+        <p style="color:#64748B;font-size:.82rem;line-height:1.6">${a}</p>
+      </div>`).join('')}
+    </div>`;
+  break;
 
     default:
       root.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#64748B"><div style="font-size:3rem">🚧</div><p>Coming soon</p></div>`;
