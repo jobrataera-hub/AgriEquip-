@@ -474,24 +474,22 @@ function renderSection(id) {
     }
 
     // ── ACADEMY ──────────────────────────────────────────
-    case 'academy':
-      root.innerHTML = `
-        <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
-          <h3 style="color:white">🎓 Farming Academy</h3>
-          <p style="color:rgba(255,255,255,.55);font-size:.82rem;margin-top:8px">Learn modern farming, earn XP, and unlock achievements!</p>
-        </div>
-        ${ACADEMY.map((c,i) => `
-        <div class="section-card" style="cursor:pointer" onclick="startLesson(${i})">
-          <div style="display:flex;align-items:center;gap:14px">
-            <span style="font-size:2rem">${c.emoji}</span>
-            <div style="flex:1">
-              <div style="font-weight:700;font-size:.92rem">${c.title}</div>
-              <div style="color:#64748B;font-size:.78rem;margin-top:2px">${c.desc}</div>
-            </div>
-            <span style="background:rgba(34,197,94,.1);color:#22C55E;border-radius:6px;padding:4px 8px;font-size:.75rem;white-space:nowrap">+${c.pts} XP</span>
-          </div>
-        </div>`).join('')}`;
-      break;
+    case 'academy': {
+  const tab = window._academyTab || 'lessons';
+  root.innerHTML = `
+    <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
+      <h3 style="color:white">🎓 AgriAcademy</h3>
+      <p style="color:rgba(255,255,255,.55);font-size:.82rem;margin-top:8px">Learn modern farming, earn XP, and unlock achievements!</p>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button class="action-btn" style="background:${tab==='lessons'?'#22C55E':'#334155'}" onclick="setAcademyTab('lessons')">📚 Lessons</button>
+      <button class="action-btn" style="background:${tab==='videos'?'#22C55E':'#334155'}" onclick="setAcademyTab('videos')">🎥 Videos</button>
+      <button class="action-btn" style="background:${tab==='tips'?'#22C55E':'#334155'}" onclick="setAcademyTab('tips')">💡 Daily Tips</button>
+    </div>
+    <div id="academyContent"></div>`;
+  renderAcademyTab(tab);
+  break;
+}
 
     // ── COMMUNITY ────────────────────────────────────────
     case 'community':
@@ -1096,6 +1094,65 @@ function showToast(msg) {
 }
 window._app.showToast = showToast;
 window.showToast = showToast;
+window.const VIDEOS = [
+  { emoji:'🎬', title:'How to Operate a Tractor Safely', dur:'8 min' },
+  { emoji:'🎬', title:'Coffee Harvesting Techniques', dur:'6 min' },
+  { emoji:'🎬', title:'Irrigation System Setup', dur:'10 min' },
+  { emoji:'🎬', title:'Tractor Maintenance Basics', dur:'7 min' },
+];
+const ARTICLES = [
+  { emoji:'📄', title:'Understanding Soil pH for Better Yields', read:'4 min' },
+  { emoji:'📄', title:'Fertilizer Timing Guide for Ethiopian Crops', read:'5 min' },
+  { emoji:'📄', title:'Pest Management Without Chemicals', read:'6 min' },
+  { emoji:'📄', title:'Water Conservation Techniques for Farms', read:'4 min' },
+];
+const DAILY_TIPS = [
+  '🌱 Rotate your crops every season to keep soil healthy and reduce pest buildup.',
+  '💧 Water early morning or late evening to reduce evaporation loss.',
+  '🌾 Test your soil every 2-3 years to know exactly what nutrients it needs.',
+  '🚜 Check tractor oil levels weekly during heavy use season.',
+  '☕ Coffee cherries are ready to pick when fully red — check daily during harvest.',
+];
+
+window.setAcademyTab = function(tab) {
+  window._academyTab = tab;
+  renderAcademyTab(tab);
+};
+
+function renderAcademyTab(tab) {
+  const el = document.getElementById('academyContent');
+  if (!el) return;
+  if (tab === 'lessons') {
+    el.innerHTML = ACADEMY.map((c,i) => `
+    <div class="section-card" style="cursor:pointer" onclick="startLesson(${i})">
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="font-size:2rem">${c.emoji}</span>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:.92rem">${c.title}</div>
+          <div style="color:#64748B;font-size:.78rem;margin-top:2px">${c.desc}</div>
+        </div>
+        <span style="background:rgba(34,197,94,.1);color:#22C55E;border-radius:6px;padding:4px 8px;font-size:.75rem;white-space:nowrap">+${c.pts} XP</span>
+      </div>
+    </div>`).join('');
+  } else if (tab === 'videos') {
+    el.innerHTML = VIDEOS.map(v => `
+    <div class="section-card" style="cursor:pointer" onclick="showToast('▶️ Playing: ${v.title}')">
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="font-size:2rem">${v.emoji}</span>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:.92rem">${v.title}</div>
+          <div style="color:#64748B;font-size:.78rem;margin-top:2px">🎥 ${v.dur} video</div>
+        </div>
+      </div>
+    </div>`).join('');
+  } else if (tab === 'tips') {
+    el.innerHTML = DAILY_TIPS.map((t,i) => `
+    <div class="section-card">
+      <p style="font-size:.86rem;line-height:1.6">${t}</p>
+      <p style="color:#64748B;font-size:.7rem;margin-top:6px">Tip #${i+1}</p>
+    </div>`).join('');
+  }
+}
 
 // ─── XP helpers ──────────────────────────────────────────
 function getXP()         { return parseInt(localStorage.getItem('agriequip_xp') || '0'); }
