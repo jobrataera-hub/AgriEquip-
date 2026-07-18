@@ -962,11 +962,20 @@ const TEFF_KB = [
   { k:['vip','upgrade','commission'], a:'💎 <strong>VIP Plans:</strong> Free(10%) → VIP1 200ETB(8%) → VIP2 500ETB(7%) → VIP3 1000ETB(6%) → VIP4 2000ETB(5%) → VIP5 4000ETB(4%). Higher tier = less commission!' },
   { k:['task','xp','rank','level'], a:'✅ <strong>Tasks & Ranks:</strong> Complete daily tasks to earn XP. Ranks: 🌱Seedling→🌿Grower→🚜Specialist→🌾Harvest Master→🏅Expert→👑Legend' },
   { k:['list','equipment','rent out'], a:'📦 <strong>List Equipment:</strong> My Listings → Add New Equipment → fill name, category, price, location → Submit (+30 XP)' },
-  { k:['crop','plant','season','maize','teff','coffee'], a:'🌱 For crop-specific advice, check the Academy section — lessons on Teff, Coffee, Maize, Soil Health, and Irrigation are available!' },
+  { k:['book','rent','hire tractor'], a:'🚜 <strong>Rent Equipment:</strong> Go to Browse Equipment, find what you need, and tap Book to contact the owner via Teff AI or listed contact.' },
+  { k:['yellow','disease','pest','sick plant'], a:'🌱 Yellowing leaves are often nitrogen deficiency or overwatering. For accurate diagnosis, check the Academy Soil Health lesson, or share a photo in Community for other farmers\' advice.' },
+  { k:['teff plant','when plant teff','teff season'], a:'🌾 Teff is typically planted June–July (main rainy season, "Meher") in most highland areas. Check local extension advice for your specific zone.' },
+  { k:['maize','planting maize'], a:'🌽 Maize planting in Ethiopia is usually April–May for the belg season or June–July for meher, depending on your region\'s rainfall pattern.' },
+  { k:['fertilizer','which fertilizer'], a:'🌱 General guide: DAP at planting for phosphorus, Urea as top-dressing for nitrogen. Exact amounts depend on soil test — check the Academy fertilizer lesson.' },
+  { k:['weather','rain','forecast'], a:'🌤 Weather integration is coming soon! For now, check local forecasts before major field work — it\'s one of your Daily Tasks.' },
+  { k:['market price','crop price','sell price'], a:'📈 Check the Live Market Prices card on your Home screen for today\'s Teff, Coffee, Maize, and Wheat prices in Addis Ababa.' },
+  { k:['crop','plant','season'], a:'🌱 For crop-specific advice, check the Academy section — lessons on Teff, Coffee, Maize, Soil Health, and Irrigation are available!' },
+  { k:['referral','invite','code'], a:'🎁 Share your referral code (found on Home) with friends. Earn 50 ETB when they join and complete their first rental!' },
   { k:['contact','support','phone','email'], a:'📞 <strong>Contact:</strong><br>📧 support0agriequip.et@gmail.com<br>📱 +251 993 920 750<br>✈️ Telegram: @AgriEquipET' },
-  { k:['salam','hello','hi'], a:'Salam! 👋 How can I help you today?' },
+  { k:['salam','hello','hi','selam'], a:'Salam! 👋 How can I help you today?' },
   { k:['thank'], a:'Betam amesegnalehu! 🙏 Anything else?' },
 ];
+
 function sendTeff() {
   const input = document.getElementById('teffInput');
   const msg   = input?.value?.trim();
