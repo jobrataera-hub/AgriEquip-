@@ -589,24 +589,54 @@ function renderSection(id) {
 
     // ── SETTINGS ─────────────────────────────────────────
     case 'settings': {
-      const ct = localStorage.getItem('agriequip_theme') || 'dark';
-      root.innerHTML = `
-        <div class="section-card">
-          <h3>🎨 App Theme</h3>
-          <div class="theme-options">
-            ${[['dark','Dark','#0F172A','#1E293B'],['light','White','#F8FAFC','#E2E8F0'],['black','Black','#000','#111'],['green','Nature','#052e16','#14532d']].map(([id,label,c1,c2])=>`
-            <button class="theme-btn ${ct===id?'active':''}" onclick="setTheme('${id}')">
-              <div class="theme-preview" style="background:linear-gradient(135deg,${c1},${c2})"></div>
-              <span>${label}</span>
-            </button>`).join('')}
-          </div>
-        </div>
-        <div class="section-card">
-          <h3>⚠️ Danger Zone</h3>
-          <button class="action-btn" style="background:#EF4444" onclick="if(confirm('Clear cache and reset tasks?')){localStorage.clear();location.reload()}">🗑️ Clear Cache</button>
-        </div>`;
-      break;
+  const ct = localStorage.getItem('agriequip_theme') || 'dark';
+  const lang = localStorage.getItem('agriequip_lang') || 'en';
+  root.innerHTML = `
+    <div class="section-card">
+      <h3>🎨 App Theme</h3>
+      <div class="theme-options">
+        ${[['dark','Dark','#0F172A','#1E293B'],['light','White','#F8FAFC','#E2E8F0'],['black','Black','#000','#111'],['green','Nature','#052e16','#14532d']].map(([id,label,c1,c2])=>`
+        <button class="theme-btn ${ct===id?'active':''}" onclick="setTheme('${id}')">
+          <div class="theme-preview" style="background:linear-gradient(135deg,${c1},${c2})"></div>
+          <span>${label}</span>
+        </button>`).join('')}
+      </div>
+    </div>
+    <div class="section-card">
+      <h3>🌐 Language</h3>
+      <div style="display:flex;gap:8px">
+        <button class="action-btn" style="background:${lang==='en'?'#22C55E':'#334155'}" onclick="setLang('en')">🇬🇧 English</button>
+        <button class="action-btn" style="background:${lang==='am'?'#22C55E':'#334155'}" onclick="setLang('am')">🇪🇹 አማርኛ</button>
+      </div>
+      <p style="color:#64748B;font-size:.75rem;margin-top:8px;text-align:center">Full Amharic translation coming soon</p>
+    </div>
+    <div class="section-card">
+      <h3>🔔 Notifications</h3>
+      <label style="display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+        <span style="font-size:.85rem">Booking updates</span>
+        <input type="checkbox" checked style="width:20px;height:20px">
+      </label>
+      <label style="display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+        <span style="font-size:.85rem">Market price alerts</span>
+        <input type="checkbox" checked style="width:20px;height:20px">
+      </label>
+      <label style="display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+        <span style="font-size:.85rem">Community activity</span>
+        <input type="checkbox" style="width:20px;height:20px">
+      </label>
+    </div>
+    <div class="section-card">
+      <h3>🌾 Farm Profile</h3>
+      <p style="color:#64748B;font-size:.82rem;margin-bottom:10px">Set up your farm details to get personalized advice</p>
+      <button class="action-btn" onclick="showSection('profile')">Edit Farm Profile</button>
+    </div>
+    <div class="section-card">
+      <h3>⚠️ Danger Zone</h3>
+      <button class="action-btn" style="background:#EF4444" onclick="if(confirm('Clear cache and reset tasks?')){localStorage.clear();location.reload()}">🗑️ Clear Cache</button>
+    </div>`;
+  break;
     }
+    
 
     // ── ABOUT ────────────────────────────────────────────
     case 'about':
@@ -938,6 +968,11 @@ window.startLesson = function(i) {
 
 window.submitPost = submitPost;
 
+window.setLang = function(l) {
+  localStorage.setItem('agriequip_lang', l);
+  showToast(l === 'am' ? '🇪🇹 አማርኛ ተመርጧል' : '🇬🇧 English selected');
+  showSection('settings');
+};
 // ─── Teff AI ─────────────────────────────────────────────
 const TEFF_SYSTEM = `You are Teff AI, the intelligent assistant for AgriEquip — Ethiopia's agricultural equipment rental marketplace. Named after Ethiopia's ancient grain. Be warm, helpful, concise. Use occasional Amharic greetings. Use emojis naturally.
 
