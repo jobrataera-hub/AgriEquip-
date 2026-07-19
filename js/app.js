@@ -365,12 +365,7 @@ function renderSection(id) {
 
         <!-- BANKS LIST -->
         <div id="walletMain">
-          <div class="section-card">
-            <h3>🏦 Supported Banks & Services</h3>
-            <div class="bank-grid">
-              ${['CBE','Awash','Dashen','Abyssinia','Telebirr','M-Pesa','Nib','United','BOA','Coop','Bunna','Zemen'].map(b=>`<div class="bank-item">🏦<br>${b}</div>`).join('')}
-            </div>
-          </div>
+          
           <div class="section-card">
             <h3>📊 Transaction History</h3>
             <div id="transactionHistory"><p style="color:#64748B;text-align:center;padding:20px">Loading...</p></div>
