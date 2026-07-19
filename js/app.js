@@ -1094,7 +1094,7 @@ function showToast(msg) {
 }
 window._app.showToast = showToast;
 window.showToast = showToast;
-window.const VIDEOS = [
+ const VIDEOS = [
   { emoji:'🎬', title:'How to Operate a Tractor Safely', dur:'8 min' },
   { emoji:'🎬', title:'Coffee Harvesting Techniques', dur:'6 min' },
   { emoji:'🎬', title:'Irrigation System Setup', dur:'10 min' },
