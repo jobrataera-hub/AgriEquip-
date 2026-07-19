@@ -470,19 +470,230 @@ function renderSection(id) {
 
     // ── ACADEMY ──────────────────────────────────────────
     case 'academy': {
-  const tab = window._academyTab || 'lessons';
-  root.innerHTML = `
+  const view = window._academyView || 'home';
+  if (view === 'home') {
+    root.innerHTML = renderAcademyHome();
+  } else if (view === 'category') {
+    root.innerHTML = renderAcademyCategory(window._academyCat);
+  } else if (view === 'dashboard') {
+    root.innerHTML = renderAcademyDashboard();
+  }
+      const ACADEMY_CATEGORIES = [
+  { id:'crop', icon:'🌾', name:'Crop Production', desc:'Teff, wheat, maize, coffee & more', color:'#22C55E' },
+  { id:'machinery', icon:'🚜', name:'Machinery Training', desc:'Tractors, harvesters, safety', color:'#06B6D4' },
+  { id:'smart', icon:'🌱', name:'Smart Farming', desc:'Soil, irrigation, pest control', color:'#8B5CF6' },
+  { id:'livestock', icon:'🐄', name:'Livestock', desc:'Dairy, poultry, animal care', color:'#F59E0B' },
+  { id:'business', icon:'💰', name:'Farm Business', desc:'Budgeting, marketing, growth', color:'#EF4444' },
+];
+
+const ACADEMY_LESSONS = [
+  { id:0,  cat:'crop', emoji:'🌾', title:'Introduction to Teff Farming', pts:40, desc:'Planting, care, and harvest basics for Ethiopia\'s staple crop.' },
+  { id:1,  cat:'crop', emoji:'🌾', title:'Wheat Farming Guide', pts:35, desc:'Highland wheat cultivation from seed to harvest.' },
+  { id:2,  cat:'crop', emoji:'🌽', title:'Maize Production Techniques', pts:35, desc:'Belg and meher season maize management.' },
+  { id:3,  cat:'crop', emoji:'☕', title:'Coffee Cultivation Guide', pts:50, desc:'From seedling to harvest — Ethiopian coffee farming.' },
+  { id:4,  cat:'crop', emoji:'🌻', title:'Sesame Farming Basics', pts:30, desc:'Growing sesame for export markets.' },
+  { id:5,  cat:'crop', emoji:'🥬', title:'Vegetable Farming Guide', pts:30, desc:'High-value vegetable production techniques.' },
+  { id:6,  cat:'crop', emoji:'🍎', title:'Fruit Tree Farming', pts:35, desc:'Planting and caring for fruit orchards.' },
+  { id:7,  cat:'crop', emoji:'🏡', title:'Greenhouse Farming Intro', pts:45, desc:'Getting started with controlled environment farming.' },
+  { id:8,  cat:'machinery', emoji:'🚜', title:'Tractor Operation & Safety', pts:60, desc:'How to safely operate and maintain a tractor.' },
+  { id:9,  cat:'machinery', emoji:'🌾', title:'Combine Harvester Basics', pts:55, desc:'Operating combine harvesters efficiently.' },
+  { id:10, cat:'machinery', emoji:'⚙️', title:'Ploughing Techniques', pts:35, desc:'Proper ploughing methods for different soils.' },
+  { id:11, cat:'machinery', emoji:'🌱', title:'Seeder Operation Guide', pts:35, desc:'Using mechanical seeders for even planting.' },
+  { id:12, cat:'machinery', emoji:'💧', title:'Irrigation Pump Maintenance', pts:40, desc:'Keeping your irrigation pumps running smoothly.' },
+  { id:13, cat:'machinery', emoji:'🔧', title:'Machine Maintenance Basics', pts:45, desc:'Regular upkeep to extend equipment life.' },
+  { id:14, cat:'machinery', emoji:'⛽', title:'Fuel-Saving Practices', pts:30, desc:'Reduce fuel costs on your equipment.' },
+  { id:15, cat:'machinery', emoji:'🛡', title:'Equipment Safety Procedures', pts:50, desc:'Preventing accidents around farm machinery.' },
+  { id:16, cat:'smart', emoji:'🎯', title:'Precision Agriculture Intro', pts:50, desc:'Using data to optimize every hectare.' },
+  { id:17, cat:'smart', emoji:'🌍', title:'Soil Health & Fertilizer Guide', pts:55, desc:'Understanding soil pH, nutrients, and fertilizers.' },
+  { id:18, cat:'smart', emoji:'💧', title:'Efficient Irrigation Techniques', pts:45, desc:'Reduce water waste and improve crop yield.' },
+  { id:19, cat:'smart', emoji:'🐛', title:'Pest Management Guide', pts:40, desc:'Identify and control common crop pests.' },
+  { id:20, cat:'smart', emoji:'🦠', title:'Disease Prevention Basics', pts:40, desc:'Spotting and preventing crop diseases early.' },
+  { id:21, cat:'smart', emoji:'🌦', title:'Climate-Smart Farming', pts:45, desc:'Adapting farming practices to changing weather.' },
+  { id:22, cat:'livestock', emoji:'🐄', title:'Dairy Farming Basics', pts:45, desc:'Milk production and dairy cattle care.' },
+  { id:23, cat:'livestock', emoji:'🐂', title:'Beef Production Guide', pts:40, desc:'Raising cattle for meat production.' },
+  { id:24, cat:'livestock', emoji:'🐔', title:'Poultry Management', pts:35, desc:'Chicken farming for eggs and meat.' },
+  { id:25, cat:'livestock', emoji:'🐑', title:'Sheep & Goat Farming', pts:35, desc:'Small ruminant management basics.' },
+  { id:26, cat:'livestock', emoji:'💉', title:'Vaccination Schedules', pts:30, desc:'Keeping livestock healthy with proper vaccination.' },
+  { id:27, cat:'business', emoji:'📊', title:'Farm Budgeting Basics', pts:40, desc:'Planning your farm finances effectively.' },
+  { id:28, cat:'business', emoji:'📝', title:'Farm Record Keeping', pts:30, desc:'Track expenses, income, and yields properly.' },
+  { id:29, cat:'business', emoji:'📈', title:'Marketing Your Produce', pts:45, desc:'Get the best prices for what you grow.' },
+  { id:30, cat:'business', emoji:'💳', title:'Digital Payments for Farmers', pts:25, desc:'Using mobile money and digital wallets.' },
+];
+
+const AGRI_RANKS = [
+  { icon:'🌱', name:'Beginner Farmer', xp:0 },
+  { icon:'🌿', name:'Skilled Farmer', xp:150 },
+  { icon:'🌾', name:'Advanced Farmer', xp:400 },
+  { icon:'🚜', name:'Equipment Specialist', xp:800 },
+  { icon:'🧠', name:'Agri Expert', xp:1500 },
+  { icon:'👑', name:'Agri Master', xp:3000 },
+];
+
+function getAcademyProgress() {
+  return JSON.parse(localStorage.getItem('agriequip_academy') || '{"completed":[],"xp":0,"streak":0,"lastDay":null}');
+}
+function saveAcademyProgress(p) {
+  localStorage.setItem('agriequip_academy', JSON.stringify(p));
+}
+function academyRank(xp) {
+  return [...AGRI_RANKS].reverse().find(r => xp >= r.xp) || AGRI_RANKS[0];
+}
+function academyNextRank(xp) {
+  return AGRI_RANKS.find(r => r.xp > xp) || null;
+}
+
+function renderAcademyHome() {
+  const prog = getAcademyProgress();
+  const rank = academyRank(prog.xp);
+  const dailyTip = DAILY_TIPS[new Date().getDate() % DAILY_TIPS.length];
+  return `
     <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
       <h3 style="color:white">🎓 AgriAcademy</h3>
-      <p style="color:rgba(255,255,255,.55);font-size:.82rem;margin-top:8px">Learn modern farming, earn XP, and unlock achievements!</p>
+      <p style="color:rgba(255,255,255,.6);font-size:.8rem;margin-top:4px;font-style:italic">"Learn. Grow. Succeed."</p>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+        <span style="font-size:1.6rem">${rank.icon}</span>
+        <div>
+          <div style="font-weight:700;color:#22C55E;font-size:.95rem">${rank.name}</div>
+          <div style="color:rgba(255,255,255,.4);font-size:.72rem">${prog.xp.toLocaleString()} XP · ${prog.completed.length} lessons done</div>
+        </div>
+      </div>
+      <button class="action-btn" style="margin-top:12px;background:rgba(255,255,255,.12)" onclick="setAcademyView('dashboard')">📊 View Learning Dashboard</button>
     </div>
-    <div style="display:flex;gap:8px;margin-bottom:14px">
-      <button class="action-btn" style="background:${tab==='lessons'?'#22C55E':'#334155'}" onclick="setAcademyTab('lessons')">📚 Lessons</button>
-      <button class="action-btn" style="background:${tab==='videos'?'#22C55E':'#334155'}" onclick="setAcademyTab('videos')">🎥 Videos</button>
-      <button class="action-btn" style="background:${tab==='tips'?'#22C55E':'#334155'}" onclick="setAcademyTab('tips')">💡 Daily Tips</button>
+    <div class="section-card">
+      <h3>💡 Daily Farming Tip</h3>
+      <p style="font-size:.86rem;line-height:1.6">${dailyTip}</p>
     </div>
-    <div id="academyContent"></div>`;
-  renderAcademyTab(tab);
+    <div class="section-card">
+      <h3>🧠 Ask Teff AI</h3>
+      <p style="color:#64748B;font-size:.82rem;margin-bottom:10px">Not sure what to learn? Ask Teff AI for a lesson recommendation.</p>
+      <button class="action-btn" onclick="showSection('teffai')">🤖 Ask Teff AI</button>
+    </div>
+    <h3 style="margin:16px 0 10px;font-size:.95rem">📚 Learning Categories</h3>
+    ${ACADEMY_CATEGORIES.map(cat => {
+      const count = ACADEMY_LESSONS.filter(l => l.cat === cat.id).length;
+      const done = ACADEMY_LESSONS.filter(l => l.cat === cat.id && prog.completed.includes(l.id)).length;
+      return `
+      <div class="section-card" style="cursor:pointer;border-left:4px solid ${cat.color}" onclick="setAcademyView('category','${cat.id}')">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="font-size:2rem">${cat.icon}</span>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:.92rem">${cat.name}</div>
+            <div style="color:#64748B;font-size:.78rem;margin-top:2px">${cat.desc}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:.78rem;color:${cat.color};font-weight:700">${done}/${count}</div>
+            <div style="font-size:.68rem;color:#64748B">lessons</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}
+    <div class="section-card" style="opacity:.6">
+      <h3>👨‍🏫 Expert Center</h3>
+      <p style="color:#64748B;font-size:.8rem">Live Q&A and expert consultations — coming soon!</p>
+    </div>`;
+}
+
+function renderAcademyCategory(catId) {
+  const cat = ACADEMY_CATEGORIES.find(c => c.id === catId);
+  const lessons = ACADEMY_LESSONS.filter(l => l.cat === catId);
+  const prog = getAcademyProgress();
+  if (!cat) return renderAcademyHome();
+  return `
+    <button class="action-btn" style="width:auto;padding:8px 14px;margin-bottom:12px;background:#334155" onclick="setAcademyView('home')">← Back to Academy</button>
+    <div class="section-card" style="background:linear-gradient(135deg,${cat.color}22,${cat.color}11);border-color:${cat.color}44;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:2.2rem">${cat.icon}</span>
+        <div>
+          <div style="font-weight:800;font-size:1.05rem">${cat.name}</div>
+          <div style="color:#64748B;font-size:.8rem">${cat.desc}</div>
+        </div>
+      </div>
+    </div>
+    ${lessons.map(l => {
+      const done = prog.completed.includes(l.id);
+      return `
+      <div class="section-card" style="cursor:pointer;${done?'opacity:.6':''}" onclick="startAcademyLesson(${l.id})">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="font-size:2rem">${done?'✅':l.emoji}</span>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:.92rem">${l.title}</div>
+            <div style="color:#64748B;font-size:.78rem;margin-top:2px">${l.desc}</div>
+          </div>
+          <span style="background:${cat.color}18;color:${cat.color};border-radius:6px;padding:4px 8px;font-size:.75rem;white-space:nowrap">${done?'Done':'+'+l.pts+' XP'}</span>
+        </div>
+      </div>`;
+    }).join('')}`;
+}
+
+function renderAcademyDashboard() {
+  const prog = getAcademyProgress();
+  const rank = academyRank(prog.xp);
+  const next = academyNextRank(prog.xp);
+  const pct = next ? Math.round((prog.xp - rank.xp) / (next.xp - rank.xp) * 100) : 100;
+  return `
+    <button class="action-btn" style="width:auto;padding:8px 14px;margin-bottom:12px;background:#334155" onclick="setAcademyView('home')">← Back to Academy</button>
+    <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
+      <h3 style="color:white">📊 Learning Dashboard</h3>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+        <span style="font-size:1.8rem">${rank.icon}</span>
+        <div>
+          <div style="font-weight:700;color:#22C55E;font-size:1rem">${rank.name}</div>
+          <div style="color:rgba(255,255,255,.4);font-size:.75rem">${prog.xp.toLocaleString()} XP</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.1);border-radius:20px;height:8px;overflow:hidden;margin:10px 0">
+        <div style="background:linear-gradient(90deg,#22C55E,#06B6D4);height:100%;width:${pct}%"></div>
+      </div>
+      <p style="color:rgba(255,255,255,.4);font-size:.72rem;text-align:center">${next ? prog.xp+' / '+next.xp+' XP to '+next.name : '🎉 Agri Master achieved!'}</p>
+    </div>
+    <div class="quick-stats">
+      <div class="stat-card"><div class="stat-icon">📚</div><h3>${prog.completed.length}</h3><p>Lessons Done</p></div>
+      <div class="stat-card"><div class="stat-icon">⭐</div><h3>${prog.xp}</h3><p>Total XP</p></div>
+      <div class="stat-card"><div class="stat-icon">🔥</div><h3>${prog.streak||0}</h3><p>Day Streak</p></div>
+      <div class="stat-card"><div class="stat-icon">🏆</div><h3>${AGRI_RANKS.filter(r=>prog.xp>=r.xp).length}</h3><p>Ranks Reached</p></div>
+    </div>
+    <div class="section-card">
+      <h3>🏆 All Ranks</h3>
+      ${AGRI_RANKS.map(r=>`
+      <div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+        <span style="font-size:1.5rem">${r.icon}</span>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:.88rem;${prog.xp>=r.xp?'color:#22C55E':''}">${r.name}</div>
+          <div style="font-size:.72rem;color:#64748B">${r.xp.toLocaleString()} XP required</div>
+        </div>
+        <span style="font-size:.8rem">${prog.xp>=r.xp?'✅':'🔒'}</span>
+      </div>`).join('')}
+    </div>`;
+}
+
+window.setAcademyView = function(view, cat) {
+  window._academyView = view;
+  if (cat) window._academyCat = cat;
+  showSection('academy');
+};
+
+window.startAcademyLesson = function(id) {
+  const l = ACADEMY_LESSONS.find(x => x.id === id);
+  if (!l) return;
+  const prog = getAcademyProgress();
+  if (prog.completed.includes(id)) { showToast('✅ Already completed this lesson'); return; }
+  showToast(`📖 Starting: ${l.title}...`);
+  setTimeout(() => {
+    prog.completed.push(id);
+    prog.xp += l.pts;
+    const today = new Date().toDateString();
+    if (prog.lastDay !== today) {
+      prog.streak = (prog.lastDay === new Date(Date.now()-86400000).toDateString()) ? (prog.streak||0)+1 : 1;
+      prog.lastDay = today;
+    }
+    saveAcademyProgress(prog);
+    showToast(`🎓 Lesson complete! +${l.pts} XP`);
+    const oldRank = academyRank(prog.xp - l.pts);
+    const newRank = academyRank(prog.xp);
+    if (oldRank.name !== newRank.name) setTimeout(() => showToast(`🏆 Rank up! You're now ${newRank.icon} ${newRank.name}`), 1500);
+    showSection('academy');
+  }, 1500);
+};
   break;
 }
 
