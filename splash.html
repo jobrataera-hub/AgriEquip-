@@ -1,399 +1,523 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgriEquip</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{width:100%;height:100%;overflow:hidden;background:#000}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#052e16">
+<title>AgriEquip</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:#052e16}
 
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes progress{from{width:0%}to{width:100%}}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+/* ── STAGE WRAPPER ── */
+.stage{
+  position:fixed;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .6s ease;
+  padding:24px;text-align:center;
+}
+.stage.active{opacity:1;pointer-events:all}
 
-    /* Logo bounce in */
-    @keyframes logoBounce{
-      0%{transform:scale(0.3) translateY(60px);opacity:0}
-      55%{transform:scale(1.1) translateY(-15px);opacity:1}
-      72%{transform:scale(0.96) translateY(5px)}
-      85%{transform:scale(1.04) translateY(-3px)}
-      100%{transform:scale(1) translateY(0);opacity:1}
-    }
-    /* Slight rotate after bounce */
-    @keyframes logoRotate{
-      0%{transform:rotate(0deg) scale(1)}
-      25%{transform:rotate(4deg) scale(1.03)}
-      50%{transform:rotate(-2deg) scale(1)}
-      75%{transform:rotate(1.5deg)}
-      100%{transform:rotate(0deg) scale(1)}
-    }
-    /* Green pulse glow */
-    @keyframes logoPulse{
-      0%,100%{box-shadow:0 0 40px rgba(34,197,94,0.45),0 0 80px rgba(34,197,94,0.2),0 25px 60px rgba(0,0,0,0.6)}
-      50%{box-shadow:0 0 70px rgba(34,197,94,0.75),0 0 130px rgba(34,197,94,0.4),0 25px 60px rgba(0,0,0,0.6)}
-    }
-    /* Tractor drives in */
-    @keyframes tractorEnter{
-      0%{transform:translateX(-50px);opacity:0}
-      55%{transform:translateX(3px);opacity:1}
-      75%{transform:translateX(-2px)}
-      100%{transform:translateX(0);opacity:1}
-    }
-    /* Wheels spin */
-    @keyframes wheelSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-    /* Wheat sways */
-    @keyframes wheatSway{
-      0%,100%{transform:skewX(-3deg)}
-      50%{transform:skewX(3deg)}
-    }
-    /* Sun rises */
-    @keyframes sunRise{
-      0%{transform:translateY(18px);opacity:0}
-      100%{transform:translateY(0);opacity:1}
-    }
-    @keyframes sunGlow{
-      0%,100%{filter:drop-shadow(0 0 4px rgba(255,220,80,0.5))}
-      50%{filter:drop-shadow(0 0 12px rgba(255,220,80,0.9))}
-    }
-    /* Cloud drifts */
-    @keyframes cloudDrift{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
-    /* Orbit particles */
-    @keyframes orbit1{from{transform:rotate(0deg) translateX(82px) rotate(0deg)}to{transform:rotate(360deg) translateX(82px) rotate(-360deg)}}
-    @keyframes orbit2{from{transform:rotate(180deg) translateX(110px) rotate(-180deg)}to{transform:rotate(540deg) translateX(110px) rotate(-540deg)}}
-    @keyframes orbit3{from{transform:rotate(60deg) translateX(58px) rotate(-60deg)}to{transform:rotate(420deg) translateX(58px) rotate(-420deg)}}
-    /* Floating particles */
-    @keyframes particleFloat{
-      0%{transform:translateY(0) scale(1);opacity:0.6}
-      100%{transform:translateY(-120px) scale(0.2);opacity:0}
-    }
-    /* Light rays */
-    @keyframes rayPulse{0%,100%{opacity:0.04}50%{opacity:0.09}}
-    /* Text glow */
-    @keyframes textGlow{
-      0%,100%{text-shadow:0 0 20px rgba(34,197,94,0.3)}
-      50%{text-shadow:0 0 40px rgba(34,197,94,0.7),0 0 70px rgba(34,197,94,0.3)}
-    }
-    /* Mountain shimmer */
-    @keyframes mountainGlow{0%,100%{opacity:0.06}50%{opacity:0.11}}
-    /* Screen fade at end */
-    @keyframes screenFadeOut{from{opacity:0}to{opacity:1}}
-    /* Exhaust puff */
-    @keyframes puff{
-      0%{transform:translate(0,0) scale(0.4);opacity:0.6}
-      100%{transform:translate(-12px,-18px) scale(2);opacity:0}
-    }
+/* ── PARTICLES ── */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.particle{
+  position:absolute;bottom:-20px;width:8px;height:8px;
+  border-radius:50%;background:rgba(34,197,94,.25);
+  animation:rise linear infinite;
+}
+@keyframes rise{
+  0%{transform:translateY(0) scale(1);opacity:.6}
+  100%{transform:translateY(-110vh) scale(.3);opacity:0}
+}
 
-    .bg{
-      position:fixed;inset:0;z-index:0;
-      background:radial-gradient(ellipse at 50% 35%,
-        #0b2e1c 0%,#061428 35%,#020c18 65%,#000 100%);
-    }
-    .bg-overlay{
-      position:fixed;inset:0;z-index:1;
-      background:
-        radial-gradient(ellipse at 30% 60%,rgba(34,197,94,0.06) 0%,transparent 50%),
-        radial-gradient(ellipse at 70% 40%,rgba(6,182,212,0.04) 0%,transparent 50%);
-      animation:rayPulse 4s ease-in-out infinite;
-    }
+/* ── BACKGROUNDS ── */
+.bg-dark{background:radial-gradient(ellipse at 50% 30%,#0d3d22 0%,#052e16 60%,#021a0c 100%)}
+.bg-sunrise{background:linear-gradient(180deg,#0a2d18 0%,#0d4a24 40%,#1a6b3a 70%,#22c55e22 100%)}
+.bg-field{background:linear-gradient(180deg,#0a1628 0%,#0d3d22 50%,#052e16 100%)}
+.bg-trust{background:radial-gradient(ellipse at 50% 40%,#1a3a2a 0%,#052e16 100%)}
+.bg-ethiopia{background:linear-gradient(180deg,#052e16 0%,#0a2d18 50%,#021a0c 100%)}
+.bg-loading{background:radial-gradient(ellipse at 50% 50%,#0d3d22 0%,#052e16 80%)}
+.bg-ready{background:radial-gradient(ellipse at 50% 40%,#14532d 0%,#052e16 80%)}
+.bg-enter{background:linear-gradient(180deg,#021a0c 0%,#052e16 100%)}
 
-    /* Light rays */
-    .rays{position:fixed;inset:0;z-index:2;overflow:hidden;pointer-events:none}
-    .ray{
-      position:absolute;top:0;width:2px;height:100%;
-      background:linear-gradient(180deg,transparent 0%,rgba(34,197,94,0.06) 30%,rgba(34,197,94,0.09) 50%,rgba(34,197,94,0.06) 70%,transparent 100%);
-      transform-origin:top center;
-      animation:rayPulse 3s ease-in-out infinite;
-    }
+/* ── LOGO ── */
+.logo-icon{
+  width:96px;height:96px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  border-radius:28px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;margin:0 auto 20px;
+  box-shadow:0 0 0 0 rgba(34,197,94,.4);
+  animation:logoPulse 2.5s ease-in-out infinite;
+}
+@keyframes logoPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4),0 8px 32px rgba(34,197,94,.3)}
+  50%{box-shadow:0 0 0 20px rgba(34,197,94,0),0 12px 48px rgba(34,197,94,.5)}
+}
+.logo-name{
+  font-size:2.4rem;font-weight:800;letter-spacing:-1px;
+  background:linear-gradient(135deg,#ffffff,#86efac);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:4px;
+}
+.logo-name span{color:#22c55e;-webkit-text-fill-color:#22c55e}
+.logo-sub{color:rgba(255,255,255,.5);font-size:.9rem;letter-spacing:1px}
+.made-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);
+  border-radius:99px;padding:6px 14px;font-size:.78rem;
+  color:rgba(255,255,255,.6);margin-top:20px;
+}
 
-    /* Agri background */
-    .agri-bg{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;animation:fadeIn 1s ease 1.5s forwards}
-    .mountains{position:absolute;bottom:0;left:0;right:0;animation:mountainGlow 5s ease-in-out infinite}
-    .wheat-bg{position:absolute;font-size:1.8rem;opacity:0.07}
-    .leaf-bg{position:absolute;opacity:0.06;font-size:1.4rem}
+/* ── PROGRESS BAR ── */
+.progress-wrap{width:200px;height:3px;background:rgba(255,255,255,.1);border-radius:99px;margin:28px auto 8px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,#22c55e,#4ade80);border-radius:99px;width:0%;transition:width .3s ease}
+.progress-label{color:rgba(255,255,255,.35);font-size:.72rem;letter-spacing:.5px}
 
-    /* Particles */
-    .particles{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;animation:fadeIn 0.8s ease 1.2s forwards}
-    .particle{position:absolute;border-radius:50%;animation:particleFloat linear infinite}
-    .orbit-system{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;opacity:0;animation:fadeIn 0.5s ease 2.8s forwards}
-    .orb{position:absolute;border-radius:50%;top:0;left:0}
-    .orb1{width:9px;height:9px;background:radial-gradient(circle,#22C55E,#16A34A);box-shadow:0 0 14px #22C55E;margin:-4.5px 0 0 -4.5px;animation:orbit1 4s linear infinite}
-    .orb2{width:6px;height:6px;background:radial-gradient(circle,#06B6D4,#0891B2);box-shadow:0 0 10px #06B6D4;margin:-3px 0 0 -3px;animation:orbit2 6.5s linear infinite}
-    .orb3{width:7px;height:7px;background:radial-gradient(circle,#F59E0B,#D97706);box-shadow:0 0 12px #F59E0B;margin:-3.5px 0 0 -3.5px;animation:orbit3 3.2s linear infinite}
+/* ── STAGE 1: LOGO SPLASH ── */
+#s1 .logo-icon{
+  animation:logoGrow 1s cubic-bezier(.34,1.56,.64,1) both, logoPulse 2.5s 1s ease-in-out infinite;
+}
+@keyframes logoGrow{from{transform:scale(0) rotate(-15deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
 
-    /* Main content */
-    .content{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+/* ── STAGE 2: TAGLINE ── */
+.tagline-big{
+  font-size:1.6rem;font-weight:800;color:white;line-height:1.2;
+  margin-bottom:14px;max-width:320px;
+}
+.tagline-big em{color:#22c55e;font-style:normal}
+.tagline-sub{color:rgba(255,255,255,.55);font-size:.88rem;max-width:280px;line-height:1.6}
+.dots{display:flex;gap:8px;justify-content:center;margin-top:24px}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2)}
+.dot.active{background:#22c55e;width:24px;border-radius:99px}
 
-    /* THE LOGO */
-    .logo-wrap{
-      position:relative;margin-bottom:38px;
-      opacity:0;
-      animation:logoBounce 1.3s cubic-bezier(0.34,1.4,0.64,1) 0.8s forwards;
-    }
+/* ── STAGE 3: FEATURES ── */
+.feature-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px}
+.feature-card{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;padding:12px 14px;text-align:left;
+  opacity:0;transform:translateX(-20px);
+  animation:slideIn .4s ease forwards;
+}
+.feature-card .fi{font-size:1.3rem;min-width:28px}
+.feature-card .ft{font-size:.85rem;color:white;font-weight:600}
+.feature-card .fd{font-size:.72rem;color:rgba(255,255,255,.45);margin-top:1px}
+@keyframes slideIn{to{opacity:1;transform:translateX(0)}}
+.section-title{color:#22c55e;font-size:.72rem;text-transform:uppercase;letter-spacing:2px;margin-bottom:14px}
 
-    .logo-icon{
-      width:140px;height:140px;border-radius:34px;
-      position:relative;overflow:hidden;
-      background:linear-gradient(145deg,#22C55E 0%,#16A34A 45%,#0d8c3a 100%);
-      box-shadow:
-        0 0 45px rgba(34,197,94,0.55),
-        0 0 90px rgba(34,197,94,0.25),
-        0 28px 65px rgba(0,0,0,0.65),
-        inset 0 1px 0 rgba(255,255,255,0.28),
-        inset 0 -2px 4px rgba(0,0,0,0.2);
-      border:1.5px solid rgba(255,255,255,0.18);
-    }
-    /* Glossy highlight */
-    .logo-icon::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:52%;
-      background:linear-gradient(180deg,rgba(255,255,255,0.24) 0%,rgba(255,255,255,0.07) 50%,transparent 100%);
-      border-radius:34px 34px 50% 50%;z-index:2;
-    }
-    /* Bottom shadow */
-    .logo-icon::after{
-      content:'';position:absolute;bottom:0;left:0;right:0;height:28%;
-      background:linear-gradient(0deg,rgba(0,0,0,0.22) 0%,transparent 100%);z-index:2;
-    }
+/* ── STAGE 4: TRUST ── */
+.shield-wrap{
+  width:100px;height:100px;border-radius:50%;
+  background:rgba(34,197,94,.1);border:2px solid rgba(34,197,94,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:3rem;margin:0 auto 20px;
+  animation:shieldPop .8s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes shieldPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.trust-title{font-size:1.3rem;font-weight:700;color:white;margin-bottom:16px}
+.trust-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px}
+.trust-item{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);
+  border-radius:10px;padding:10px 14px;font-size:.85rem;color:rgba(255,255,255,.8);
+  opacity:0;animation:trustIn .4s ease forwards;
+}
+.trust-item .ti{color:#22c55e;font-size:1rem}
+@keyframes trustIn{to{opacity:1}}
 
-    /* SVG inside */
-    .logo-svg-wrap{position:relative;z-index:3;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:14px}
+/* ── STAGE 5: ETHIOPIA ── */
+.eth-flag{
+  font-size:3.5rem;margin-bottom:12px;
+  animation:flagWave 2s ease-in-out infinite;
+  display:inline-block;
+}
+@keyframes flagWave{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.eth-title{font-size:1.6rem;font-weight:800;color:white;margin-bottom:6px}
+.eth-title span{color:#22c55e}
+.eth-sub{color:rgba(255,255,255,.55);font-size:.85rem;line-height:1.7}
+.eth-icons{display:flex;gap:20px;justify-content:center;margin-top:20px;font-size:1.8rem}
 
-    /* Animated tractor parts */
-    .tractor-g{animation:tractorEnter 1.2s cubic-bezier(0.34,1.2,0.64,1) 1.5s both}
-    .big-wheel{transform-origin:25px 61px;animation:wheelSpin 0.85s linear 1.8s infinite}
-    .sm-wheel{transform-origin:54px 58px;animation:wheelSpin 0.65s linear 1.8s infinite}
-    .wheat-g1{transform-origin:74px 62px;animation:wheatSway 2s ease-in-out 2s infinite}
-    .wheat-g2{transform-origin:84px 62px;animation:wheatSway 2s ease-in-out 2.2s infinite}
-    .wheat-g3{transform-origin:94px 62px;animation:wheatSway 2s ease-in-out 2.4s infinite}
-    .sun-g{animation:sunRise 1s ease 1.2s both,sunGlow 2.5s ease-in-out 2.5s infinite}
-    .cloud-g1{animation:cloudDrift 4s ease-in-out 2.5s infinite}
-    .cloud-g2{animation:cloudDrift 5.5s ease-in-out 3s infinite reverse}
-    .puff1{animation:puff 1.4s ease-out 2.2s infinite}
-    .puff2{animation:puff 1.4s ease-out 2.7s infinite}
+/* ── STAGE 6: LOADING ── */
+.circle-loader{
+  width:120px;height:120px;position:relative;margin:0 auto 20px;
+}
+.circle-loader svg{transform:rotate(-90deg)}
+.circle-loader .bg-ring{fill:none;stroke:rgba(255,255,255,.08);stroke-width:8}
+.circle-loader .fg-ring{
+  fill:none;stroke:url(#cg);stroke-width:8;stroke-linecap:round;
+  stroke-dasharray:340;stroke-dashoffset:340;
+  transition:stroke-dashoffset .3s ease;
+}
+.pct-text{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:1.5rem;font-weight:800;color:white;
+}
+.load-icons{display:flex;gap:16px;justify-content:center;margin:12px 0;font-size:1.4rem}
+.load-icons span{opacity:.3;transition:opacity .3s}
+.load-icons span.lit{opacity:1}
+.load-status{color:#22c55e;font-size:.82rem;min-height:20px;transition:opacity .3s}
 
-    /* Glow rings */
-    .glow-ring{position:absolute;border-radius:50%;border:1px solid rgba(34,197,94,0.18);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
-    .ring1{width:175px;height:175px;animation:logoPulse 2s ease-in-out 2s infinite}
-    .ring2{width:215px;height:215px;border-color:rgba(34,197,94,0.1);animation:logoPulse 2s ease-in-out 2.3s infinite}
-    .ring3{width:265px;height:265px;border-color:rgba(34,197,94,0.05);animation:logoPulse 2s ease-in-out 2.6s infinite}
+/* ── STAGE 7: READY ── */
+.check-wrap{
+  width:110px;height:110px;border-radius:50%;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:3.5rem;margin:0 auto 20px;
+  animation:checkPop .6s cubic-bezier(.34,1.56,.64,1) both;
+  box-shadow:0 0 40px rgba(34,197,94,.4);
+}
+@keyframes checkPop{from{transform:scale(0)}to{transform:scale(1)}}
+.ready-title{font-size:1.8rem;font-weight:800;color:white;margin-bottom:6px}
+.ready-title em{color:#22c55e;font-style:normal}
+.ready-sub{color:rgba(255,255,255,.55);font-size:.88rem;margin-bottom:8px}
+.sparkle{position:absolute;pointer-events:none}
+.sp{position:absolute;font-size:1.2rem;animation:sparkleOut .8s ease forwards}
+@keyframes sparkleOut{0%{transform:scale(0) rotate(0deg);opacity:1}100%{transform:scale(1.5) rotate(180deg) translate(30px,-30px);opacity:0}}
 
-    /* Text */
-    .logo-name{
-      font-family:'Fraunces',serif;font-size:2.7rem;font-weight:900;
-      color:white;letter-spacing:-0.5px;text-align:center;
-      opacity:0;animation:slideUp 0.8s ease 2s both,textGlow 3s ease-in-out 3s infinite;
-      text-shadow:0 2px 20px rgba(34,197,94,0.4);
-    }
-    .logo-sub{
-      font-family:'Poppins',sans-serif;font-size:0.76rem;font-weight:400;
-      color:rgba(255,255,255,0.5);letter-spacing:4px;text-transform:uppercase;
-      text-align:center;margin-top:8px;
-      opacity:0;animation:slideUp 0.7s ease 2.3s both;
-    }
-    .dot-sep{color:#22C55E;opacity:0.8}
-    .logo-tagline{
-      font-family:'Poppins',sans-serif;font-size:0.7rem;font-weight:300;
-      color:rgba(255,255,255,0.3);letter-spacing:2px;
-      text-align:center;margin-top:4px;
-      opacity:0;animation:slideUp 0.6s ease 2.5s both;
-    }
+/* ── STAGE 8: ENTER ── */
+.enter-logo{font-size:2rem;font-weight:800;color:white;margin-bottom:4px}
+.enter-logo span{color:#22c55e}
+.enter-sub{color:rgba(255,255,255,.4);font-size:.78rem;margin-bottom:28px}
+.enter-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:white;border:none;border-radius:14px;padding:16px 48px;
+  font-size:1rem;font-weight:700;cursor:pointer;
+  box-shadow:0 8px 24px rgba(34,197,94,.4);
+  animation:btnPulse 2s ease-in-out infinite;
+  font-family:inherit;
+}
+@keyframes btnPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.enter-login{color:rgba(255,255,255,.4);font-size:.82rem;margin-top:16px}
+.enter-login a{color:#22c55e;font-weight:600}
+.dash-preview{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  width:100%;max-width:300px;margin:20px auto 0;
+}
+.dp-card{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;padding:10px;text-align:center;font-size:.72rem;color:rgba(255,255,255,.6);
+}
+.dp-card .di{font-size:1.2rem;margin-bottom:4px}
 
-    /* Loading */
-    .bar-section{margin-top:46px;opacity:0;animation:fadeIn 0.5s ease 2.7s forwards}
-    .bar-outer{width:180px;height:2px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
-    .bar-inner{height:100%;background:linear-gradient(90deg,#22C55E,#06B6D4,#22C55E);background-size:200%;border-radius:2px;animation:progress 5s ease 3s both}
-    .bar-txt{color:rgba(255,255,255,0.2);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;text-align:center;margin-top:10px;font-family:'Poppins',sans-serif;animation:blink 1.5s infinite 3.2s}
+/* ── GLOW OVERLAY ── */
+.glow-overlay{
+  position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse at 50% 0%,rgba(34,197,94,.08) 0%,transparent 70%);
+}
 
-    .country{position:fixed;bottom:18px;font-family:'Poppins',sans-serif;font-size:0.62rem;color:rgba(255,255,255,0.14);letter-spacing:1.5px;text-transform:uppercase;opacity:0;animation:fadeIn 0.5s ease 2.8s forwards}
-
-    /* Final fade */
-    .screen-fade{position:fixed;inset:0;z-index:999;background:#000;opacity:0;pointer-events:none;animation:screenFadeOut 0.8s ease 8s forwards}
-  </style>
+/* ── TRANSITION OVERLAY ── */
+#transOverlay{
+  position:fixed;inset:0;background:#052e16;z-index:999;
+  opacity:0;pointer-events:none;transition:opacity .4s ease;
+}
+#transOverlay.flash{opacity:1}
+</style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="bg-overlay"></div>
 
-  <div class="rays" id="rays"></div>
+<div id="particles"></div>
+<div class="glow-overlay"></div>
+<div id="transOverlay"></div>
 
-  <!-- Agricultural bg -->
-  <div class="agri-bg">
-    <svg class="mountains" viewBox="0 0 400 140" preserveAspectRatio="none" style="height:170px">
-      <defs>
-        <linearGradient id="mtG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#22C55E" stop-opacity="0.09"/>
-          <stop offset="100%" stop-color="#22C55E" stop-opacity="0.02"/>
-        </linearGradient>
-      </defs>
-      <path d="M0 140 L45 70 L85 100 L135 35 L185 80 L225 25 L275 70 L315 40 L365 78 L400 50 L400 140 Z" fill="url(#mtG)"/>
-      <path d="M0 140 L65 90 L105 105 L155 62 L205 92 L255 58 L305 88 L355 68 L400 85 L400 140 Z" fill="rgba(34,197,94,0.04)"/>
-    </svg>
-    <div class="wheat-bg" style="bottom:14%;left:4%;animation:wheatSway 3s ease-in-out infinite">🌾</div>
-    <div class="wheat-bg" style="bottom:19%;right:5%;animation:wheatSway 3.5s ease-in-out infinite 0.5s">🌾</div>
-    <div class="wheat-bg" style="bottom:11%;left:17%;animation:wheatSway 2.8s ease-in-out infinite 1s">🌿</div>
-    <div class="wheat-bg" style="bottom:17%;right:18%;animation:wheatSway 4s ease-in-out infinite 0.3s">🌿</div>
-    <div class="leaf-bg" style="top:14%;left:7%;animation:wheatSway 4s ease-in-out infinite">🍃</div>
-    <div class="leaf-bg" style="top:19%;right:9%;animation:wheatSway 3.5s ease-in-out infinite 1s">🍃</div>
-    <div class="leaf-bg" style="top:34%;left:3%;animation:wheatSway 5s ease-in-out infinite 0.5s">🌱</div>
-    <div class="leaf-bg" style="top:29%;right:4%;animation:wheatSway 4.5s ease-in-out infinite 1.5s">🌱</div>
+<!-- STAGE 1: LOGO SPLASH -->
+<div class="stage bg-dark active" id="s1">
+  <div style="position:relative;z-index:2">
+    <div class="logo-icon">🌾</div>
+    <div class="logo-name">Agri<span>Equip</span></div>
+    <div class="logo-sub">Smart Farming Solutions</div>
+    <div class="made-badge">🇪🇹 Made in Ethiopia</div>
+    <div class="progress-wrap" style="margin-top:40px">
+      <div class="progress-bar" id="s1bar"></div>
+    </div>
+    <div class="progress-label">Loading...</div>
   </div>
+</div>
 
-  <div class="particles" id="particles">
-    <div class="orbit-system">
-      <div class="orb orb1"></div>
-      <div class="orb orb2"></div>
-      <div class="orb orb3"></div>
+<!-- STAGE 2: TAGLINE -->
+<div class="stage bg-sunrise" id="s2">
+  <div style="position:relative;z-index:2;max-width:340px">
+    <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:24px">
+      <div style="width:32px;height:32px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem">🌾</div>
+      <div class="logo-name" style="font-size:1.4rem;margin:0">Agri<span>Equip</span></div>
+    </div>
+    <div class="tagline-big">Empowering Farmers.<br><em>Feeding Ethiopia.</em></div>
+    <div class="tagline-sub">Technology, Knowledge and Equipment for a Better Tomorrow.</div>
+    <div class="made-badge" style="margin-top:28px">🇪🇹 Made in Ethiopia</div>
+    <div class="dots" style="margin-top:28px">
+      <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
     </div>
   </div>
+</div>
 
-  <div class="content">
-    <div class="logo-wrap" id="logoWrap">
-      <div class="glow-ring ring1"></div>
-      <div class="glow-ring ring2"></div>
-      <div class="glow-ring ring3"></div>
-
-      <div class="logo-icon">
-        <div class="logo-svg-wrap">
-          <!-- ORIGINAL AGRIEQUIP TRACTOR + WHEAT SVG LOGO -->
-          <svg width="112" height="112" viewBox="0 0 112 112" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Sky area -->
-            <rect x="0" y="0" width="112" height="55" rx="8" fill="rgba(255,255,255,0.04)"/>
-
-            <!-- Sun (rises in) -->
-            <g class="sun-g">
-              <circle cx="18" cy="20" r="9.5" fill="rgba(255,255,255,0.18)"/>
-              <circle cx="18" cy="20" r="5.5" fill="rgba(255,255,255,0.62)"/>
-              <line x1="18" y1="7" x2="18" y2="4" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round"/>
-              <line x1="27" y1="11" x2="29" y2="9" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round"/>
-              <line x1="31" y1="20" x2="34" y2="20" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round"/>
-              <line x1="27" y1="29" x2="29" y2="31" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="18" y1="33" x2="18" y2="36" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/>
-            </g>
-
-            <!-- Clouds -->
-            <g class="cloud-g1">
-              <ellipse cx="58" cy="16" rx="11" ry="4.5" fill="rgba(255,255,255,0.12)"/>
-              <ellipse cx="52" cy="18" rx="7" ry="3.5" fill="rgba(255,255,255,0.09)"/>
-              <ellipse cx="64" cy="18" rx="5.5" ry="3" fill="rgba(255,255,255,0.09)"/>
-            </g>
-            <g class="cloud-g2">
-              <ellipse cx="84" cy="13" rx="9" ry="3.5" fill="rgba(255,255,255,0.07)"/>
-              <ellipse cx="90" cy="15" rx="5" ry="2.5" fill="rgba(255,255,255,0.05)"/>
-            </g>
-
-            <!-- Exhaust puffs -->
-            <circle class="puff1" cx="57" cy="46" r="3" fill="rgba(255,255,255,0.22)"/>
-            <circle class="puff2" cx="55" cy="44" r="2" fill="rgba(255,255,255,0.16)"/>
-
-            <!-- Tractor group (drives in) -->
-            <g class="tractor-g">
-              <!-- Tractor body -->
-              <rect x="10" y="58" width="44" height="23" rx="6.5" fill="rgba(255,255,255,0.88)"/>
-              <!-- Cab -->
-              <rect x="38" y="48" width="21" height="17" rx="5.5" fill="rgba(255,255,255,0.72)"/>
-              <!-- Cab window -->
-              <rect x="41" y="51" width="15" height="9.5" rx="3" fill="rgba(6,182,212,0.42)"/>
-              <!-- Exhaust pipe -->
-              <rect x="55" y="44" width="3" height="7" rx="1.5" fill="rgba(255,255,255,0.58)"/>
-
-              <!-- Big spinning wheel -->
-              <circle class="big-wheel" cx="25" cy="82" r="13" fill="rgba(10,22,40,0.85)" stroke="rgba(255,255,255,0.9)" stroke-width="2.5"/>
-              <circle cx="25" cy="82" r="5.5" fill="rgba(255,255,255,0.2)"/>
-              <line x1="25" y1="69" x2="25" y2="95" stroke="rgba(255,255,255,0.38)" stroke-width="2"/>
-              <line x1="12" y1="82" x2="38" y2="82" stroke="rgba(255,255,255,0.38)" stroke-width="2"/>
-              <line x1="16" y1="73" x2="34" y2="91" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-              <line x1="34" y1="73" x2="16" y2="91" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-
-              <!-- Small spinning wheel -->
-              <circle class="sm-wheel" cx="52" cy="79" r="9" fill="rgba(10,22,40,0.85)" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
-              <circle cx="52" cy="79" r="4" fill="rgba(255,255,255,0.2)"/>
-              <line x1="52" y1="70" x2="52" y2="88" stroke="rgba(255,255,255,0.32)" stroke-width="1.5"/>
-              <line x1="43" y1="79" x2="61" y2="79" stroke="rgba(255,255,255,0.32)" stroke-width="1.5"/>
-            </g>
-
-            <!-- Wheat stalks (swaying) -->
-            <g class="wheat-g1">
-              <line x1="72" y1="84" x2="72" y2="32" stroke="rgba(255,255,255,0.82)" stroke-width="2.5" stroke-linecap="round"/>
-              <ellipse cx="72" cy="26" rx="5" ry="10.5" fill="rgba(255,255,255,0.82)" transform="rotate(-13 72 26)"/>
-              <line x1="68" y1="46" x2="72" y2="46" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="68" y1="58" x2="72" y2="58" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="72" y1="68" x2="76" y2="68" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round"/>
-            </g>
-            <g class="wheat-g2">
-              <line x1="83" y1="84" x2="83" y2="36" stroke="rgba(255,255,255,0.72)" stroke-width="2" stroke-linecap="round"/>
-              <ellipse cx="83" cy="30" rx="4.5" ry="9.5" fill="rgba(255,255,255,0.72)" transform="rotate(10 83 30)"/>
-              <line x1="79" y1="52" x2="83" y2="52" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="83" y1="64" x2="87" y2="64" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/>
-            </g>
-            <g class="wheat-g3">
-              <line x1="94" y1="84" x2="94" y2="38" stroke="rgba(255,255,255,0.62)" stroke-width="2" stroke-linecap="round"/>
-              <ellipse cx="94" cy="32" rx="4" ry="9" fill="rgba(255,255,255,0.62)" transform="rotate(-6 94 32)"/>
-              <line x1="90" y1="56" x2="94" y2="56" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round"/>
-            </g>
-
-            <!-- Ground lines -->
-            <rect x="8" y="86" width="96" height="5" rx="2.5" fill="rgba(255,255,255,0.22)"/>
-            <rect x="8" y="95" width="96" height="4" rx="2" fill="rgba(255,255,255,0.13)"/>
-            <rect x="8" y="103" width="96" height="3" rx="1.5" fill="rgba(255,255,255,0.07)"/>
-          </svg>
-        </div>
-      </div>
+<!-- STAGE 3: FEATURE HIGHLIGHTS -->
+<div class="stage bg-field" id="s3">
+  <div style="position:relative;z-index:2;width:100%;max-width:340px">
+    <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:18px">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem">🌾</div>
+      <div class="logo-name" style="font-size:1.2rem;margin:0">Agri<span>Equip</span></div>
     </div>
-
-    <div class="logo-name">AgriEquip</div>
-    <div class="logo-sub">Grow <span class="dot-sep">•</span> Invest <span class="dot-sep">•</span> Prosper</div>
-    <div class="logo-tagline">Agricultural Rental Marketplace • Ethiopia 🇪🇹</div>
-
-    <div class="bar-section">
-      <div class="bar-outer"><div class="bar-inner"></div></div>
-      <div class="bar-txt">Loading...</div>
+    <div class="section-title">All-in-One Platform for Modern Farmers</div>
+    <div class="feature-list" id="fList"></div>
+    <div class="dots" style="margin-top:18px">
+      <div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div>
     </div>
   </div>
+</div>
 
-  <div class="country">v1.0.0 • Made in Ethiopia</div>
-  <div class="screen-fade"></div>
+<!-- STAGE 4: TRUST & SECURITY -->
+<div class="stage bg-trust" id="s4">
+  <div style="position:relative;z-index:2;width:100%;max-width:300px">
+    <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:20px">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem">🌾</div>
+      <div class="logo-name" style="font-size:1.2rem;margin:0">Agri<span>Equip</span></div>
+    </div>
+    <div class="shield-wrap">🛡</div>
+    <div class="trust-title">Secure. Reliable.<br>Always with You.</div>
+    <div class="trust-list" id="tList"></div>
+    <div class="dots" style="margin-top:18px">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+    </div>
+  </div>
+</div>
 
-  <script>
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+<!-- STAGE 5: MADE IN ETHIOPIA -->
+<div class="stage bg-ethiopia" id="s5">
+  <div style="position:relative;z-index:2;max-width:300px">
+    <div class="eth-flag">🇪🇹</div>
+    <div class="eth-title">Proudly <span>Made in Ethiopia</span></div>
+    <div class="eth-sub">
+      Built for Ethiopian farmers,<br>
+      by innovative minds.<br><br>
+      Designed for Africa's Future.
+    </div>
+    <div class="eth-icons">🌾 🚜 ☕ 🌱</div>
+  </div>
+</div>
 
-    // Light rays
-    const raysEl = document.getElementById('rays');
-    for (let i = 0; i < 12; i++) {
-      const ray = document.createElement('div');
-      ray.className = 'ray';
-      ray.style.cssText = `left:${4 + i * 8}%;transform:rotate(${(i-6)*3}deg);animation-delay:${i*0.2}s;opacity:${0.03+Math.random()*0.05}`;
-      raysEl.appendChild(ray);
+<!-- STAGE 6: LOADING PROGRESS -->
+<div class="stage bg-loading" id="s6">
+  <div style="position:relative;z-index:2;width:100%;max-width:300px">
+    <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:24px">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem">🌾</div>
+      <div class="logo-name" style="font-size:1.2rem;margin:0">Agri<span>Equip</span></div>
+    </div>
+    <div class="circle-loader">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <defs>
+          <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#22c55e"/>
+            <stop offset="100%" stop-color="#4ade80"/>
+          </linearGradient>
+        </defs>
+        <circle class="bg-ring" cx="60" cy="60" r="54"/>
+        <circle class="fg-ring" id="fgRing" cx="60" cy="60" r="54"/>
+      </svg>
+      <div class="pct-text" id="pctText">0%</div>
+    </div>
+    <div class="load-status" id="loadStatus">🌱 Preparing your farm...</div>
+    <div class="load-icons">
+      <span id="li0">🌱</span>
+      <span id="li1">🚜</span>
+      <span id="li2">📈</span>
+      <span id="li3">👥</span>
+    </div>
+    <div class="progress-wrap" style="width:100%">
+      <div class="progress-bar" id="loadBar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 7: READY -->
+<div class="stage bg-ready" id="s7">
+  <div style="position:relative;z-index:2" id="readyContent">
+    <div class="check-wrap">✅</div>
+    <div class="ready-title">Everything is <em>Ready!</em></div>
+    <div class="ready-sub">Let's grow together with AgriEquip.</div>
+    <div class="dots" style="margin-top:16px">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 8: ENTER APP -->
+<div class="stage bg-enter" id="s8">
+  <div style="position:relative;z-index:2;width:100%;max-width:320px">
+    <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:6px">
+      <div style="width:40px;height:40px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem">🌾</div>
+    </div>
+    <div class="enter-logo">Welcome to Agri<span>Equip</span></div>
+    <div class="enter-sub">Smart Farming Starts Here</div>
+
+    <div class="dash-preview">
+      <div class="dp-card"><div class="di">🌤</div>Today's Weather</div>
+      <div class="dp-card"><div class="di">🤖</div>AgriEquip AI</div>
+      <div class="dp-card"><div class="di">🚜</div>Nearby Equipment</div>
+      <div class="dp-card"><div class="di">📈</div>Market Prices</div>
+      <div class="dp-card"><div class="di">🌾</div>Farm Tasks</div>
+      <div class="dp-card"><div class="di">💰</div>Farm Wallet</div>
+    </div>
+
+    <button class="enter-btn" onclick="enterApp()" style="margin-top:24px;width:100%">
+      Get Started →
+    </button>
+    <div class="enter-login">Already have an account? <a href="login.html">Login</a></div>
+  </div>
+</div>
+
+<script>
+// ── PARTICLES ─────────────────────────────────────────────
+(function(){
+  const c = document.getElementById('particles');
+  for(let i=0;i<20;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const s = 4+Math.random()*8;
+    p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${5+Math.random()*8}s;animation-delay:${Math.random()*6}s;opacity:${.15+Math.random()*.3}`;
+    c.appendChild(p);
+  }
+})();
+
+// ── FEATURES ──────────────────────────────────────────────
+const FEATURES = [
+  {icon:'🤖', t:'AgriEquip AI',         d:'Smart farming assistance'},
+  {icon:'🚜', t:'Equipment Marketplace', d:'Rent and share machinery'},
+  {icon:'🌤', t:'Weather Intelligence',  d:'Real-time weather updates'},
+  {icon:'📈', t:'Market Prices',         d:'Live crop price tracking'},
+  {icon:'🌾', t:'Crop Health',           d:'AI-powered crop monitoring'},
+  {icon:'💰', t:'Farm Wallet',           d:'Secure farm payments'},
+];
+(function(){
+  const el = document.getElementById('fList');
+  FEATURES.forEach((f,i)=>{
+    el.innerHTML += `<div class="feature-card" style="animation-delay:${i*.12}s">
+      <span class="fi">${f.icon}</span>
+      <div><div class="ft">${f.t}</div><div class="fd">${f.d}</div></div>
+    </div>`;
+  });
+})();
+
+// ── TRUST ITEMS ───────────────────────────────────────────
+const TRUST = ['✔ Secure Login','✔ Encrypted Data','✔ Verified Equipment','✔ Privacy Protected'];
+(function(){
+  const el = document.getElementById('tList');
+  TRUST.forEach((t,i)=>{
+    el.innerHTML += `<div class="trust-item" style="animation-delay:${.3+i*.15}s">
+      <span class="ti">✅</span><span>${t}</span>
+    </div>`;
+  });
+})();
+
+// ── STAGE CONTROLLER ──────────────────────────────────────
+let cur = 1;
+const overlay = document.getElementById('transOverlay');
+
+function goTo(n){
+  return new Promise(res=>{
+    overlay.classList.add('flash');
+    setTimeout(()=>{
+      document.getElementById('s'+cur).classList.remove('active');
+      cur = n;
+      document.getElementById('s'+n).classList.add('active');
+      overlay.classList.remove('flash');
+      res();
+    },400);
+  });
+}
+
+// ── S1: LOGO SPLASH (2s) ──────────────────────────────────
+let s1Progress = 0;
+const s1bar = document.getElementById('s1bar');
+const s1int = setInterval(()=>{
+  s1Progress += 100/60;
+  s1bar.style.width = Math.min(s1Progress,100)+'%';
+  if(s1Progress >= 100){ clearInterval(s1int); setTimeout(()=>goTo(2).then(startS2), 200); }
+},33);
+
+// ── S2: TAGLINE (2s) ─────────────────────────────────────
+function startS2(){ setTimeout(()=>goTo(3).then(startS3), 2000); }
+
+// ── S3: FEATURES (3.5s) ──────────────────────────────────
+function startS3(){ setTimeout(()=>goTo(4).then(startS4), 3500); }
+
+// ── S4: TRUST (2.5s) ─────────────────────────────────────
+function startS4(){ setTimeout(()=>goTo(5).then(startS5), 2500); }
+
+// ── S5: ETHIOPIA (2s) ────────────────────────────────────
+function startS5(){ setTimeout(()=>goTo(6).then(startS6), 2000); }
+
+// ── S6: LOADING PROGRESS (4s) ────────────────────────────
+const STATUSES = [
+  '🌱 Preparing your farm...',
+  '☁️ Loading weather data...',
+  '🚜 Connecting equipment...',
+  '📈 Updating market prices...',
+  '🤖 Starting AgriEquip AI...',
+  '🔒 Securing your account...',
+];
+const ICONS_IDS = ['li0','li1','li2','li3'];
+
+function startS6(){
+  let pct = 0;
+  let statusIdx = 0;
+  const fgRing = document.getElementById('fgRing');
+  const pctText = document.getElementById('pctText');
+  const loadBar = document.getElementById('loadBar');
+  const loadStatus = document.getElementById('loadStatus');
+  const circum = 2 * Math.PI * 54; // ~339
+
+  const interval = setInterval(()=>{
+    pct += 100/120; // ~4 seconds at 30fps
+    const clampPct = Math.min(pct, 100);
+    const offset = circum - (clampPct/100)*circum;
+    fgRing.style.strokeDashoffset = offset;
+    pctText.textContent = Math.floor(clampPct)+'%';
+    loadBar.style.width = clampPct+'%';
+
+    // Rotate status messages
+    const newIdx = Math.floor((clampPct/100)*STATUSES.length);
+    if(newIdx !== statusIdx && newIdx < STATUSES.length){
+      statusIdx = newIdx;
+      loadStatus.textContent = STATUSES[statusIdx];
+      // Light up icon
+      ICONS_IDS.forEach((id,i)=>{
+        document.getElementById(id).classList.toggle('lit', i<=statusIdx);
+      });
     }
 
-    // Floating particles
-    const particlesEl = document.getElementById('particles');
-    const colors = ['#22C55E','#16A34A','#06B6D4','#F59E0B','#86EFAC'];
-    for (let i = 0; i < 22; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      const size = 2 + Math.random() * 5;
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      p.style.cssText = `width:${size}px;height:${size}px;background:${color};left:${Math.random()*100}%;top:${25+Math.random()*55}%;opacity:${0.3+Math.random()*0.5};animation-duration:${3+Math.random()*5}s;animation-delay:${Math.random()*4}s;box-shadow:0 0 ${size*2}px ${color}`;
-      particlesEl.appendChild(p);
+    if(clampPct >= 100){
+      clearInterval(interval);
+      setTimeout(()=>goTo(7).then(startS7), 300);
     }
+  }, 33);
+}
 
-    // Logo animation stages
-    const logoWrap = document.getElementById('logoWrap');
+// ── S7: READY (2s) ───────────────────────────────────────
+function startS7(){
+  // Sparkle burst
+  const wrap = document.getElementById('readyContent');
+  ['✨','⭐','💫','🌟','✨','💚'].forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'sparkle';
+    el.style.cssText = `left:${20+i*12}%;top:${20+Math.random()*40}%`;
+    el.innerHTML = `<span class="sp" style="animation-delay:${i*.1}s">${s}</span>`;
+    wrap.appendChild(el);
+  });
+  // Vibrate if supported
+  if(navigator.vibrate) navigator.vibrate([100,50,100]);
+  setTimeout(()=>goTo(8), 2200);
+}
 
-    // After bounce — rotate
-    setTimeout(() => {
-      logoWrap.style.animation = 'logoRotate 1.5s ease forwards';
-    }, 2300);
+// ── S8: ENTER ────────────────────────────────────────────
+function enterApp(){
+  // Check if user is logged in — redirect accordingly
+  window.location.href = 'login.html';
+}
 
-    // After rotate — pulse glow
-    setTimeout(() => {
-      logoWrap.style.animation = 'logoPulse 2.2s ease-in-out infinite';
-    }, 4000);
-
-    sessionStorage.setItem('splashSeen', '1');
-    setTimeout(() => { window.location.href = 'login.html'; }, 8300);
-  </script>
+// Allow tapping any stage to skip to next (optional)
+document.addEventListener('keydown',(e)=>{ if(e.key==='Enter') enterApp(); });
+</script>
 </body>
 </html>
