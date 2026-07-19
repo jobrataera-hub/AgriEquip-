@@ -322,7 +322,7 @@ function renderSection(id) {
         </div>
 
         <!-- DEPOSIT FORM -->
-        <div id="depositSection" style="display:none" class="section-card">
+        <div id="depositSection" style="display:none!important"  class="section-card">
           <h3>⬆️ Deposit Request</h3>
           <p style="color:#64748B;font-size:.82rem;margin-bottom:12px">Send money to AgriEquip first, then fill this form.</p>
           <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:14px;margin-bottom:14px;font-size:.83rem;line-height:2">
@@ -339,7 +339,7 @@ function renderSection(id) {
           <input type="number" class="form-input" id="depositAmount" placeholder="Enter amount" min="100">
           <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">Transaction Reference *</label>
           <input type="text" class="form-input" id="depositRef" placeholder="TXN-XXXXXXXXXX from your receipt">
-          <button class="action-btn" onclick="submitDeposit()">📤 Submit Deposit Request</button>
+          <button class="wallet-btn deposit" style="opacity:0.4;cursor:not-allowed" disabled>📤 Deposit — Coming Soon</button>
           <button class="action-btn" style="background:#334155;margin-top:8px" onclick="backToWallet()">← Back</button>
           <p id="depositMsg" style="display:none;margin-top:8px;text-align:center;font-size:.85rem"></p>
         </div>
