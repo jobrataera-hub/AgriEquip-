@@ -185,6 +185,7 @@ const LESSON_FILES = {
 };
 
 
+const AGRI_RANKS = [
   { icon:'🌱', name:'Beginner Farmer', xp:0 },
   { icon:'🌿', name:'Skilled Farmer', xp:150 },
   { icon:'🌾', name:'Advanced Farmer', xp:400 },
