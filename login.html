@@ -100,12 +100,16 @@ import { auth, db } from './firebase.js';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, increment, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
-let handledRedirect = false;
-
-onAuthStateChanged(auth, (user) => {
-  // Don't redirect immediately on a fresh Google sign-in — let the
-  // getRedirectResult flow below finish saving the Firestore profile first.
-  if (user && handledRedirect) window.location.href = 'dashboard.html';
+onAuthStateChanged(auth, async (user) => {
+  // This is the single source of truth for "am I signed in" — it fires
+  // reliably whether the session came from redirect, popup, or an
+  // existing session, even if the redirect handshake below misses it
+  // (which can happen on mobile if the browser drops sessionStorage
+  // while you're away at Google's account picker).
+  if (user) {
+    try { await saveUserToFirestore(user); } catch(e) {}
+    window.location.href = 'dashboard.html';
+  }
 });
 
 function showMsg(text, type) {
@@ -150,22 +154,16 @@ async function saveUserToFirestore(user, extra = {}) {
   }
 }
 
-// Handle the result of a Google redirect sign-in (mobile-friendly — no popups).
-// This runs once automatically whenever the page loads, including right after
-// the browser bounces back from Google's sign-in screen.
+// Surface any error from a Google redirect attempt (e.g. domain not
+// authorized, provider disabled). If the sign-in actually succeeded,
+// onAuthStateChanged above already handles moving on to the dashboard —
+// this block no longer needs to detect success itself.
 (async () => {
   try {
-    const result = await getRedirectResult(auth);
-    if (result && result.user) {
-      showMsg('✅ Welcome! Setting up your account...', 'success');
-      await saveUserToFirestore(result.user);
-      window.location.href = 'dashboard.html';
-      return;
-    }
+    await getRedirectResult(auth);
   } catch(e) {
     if (e && e.message) showMsg(cleanErr(e.message), 'error');
   }
-  handledRedirect = true;
 })();
 
 window.switchTab = function(tab) {
@@ -199,7 +197,6 @@ window.handleLogin = async function() {
   try {
     await signInWithEmailAndPassword(auth, email, password);
     showMsg('✅ Welcome back!','success');
-    handledRedirect = true;
     setTimeout(()=>window.location.href='dashboard.html', 800);
   } catch(e) { showMsg(cleanErr(e.message),'error'); btn.disabled=false; btn.textContent='Sign In →'; }
 };
@@ -219,7 +216,6 @@ window.handleRegister = async function() {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     await saveUserToFirestore(cred.user, {fullName, fatherName, referral});
     showMsg('✅ Account created!','success');
-    handledRedirect = true;
     setTimeout(()=>window.location.href='dashboard.html', 800);
   } catch(e) { showMsg(cleanErr(e.message),'error'); btn.disabled=false; btn.textContent='Create Account →'; }
 };
