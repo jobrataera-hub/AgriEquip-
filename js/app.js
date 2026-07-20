@@ -88,17 +88,9 @@ const ACADEMY_CATEGORIES = [
   { id:'business', icon:'💰', name:'Farm Business', desc:'Budgeting, marketing, growth', color:'#EF4444' },
 ];
 
-// Each lesson can optionally include:
-//   content: the readable lesson text. Use \n\n between paragraphs.
-//   image:   a URL to a header image (e.g. a path to a file you commit to /assets/academy/...)
-//   file:    a URL to a downloadable attachment (PDF, etc.)
-// If content/image/file are omitted, the reader falls back to showing just `desc`.
 const ACADEMY_LESSONS = [
-  { id:0,  cat:'crop', emoji:'🌾', title:'Introduction to Teff Farming', pts:40, desc:'Planting, care, and harvest basics for Ethiopia\'s staple crop.',
-    image:'assets/academy/teff-field.jpg',
-    content:'Teff (Eragrostis tef) is Ethiopia\'s most important staple crop, used to make injera. It thrives in a wide range of altitudes, from lowlands to highlands above 2,800m, making it one of the most adaptable cereals grown in the country.\n\nPlanting: Teff is typically sown at the start of the main rainy season (Meher), from June to July, though some regions also grow a smaller Belg-season crop. Seeds are broadcast rather than row-planted, and because they are extremely small, a fine, well-prepared seedbed is essential — clumped or rocky soil leads to poor germination.\n\nSoil and water: Teff tolerates poor soils better than most cereals, but yields best in well-drained loam. Waterlogging in the early weeks is one of the most common causes of crop failure, so avoid planting in low-lying fields that pool water after rain.\n\nWeeding: Because teff seedlings are thin and low to the ground early on, weed competition can sharply cut yield. Most farmers weed twice: once around 20 days after planting and again before the crop closes canopy.\n\nHarvest: Teff is ready for harvest 2-6 months after planting depending on variety and altitude, when the plant turns golden-yellow and grains feel firm. Cut, dry in the field for a few days, then thresh — traditionally by driving livestock over the stalks, though mechanical threshers are increasingly common.\n\nStorage tip: Dry the grain thoroughly before storage — teff stored above 12% moisture is prone to mold, which can ruin an entire harvest within weeks.' },
-  { id:1,  cat:'crop', emoji:'🌾', title:'Wheat Farming Guide', pts:35, desc:'Highland wheat cultivation from seed to harvest.',
-    content:'Wheat is grown widely across Ethiopia\'s highlands, typically above 1,500m, where cooler temperatures favor grain development.\n\n(Add your full lesson text here — planting windows, soil prep, fertilizer timing, pest watch-outs, and harvest signs.)' },
+  { id:0,  cat:'crop', emoji:'🌾', title:'Introduction to Teff Farming', pts:40, desc:'Planting, care, and harvest basics for Ethiopia\'s staple crop.' },
+  { id:1,  cat:'crop', emoji:'🌾', title:'Wheat Farming Guide', pts:35, desc:'Highland wheat cultivation from seed to harvest.' },
   { id:2,  cat:'crop', emoji:'🌽', title:'Maize Production Techniques', pts:35, desc:'Belg and meher season maize management.' },
   { id:3,  cat:'crop', emoji:'☕', title:'Coffee Cultivation Guide', pts:50, desc:'From seedling to harvest — Ethiopian coffee farming.' },
   { id:4,  cat:'crop', emoji:'🌻', title:'Sesame Farming Basics', pts:30, desc:'Growing sesame for export markets.' },
@@ -130,7 +122,69 @@ const ACADEMY_LESSONS = [
   { id:30, cat:'business', emoji:'💳', title:'Digital Payments for Farmers', pts:25, desc:'Using mobile money and digital wallets.' },
 ];
 
-const AGRI_RANKS = [
+// ─── Lesson content — PASTE HERE ──────────────────────────
+// To add a lesson's readable text: find its ID number below and paste
+// your text between the backticks ( ` ` ). Backticks are safe with
+// apostrophes, quotes, and multi-line text — no escaping needed.
+// Only avoid typing a literal backtick ( ` ) or a dollar-brace ( ${ )
+// inside the pasted text itself.
+// Leave it as `` (empty) for any lesson you haven't written yet —
+// it'll just show the short description until you fill it in.
+const LESSON_CONTENT = {
+  0: `Teff (Eragrostis tef) is Ethiopia's most important staple crop, used to make injera. It thrives in a wide range of altitudes, from lowlands to highlands above 2,800m, making it one of the most adaptable cereals grown in the country.
+
+Planting: Teff is typically sown at the start of the main rainy season (Meher), from June to July, though some regions also grow a smaller Belg-season crop. Seeds are broadcast rather than row-planted, and because they are extremely small, a fine, well-prepared seedbed is essential — clumped or rocky soil leads to poor germination.
+
+Soil and water: Teff tolerates poor soils better than most cereals, but yields best in well-drained loam. Waterlogging in the early weeks is one of the most common causes of crop failure, so avoid planting in low-lying fields that pool water after rain.
+
+Weeding: Because teff seedlings are thin and low to the ground early on, weed competition can sharply cut yield. Most farmers weed twice: once around 20 days after planting and again before the crop closes canopy.
+
+Harvest: Teff is ready for harvest 2-6 months after planting depending on variety and altitude, when the plant turns golden-yellow and grains feel firm. Cut, dry in the field for a few days, then thresh — traditionally by driving livestock over the stalks, though mechanical threshers are increasingly common.
+
+Storage tip: Dry the grain thoroughly before storage — teff stored above 12% moisture is prone to mold, which can ruin an entire harvest within weeks.`,
+  1: ``,  // Wheat Farming Guide
+  2: ``,  // Maize Production Techniques
+  3: ``,  // Coffee Cultivation Guide
+  4: ``,  // Sesame Farming Basics
+  5: ``,  // Vegetable Farming Guide
+  6: ``,  // Fruit Tree Farming
+  7: ``,  // Greenhouse Farming Intro
+  8: ``,  // Tractor Operation & Safety
+  9: ``,  // Combine Harvester Basics
+  10: ``, // Ploughing Techniques
+  11: ``, // Seeder Operation Guide
+  12: ``, // Irrigation Pump Maintenance
+  13: ``, // Machine Maintenance Basics
+  14: ``, // Fuel-Saving Practices
+  15: ``, // Equipment Safety Procedures
+  16: ``, // Precision Agriculture Intro
+  17: ``, // Soil Health & Fertilizer Guide
+  18: ``, // Efficient Irrigation Techniques
+  19: ``, // Pest Management Guide
+  20: ``, // Disease Prevention Basics
+  21: ``, // Climate-Smart Farming
+  22: ``, // Dairy Farming Basics
+  23: ``, // Beef Production Guide
+  24: ``, // Poultry Management
+  25: ``, // Sheep & Goat Farming
+  26: ``, // Vaccination Schedules
+  27: ``, // Farm Budgeting Basics
+  28: ``, // Farm Record Keeping
+  29: ``, // Marketing Your Produce
+  30: ``, // Digital Payments for Farmers
+};
+
+// Optional header image per lesson ID. Upload files to /assets/academy/
+// in your repo, then reference them here by that path.
+// Example: 0: 'assets/academy/teff-field.jpg',
+const LESSON_IMAGES = {
+};
+
+// Optional downloadable attachment (PDF etc.) per lesson ID, same pattern as above.
+const LESSON_FILES = {
+};
+
+
   { icon:'🌱', name:'Beginner Farmer', xp:0 },
   { icon:'🌿', name:'Skilled Farmer', xp:150 },
   { icon:'🌾', name:'Advanced Farmer', xp:400 },
@@ -270,6 +324,9 @@ function openLessonReader(id) {
   if (!lesson) return;
   const prog = getAcademyProgress();
   const done = prog.completed.includes(id);
+  const text  = LESSON_CONTENT[id] || lesson.desc;
+  const image = LESSON_IMAGES[id];
+  const file  = LESSON_FILES[id];
   const overlay = document.createElement('div');
   overlay.id = 'lessonReaderOverlay';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:flex-end;justify-content:center';
@@ -280,11 +337,11 @@ function openLessonReader(id) {
         <span style="font-size:.75rem;color:#64748B">📚 Lesson</span>
         <button onclick="closeLessonReader()" style="background:rgba(255,255,255,.08);border:none;color:white;width:28px;height:28px;border-radius:8px;font-size:1rem;cursor:pointer">✕</button>
       </div>
-      ${lesson.image ? `<img src="${lesson.image}" alt="${lesson.title}" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-bottom:14px" onerror="this.style.display='none'">` : ''}
+      ${image ? `<img src="${image}" alt="${lesson.title}" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-bottom:14px" onerror="this.style.display='none'">` : ''}
       <div style="font-size:2rem;margin-bottom:6px">${lesson.emoji}</div>
       <h2 style="color:white;font-size:1.2rem;margin-bottom:12px">${lesson.title}</h2>
-      <div style="color:#94A3B8;font-size:.86rem;line-height:1.85;white-space:pre-line">${(lesson.content || lesson.desc).replace(/</g,'&lt;')}</div>
-      ${lesson.file ? `<a href="${lesson.file}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:16px;color:#22C55E;font-size:.82rem;text-decoration:none;border:1px solid rgba(34,197,94,.3);border-radius:8px;padding:8px 14px">📎 Download attachment</a>` : ''}
+      <div style="color:#94A3B8;font-size:.86rem;line-height:1.85;white-space:pre-line">${text.replace(/</g,'&lt;')}</div>
+      ${file ? `<a href="${file}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:16px;color:#22C55E;font-size:.82rem;text-decoration:none;border:1px solid rgba(34,197,94,.3);border-radius:8px;padding:8px 14px">📎 Download attachment</a>` : ''}
       <button class="action-btn" style="margin-top:20px" ${done?'disabled style="opacity:.5"':''} onclick="completeLessonFromReader(${id})">
         ${done ? '✅ Already Completed' : '✅ Mark Complete (+'+lesson.pts+' XP)'}
       </button>
