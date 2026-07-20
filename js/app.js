@@ -15,6 +15,7 @@ const NAV = [
   { id:'home',      icon:'🏠',  label:'Home' },
   { id:'browse',    icon:'🔍',  label:'Browse Equipment' },
   { id:'listings',  icon:'📦',  label:'My Listings' },
+  { id:'bookings',  icon:'📅',  label:'My Bookings' },
   { id:'wallet',    icon:'💳',  label:'Wallet' },
   { id:'vip',       icon:'💎',  label:'VIP Plans' },
   { id:'tasks',     icon:'✅',  label:'Daily Tasks' },
@@ -242,6 +243,7 @@ window._app = {
   submitDeposit, submitWithdraw, showDepositForm, showWithdrawForm, backToWallet,
   submitListing, toggleListingForm, filterEquipment,
   setAcademyView, openLessonReader, closeLessonReader, completeLessonFromReader,
+  openBookingModal, closeBookingModal, updateBookingTotal, submitBookingRequest, respondBooking,
   showToast,
 };
 
@@ -649,6 +651,20 @@ function renderSection(id) {
         </div>
         <div id="myListings"></div>`;
       loadMyListings();
+      break;
+
+    // ── BOOKINGS ─────────────────────────────────────────
+    case 'bookings':
+      root.innerHTML = `
+        <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
+          <h3 style="color:white">📅 My Bookings</h3>
+          <p style="color:rgba(255,255,255,.55);font-size:.82rem;margin-top:6px">Requests you've sent, and requests owners have sent you.</p>
+        </div>
+        <h3 style="margin:4px 0 10px;font-size:.92rem">📤 Sent by Me</h3>
+        <div id="sentBookings"><p style="color:#64748B;text-align:center;padding:16px">Loading...</p></div>
+        <h3 style="margin:20px 0 10px;font-size:.92rem">📥 Received (My Listings)</h3>
+        <div id="receivedBookings"><p style="color:#64748B;text-align:center;padding:16px">Loading...</p></div>`;
+      loadMyBookings();
       break;
 
     // ── WALLET ───────────────────────────────────────────
@@ -1093,6 +1109,7 @@ async function loadEquipment() {
     el.innerHTML = snap.docs.map(d => {
       const eq = d.data();
       const icons = {tractor:'🚜',plow:'🔧',harvester:'🌾',pump:'💧',thresher:'⚙️',other:'📦'};
+      const isOwn = eq.ownerId === currentUser?.uid;
       return `<div class="equipment-card">
         <div class="equipment-img">${icons[eq.category]||'🚜'}</div>
         <div class="equipment-info">
@@ -1100,7 +1117,9 @@ async function loadEquipment() {
           <p style="color:#64748B;font-size:.78rem">📍 ${eq.location?.city||'Ethiopia'} · ${eq.category||'Equipment'}</p>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
             <span style="color:#22C55E;font-weight:700">${(eq.pricePerDay||0).toLocaleString()} ETB/day</span>
-            <button class="action-btn" style="width:auto;padding:6px 12px;font-size:.76rem" onclick="showToast('📞 Contact owner via Teff AI')">Book</button>
+            ${isOwn
+              ? `<span style="color:#64748B;font-size:.72rem">Your listing</span>`
+              : `<button class="action-btn" style="width:auto;padding:6px 12px;font-size:.76rem" onclick="openBookingModal('${d.id}')">Book</button>`}
           </div>
         </div>
       </div>`;
@@ -1147,6 +1166,185 @@ async function loadCommunity() {
       </div>`;
     }).join('');
   } catch(e) {}
+}
+
+// ─── Booking Request Flow ─────────────────────────────────
+const BOOKING_STATUS_STYLE = {
+  pending:   { label:'⏳ Pending',   color:'#F59E0B' },
+  accepted:  { label:'✅ Accepted',  color:'#22C55E' },
+  declined:  { label:'❌ Declined',  color:'#EF4444' },
+  completed: { label:'🏁 Completed', color:'#64748B' },
+};
+
+async function openBookingModal(equipmentId) {
+  if (!currentUser) return;
+  let eq;
+  try {
+    const eqSnap = await getDoc(doc(db,'equipment',equipmentId));
+    if (!eqSnap.exists()) { showToast('❌ Listing not found'); return; }
+    eq = eqSnap.data();
+  } catch(e) { showToast('❌ Could not load listing'); return; }
+  if (eq.ownerId === currentUser.uid) { showToast('⚠️ This is your own listing'); return; }
+
+  const today = new Date().toISOString().split('T')[0];
+  const overlay = document.createElement('div');
+  overlay.id = 'bookingModalOverlay';
+  overlay.dataset.price = eq.pricePerDay || 0;
+  overlay.dataset.ownerId = eq.ownerId;
+  overlay.dataset.equipName = eq.name;
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:flex-end;justify-content:center';
+  overlay.onclick = (e) => { if (e.target === overlay) closeBookingModal(); };
+  overlay.innerHTML = `
+    <div style="background:#0F172A;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:20px 20px 28px;animation:sheetUp .3s ease">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:.75rem;color:#64748B">📅 Book Equipment</span>
+        <button onclick="closeBookingModal()" style="background:rgba(255,255,255,.08);border:none;color:white;width:28px;height:28px;border-radius:8px;font-size:1rem;cursor:pointer">✕</button>
+      </div>
+      <h2 style="color:white;font-size:1.1rem;margin-bottom:4px">${eq.name}</h2>
+      <p style="color:#64748B;font-size:.8rem;margin-bottom:16px">${(eq.pricePerDay||0).toLocaleString()} ETB/day · 📍 ${eq.location?.city||'Ethiopia'}</p>
+
+      <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">Start Date *</label>
+      <input type="date" id="bookStart" class="form-input" min="${today}" onchange="updateBookingTotal()">
+      <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">End Date *</label>
+      <input type="date" id="bookEnd" class="form-input" min="${today}" onchange="updateBookingTotal()">
+
+      <label style="display:flex;align-items:center;gap:8px;padding:10px 0 0;font-size:.85rem"><input type="checkbox" id="bookOperator" style="width:18px;height:18px"> Operator needed</label>
+      <label style="display:flex;align-items:center;gap:8px;padding:6px 0 10px;font-size:.85rem"><input type="checkbox" id="bookDelivery" style="width:18px;height:18px"> Owner delivers to my location</label>
+
+      <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">Message to owner (optional)</label>
+      <textarea id="bookMessage" class="form-input" rows="2" placeholder="e.g. Need it for ploughing 4 hectares"></textarea>
+
+      <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:12px;margin-top:10px" id="bookTotalBox">
+        <p style="color:#64748B;font-size:.75rem">Select dates to see estimated total</p>
+      </div>
+
+      <button class="action-btn" style="margin-top:16px" onclick="submitBookingRequest('${equipmentId}')">📩 Send Booking Request</button>
+      <p id="bookingMsg" style="display:none;margin-top:8px;text-align:center;font-size:.85rem"></p>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function closeBookingModal() {
+  document.getElementById('bookingModalOverlay')?.remove();
+}
+
+function updateBookingTotal() {
+  const overlay = document.getElementById('bookingModalOverlay');
+  const box = document.getElementById('bookTotalBox');
+  if (!overlay || !box) return;
+  const price = parseFloat(overlay.dataset.price) || 0;
+  const start = document.getElementById('bookStart').value;
+  const end   = document.getElementById('bookEnd').value;
+  if (!start || !end) { box.innerHTML = `<p style="color:#64748B;font-size:.75rem">Select dates to see estimated total</p>`; return; }
+  if (new Date(end) < new Date(start)) { box.innerHTML = `<p style="color:#EF4444;font-size:.78rem">⚠️ End date must be after start date</p>`; return; }
+  const days = Math.max(1, Math.round((new Date(end) - new Date(start)) / 86400000) + 1);
+  const total = days * price;
+  box.innerHTML = `<p style="color:#64748B;font-size:.75rem">${days} day${days>1?'s':''} × ${price.toLocaleString()} ETB</p>
+    <p style="color:#22C55E;font-weight:700;font-size:1.1rem;margin-top:4px">Est. ${total.toLocaleString()} ETB</p>
+    <p style="color:#64748B;font-size:.68rem;margin-top:2px">Final price confirmed by owner. Payment isn't collected yet — coming soon.</p>`;
+}
+
+async function submitBookingRequest(equipmentId) {
+  const overlay = document.getElementById('bookingModalOverlay');
+  const msgEl   = document.getElementById('bookingMsg');
+  const start   = document.getElementById('bookStart').value;
+  const end     = document.getElementById('bookEnd').value;
+  const operator = document.getElementById('bookOperator').checked;
+  const delivery = document.getElementById('bookDelivery').checked;
+  const message  = document.getElementById('bookMessage').value.trim();
+  if (!start || !end) { flashMsg(msgEl,'⚠️ Choose start and end dates','#F59E0B'); return; }
+  if (new Date(end) < new Date(start)) { flashMsg(msgEl,'⚠️ End date must be after start date','#F59E0B'); return; }
+  const days  = Math.max(1, Math.round((new Date(end) - new Date(start)) / 86400000) + 1);
+  const price = parseFloat(overlay.dataset.price) || 0;
+  const ownerId   = overlay.dataset.ownerId;
+  const equipName = overlay.dataset.equipName;
+  if (ownerId === currentUser.uid) { flashMsg(msgEl,'⚠️ You can\'t book your own listing','#F59E0B'); return; }
+  try {
+    await addDoc(collection(db,'bookings'), {
+      equipmentId, equipmentName: equipName,
+      ownerId, renterId: currentUser.uid,
+      renterName: userProfile?.fullName || currentUser.email?.split('@')[0] || 'Farmer',
+      renterEmail: currentUser.email,
+      startDate: start, endDate: end, days,
+      pricePerDay: price, estimatedTotal: days * price,
+      operatorNeeded: operator, delivery, message,
+      status: 'pending', createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+    });
+    flashMsg(msgEl, '✅ Request sent! The owner will respond soon.', '#22C55E');
+    setTimeout(() => { closeBookingModal(); showSection('bookings'); }, 1200);
+  } catch(e) { flashMsg(msgEl, '❌ Failed to send request. Try again.', '#EF4444'); }
+}
+
+async function loadMyBookings() {
+  if (!currentUser) return;
+  const sentEl = document.getElementById('sentBookings');
+  const recvEl = document.getElementById('receivedBookings');
+  if (!sentEl || !recvEl) return;
+  try {
+    const sentSnap = await getDocs(query(collection(db,'bookings'), where('renterId','==',currentUser.uid), orderBy('createdAt','desc')));
+    sentEl.innerHTML = sentSnap.empty
+      ? `<p style="color:#64748B;text-align:center;padding:16px">No requests sent yet. Browse equipment to get started.</p>`
+      : await renderBookingCards(sentSnap.docs, 'renter');
+  } catch(e) { sentEl.innerHTML = `<p style="color:#64748B;text-align:center;padding:16px">Couldn't load requests. (If this is your first time, Firestore may need an index — check the browser console for a setup link.)</p>`; }
+  try {
+    const recvSnap = await getDocs(query(collection(db,'bookings'), where('ownerId','==',currentUser.uid), orderBy('createdAt','desc')));
+    recvEl.innerHTML = recvSnap.empty
+      ? `<p style="color:#64748B;text-align:center;padding:16px">No requests received yet.</p>`
+      : await renderBookingCards(recvSnap.docs, 'owner');
+  } catch(e) { recvEl.innerHTML = `<p style="color:#64748B;text-align:center;padding:16px">Couldn't load requests. (If this is your first time, Firestore may need an index — check the browser console for a setup link.)</p>`; }
+}
+
+async function renderBookingCards(docs, viewAs) {
+  const cards = await Promise.all(docs.map(async d => {
+    const b = d.data();
+    const st = BOOKING_STATUS_STYLE[b.status] || BOOKING_STATUS_STYLE.pending;
+    let contactLine = '';
+    if (b.status === 'accepted' || b.status === 'completed') {
+      const otherUid = viewAs === 'renter' ? b.ownerId : b.renterId;
+      try {
+        const uSnap = await getDoc(doc(db,'users',otherUid));
+        const phone = uSnap.exists() ? (uSnap.data().phoneNumber || '') : '';
+        contactLine = phone
+          ? `<a href="tel:${phone}" style="color:#22C55E;font-size:.8rem;text-decoration:none">📞 ${phone}</a>`
+          : `<span style="color:#64748B;font-size:.78rem">📞 Contact info not added yet</span>`;
+      } catch(e) {}
+    }
+    const actions = (viewAs === 'owner' && b.status === 'pending')
+      ? `<div style="display:flex;gap:8px;margin-top:10px">
+           <button class="action-btn" style="background:linear-gradient(135deg,#22C55E,#16A34A)" onclick="respondBooking('${d.id}','accepted')">✅ Accept</button>
+           <button class="action-btn" style="background:#334155" onclick="respondBooking('${d.id}','declined')">❌ Decline</button>
+         </div>`
+      : (b.status === 'accepted'
+          ? `<button class="action-btn" style="margin-top:10px;background:#334155" onclick="respondBooking('${d.id}','completed')">🏁 Mark Completed</button>`
+          : '');
+    return `<div class="section-card" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+        <div>
+          <p style="font-weight:700;font-size:.9rem">${b.equipmentName || 'Equipment'}</p>
+          <p style="color:#64748B;font-size:.76rem;margin-top:2px">${b.startDate} → ${b.endDate} · ${b.days} day${b.days>1?'s':''}</p>
+          <p style="color:#64748B;font-size:.76rem">${viewAs==='owner' ? 'Renter: '+(b.renterName||b.renterEmail||'') : 'Your request'}</p>
+        </div>
+        <span style="color:${st.color};font-size:.76rem;font-weight:700;white-space:nowrap">${st.label}</span>
+      </div>
+      ${b.message ? `<p style="color:#94A3B8;font-size:.8rem;margin-top:8px;font-style:italic">"${b.message.replace(/</g,'&lt;')}"</p>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:6px">
+        <span style="color:#22C55E;font-weight:700;font-size:.9rem">Est. ${(b.estimatedTotal||0).toLocaleString()} ETB</span>
+        ${contactLine}
+      </div>
+      ${actions}
+    </div>`;
+  }));
+  return cards.join('');
+}
+
+async function respondBooking(bookingId, newStatus) {
+  try {
+    await updateDoc(doc(db,'bookings',bookingId), { status: newStatus, updatedAt: serverTimestamp() });
+    if (newStatus === 'accepted')      showToast('✅ Booking accepted! Contact info unlocked.');
+    else if (newStatus === 'declined') showToast('Booking declined.');
+    else if (newStatus === 'completed') { showToast('🏁 Booking marked complete!'); completeTask('booking_'+bookingId, 25); }
+    loadMyBookings();
+  } catch(e) { showToast('❌ Failed to update booking'); }
 }
 
 // ─── Actions ─────────────────────────────────────────────
@@ -1445,6 +1643,11 @@ window.setAcademyView   = setAcademyView;
 window.openLessonReader = openLessonReader;
 window.closeLessonReader = closeLessonReader;
 window.completeLessonFromReader = completeLessonFromReader;
+window.openBookingModal = openBookingModal;
+window.closeBookingModal = closeBookingModal;
+window.updateBookingTotal = updateBookingTotal;
+window.submitBookingRequest = submitBookingRequest;
+window.respondBooking = respondBooking;
 window.showToast        = showToast;
 window.setLang = function(l) {
   localStorage.setItem('agriequip_lang', l);
