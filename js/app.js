@@ -88,9 +88,17 @@ const ACADEMY_CATEGORIES = [
   { id:'business', icon:'💰', name:'Farm Business', desc:'Budgeting, marketing, growth', color:'#EF4444' },
 ];
 
+// Each lesson can optionally include:
+//   content: the readable lesson text. Use \n\n between paragraphs.
+//   image:   a URL to a header image (e.g. a path to a file you commit to /assets/academy/...)
+//   file:    a URL to a downloadable attachment (PDF, etc.)
+// If content/image/file are omitted, the reader falls back to showing just `desc`.
 const ACADEMY_LESSONS = [
-  { id:0,  cat:'crop', emoji:'🌾', title:'Introduction to Teff Farming', pts:40, desc:'Planting, care, and harvest basics for Ethiopia\'s staple crop.' },
-  { id:1,  cat:'crop', emoji:'🌾', title:'Wheat Farming Guide', pts:35, desc:'Highland wheat cultivation from seed to harvest.' },
+  { id:0,  cat:'crop', emoji:'🌾', title:'Introduction to Teff Farming', pts:40, desc:'Planting, care, and harvest basics for Ethiopia\'s staple crop.',
+    image:'assets/academy/teff-field.jpg',
+    content:'Teff (Eragrostis tef) is Ethiopia\'s most important staple crop, used to make injera. It thrives in a wide range of altitudes, from lowlands to highlands above 2,800m, making it one of the most adaptable cereals grown in the country.\n\nPlanting: Teff is typically sown at the start of the main rainy season (Meher), from June to July, though some regions also grow a smaller Belg-season crop. Seeds are broadcast rather than row-planted, and because they are extremely small, a fine, well-prepared seedbed is essential — clumped or rocky soil leads to poor germination.\n\nSoil and water: Teff tolerates poor soils better than most cereals, but yields best in well-drained loam. Waterlogging in the early weeks is one of the most common causes of crop failure, so avoid planting in low-lying fields that pool water after rain.\n\nWeeding: Because teff seedlings are thin and low to the ground early on, weed competition can sharply cut yield. Most farmers weed twice: once around 20 days after planting and again before the crop closes canopy.\n\nHarvest: Teff is ready for harvest 2-6 months after planting depending on variety and altitude, when the plant turns golden-yellow and grains feel firm. Cut, dry in the field for a few days, then thresh — traditionally by driving livestock over the stalks, though mechanical threshers are increasingly common.\n\nStorage tip: Dry the grain thoroughly before storage — teff stored above 12% moisture is prone to mold, which can ruin an entire harvest within weeks.' },
+  { id:1,  cat:'crop', emoji:'🌾', title:'Wheat Farming Guide', pts:35, desc:'Highland wheat cultivation from seed to harvest.',
+    content:'Wheat is grown widely across Ethiopia\'s highlands, typically above 1,500m, where cooler temperatures favor grain development.\n\n(Add your full lesson text here — planting windows, soil prep, fertilizer timing, pest watch-outs, and harvest signs.)' },
   { id:2,  cat:'crop', emoji:'🌽', title:'Maize Production Techniques', pts:35, desc:'Belg and meher season maize management.' },
   { id:3,  cat:'crop', emoji:'☕', title:'Coffee Cultivation Guide', pts:50, desc:'From seedling to harvest — Ethiopian coffee farming.' },
   { id:4,  cat:'crop', emoji:'🌻', title:'Sesame Farming Basics', pts:30, desc:'Growing sesame for export markets.' },
@@ -178,7 +186,7 @@ window._app = {
   completeTask, activateVIP,
   submitDeposit, submitWithdraw, showDepositForm, showWithdrawForm, backToWallet,
   submitListing, toggleListingForm, filterEquipment,
-  setAcademyView, startAcademyLesson,
+  setAcademyView, openLessonReader, closeLessonReader, completeLessonFromReader,
   showToast,
 };
 
@@ -257,19 +265,48 @@ function setAcademyView(view, cat) {
   renderSection('academy');
 }
 
-function startAcademyLesson(id) {
+function openLessonReader(id) {
   const lesson = ACADEMY_LESSONS.find(l => l.id === id);
   if (!lesson) return;
   const prog = getAcademyProgress();
-  if (prog.completed.includes(id)) { showToast('✅ Already completed'); return; }
-  showToast(`📖 Starting: ${lesson.title}...`);
-  setTimeout(() => {
-    prog.completed.push(id);
-    prog.xp += lesson.pts;
-    saveAcademyProgress(prog);
-    showToast(`🎓 Lesson complete! +${lesson.pts} XP`);
-    renderSection('academy');
-  }, 1500);
+  const done = prog.completed.includes(id);
+  const overlay = document.createElement('div');
+  overlay.id = 'lessonReaderOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:flex-end;justify-content:center';
+  overlay.onclick = (e) => { if (e.target === overlay) closeLessonReader(); };
+  overlay.innerHTML = `
+    <div style="background:#0F172A;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:20px 20px 28px;animation:sheetUp .3s ease">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:.75rem;color:#64748B">📚 Lesson</span>
+        <button onclick="closeLessonReader()" style="background:rgba(255,255,255,.08);border:none;color:white;width:28px;height:28px;border-radius:8px;font-size:1rem;cursor:pointer">✕</button>
+      </div>
+      ${lesson.image ? `<img src="${lesson.image}" alt="${lesson.title}" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-bottom:14px" onerror="this.style.display='none'">` : ''}
+      <div style="font-size:2rem;margin-bottom:6px">${lesson.emoji}</div>
+      <h2 style="color:white;font-size:1.2rem;margin-bottom:12px">${lesson.title}</h2>
+      <div style="color:#94A3B8;font-size:.86rem;line-height:1.85;white-space:pre-line">${(lesson.content || lesson.desc).replace(/</g,'&lt;')}</div>
+      ${lesson.file ? `<a href="${lesson.file}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:16px;color:#22C55E;font-size:.82rem;text-decoration:none;border:1px solid rgba(34,197,94,.3);border-radius:8px;padding:8px 14px">📎 Download attachment</a>` : ''}
+      <button class="action-btn" style="margin-top:20px" ${done?'disabled style="opacity:.5"':''} onclick="completeLessonFromReader(${id})">
+        ${done ? '✅ Already Completed' : '✅ Mark Complete (+'+lesson.pts+' XP)'}
+      </button>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function closeLessonReader() {
+  document.getElementById('lessonReaderOverlay')?.remove();
+}
+
+function completeLessonFromReader(id) {
+  const lesson = ACADEMY_LESSONS.find(l => l.id === id);
+  if (!lesson) return;
+  const prog = getAcademyProgress();
+  if (prog.completed.includes(id)) return;
+  prog.completed.push(id);
+  prog.xp += lesson.pts;
+  saveAcademyProgress(prog);
+  showToast(`🎓 Lesson complete! +${lesson.pts} XP`);
+  closeLessonReader();
+  renderSection('academy');
 }
 
 function renderAcademyHome() {
@@ -342,7 +379,7 @@ function renderAcademyCategory(catId) {
     ${lessons.map(l => {
       const done = prog.completed.includes(l.id);
       return `
-      <div class="section-card" style="cursor:pointer;${done?'opacity:.6':''}" onclick="startAcademyLesson(${l.id})">
+      <div class="section-card" style="cursor:pointer;${done?'opacity:.6':''}" onclick="openLessonReader(${l.id})">
         <div style="display:flex;align-items:center;gap:14px">
           <span style="font-size:2rem">${done?'✅':l.emoji}</span>
           <div style="flex:1">
@@ -1347,7 +1384,9 @@ window.toggleListingForm= toggleListingForm;
 window.filterEquipment  = filterEquipment;
 window.submitPost       = submitPost;
 window.setAcademyView   = setAcademyView;
-window.startAcademyLesson = startAcademyLesson;
+window.openLessonReader = openLessonReader;
+window.closeLessonReader = closeLessonReader;
+window.completeLessonFromReader = completeLessonFromReader;
 window.showToast        = showToast;
 window.setLang = function(l) {
   localStorage.setItem('agriequip_lang', l);
@@ -1357,5 +1396,5 @@ window.setLang = function(l) {
 
 // Inject blink keyframe
 const st = document.createElement('style');
-st.textContent = `@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}} .quick-chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.8);border-radius:99px;padding:6px 12px;font-size:.74rem;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;white-space:nowrap}.quick-chip:hover{border-color:#22C55E;color:#22C55E}`;
+st.textContent = `@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}} @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}} .quick-chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.8);border-radius:99px;padding:6px 12px;font-size:.74rem;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;white-space:nowrap}.quick-chip:hover{border-color:#22C55E;color:#22C55E}`;
 document.head.appendChild(st);
