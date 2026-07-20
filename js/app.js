@@ -642,58 +642,7 @@ function renderAcademyDashboard() {
         </div>
       </div>
       <div style="background:rgba(255,255,255,.1);border-radius:20px;height:8px;overflow:hidden;margin:10px 0">
-        <div style="background:linear-gradient(90deg,#22C55E,#06B6D4);height:100%;width:${pct}%"></div>
-      </div>
-      <p style="color:rgba(255,255,255,.4);font-size:.72rem;text-align:center">${next ? prog.xp+' / '+next.xp+' XP to '+next.name : '🎉 Agri Master achieved!'}</p>
-    </div>
-    <div class="quick-stats">
-      <div class="stat-card"><div class="stat-icon">📚</div><h3>${prog.completed.length}</h3><p>Lessons Done</p></div>
-      <div class="stat-card"><div class="stat-icon">⭐</div><h3>${prog.xp}</h3><p>Total XP</p></div>
-      <div class="stat-card"><div class="stat-icon">🔥</div><h3>${prog.streak||0}</h3><p>Day Streak</p></div>
-      <div class="stat-card"><div class="stat-icon">🏆</div><h3>${AGRI_RANKS.filter(r=>prog.xp>=r.xp).length}</h3><p>Ranks Reached</p></div>
-    </div>
-    <div class="section-card">
-      <h3>🏆 All Ranks</h3>
-      ${AGRI_RANKS.map(r=>`
-      <div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-        <span style="font-size:1.5rem">${r.icon}</span>
-        <div style="flex:1">
-          <div style="font-weight:700;font-size:.88rem;${prog.xp>=r.xp?'color:#22C55E':''}">${r.name}</div>
-          <div style="font-size:.72rem;color:#64748B">${r.xp.toLocaleString()} XP required</div>
-        </div>
-        <span style="font-size:.8rem">${prog.xp>=r.xp?'✅':'🔒'}</span>
-      </div>`).join('')}
-    </div>`;
-}
 
-window.setAcademyView = function(view, cat) {
-  window._academyView = view;
-  if (cat) window._academyCat = cat;
-  showSection('academy');
-};
-
-window.startAcademyLesson = function(id) {
-  const l = ACADEMY_LESSONS.find(x => x.id === id);
-  if (!l) return;
-  const prog = getAcademyProgress();
-  if (prog.completed.includes(id)) { showToast('✅ Already completed this lesson'); return; }
-  showToast(`📖 Starting: ${l.title}...`);
-  setTimeout(() => {
-    prog.completed.push(id);
-    prog.xp += l.pts;
-    const today = new Date().toDateString();
-    if (prog.lastDay !== today) {
-      prog.streak = (prog.lastDay === new Date(Date.now()-86400000).toDateString()) ? (prog.streak||0)+1 : 1;
-      prog.lastDay = today;
-    }
-    saveAcademyProgress(prog);
-    showToast(`🎓 Lesson complete! +${l.pts} XP`);
-    const oldRank = academyRank(prog.xp - l.pts);
-    const newRank = academyRank(prog.xp);
-    if (oldRank.name !== newRank.name) setTimeout(() => showToast(`🏆 Rank up! You're now ${newRank.icon} ${newRank.name}`), 1500);
-    showSection('academy');
-  }, 1500);
-};
   break;
 }
 
