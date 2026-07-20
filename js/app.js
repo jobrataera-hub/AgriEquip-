@@ -1,4 +1,3 @@
-
 // AgriEquip — app.js — single clean module
 // Exposes all functions to window._app so bridge in HTML can reach them
 
@@ -80,6 +79,79 @@ const ACADEMY = [
   { emoji:'💰', title:'Farm Financial Management',           pts:65, desc:'Track income, expenses, and plan for profit.' },
 ];
 
+// ─── Academy (categorized) data ──────────────────────────
+const ACADEMY_CATEGORIES = [
+  { id:'crop', icon:'🌾', name:'Crop Production', desc:'Teff, wheat, maize, coffee & more', color:'#22C55E' },
+  { id:'machinery', icon:'🚜', name:'Machinery Training', desc:'Tractors, harvesters, safety', color:'#06B6D4' },
+  { id:'smart', icon:'🌱', name:'Smart Farming', desc:'Soil, irrigation, pest control', color:'#8B5CF6' },
+  { id:'livestock', icon:'🐄', name:'Livestock', desc:'Dairy, poultry, animal care', color:'#F59E0B' },
+  { id:'business', icon:'💰', name:'Farm Business', desc:'Budgeting, marketing, growth', color:'#EF4444' },
+];
+
+const ACADEMY_LESSONS = [
+  { id:0,  cat:'crop', emoji:'🌾', title:'Introduction to Teff Farming', pts:40, desc:'Planting, care, and harvest basics for Ethiopia\'s staple crop.' },
+  { id:1,  cat:'crop', emoji:'🌾', title:'Wheat Farming Guide', pts:35, desc:'Highland wheat cultivation from seed to harvest.' },
+  { id:2,  cat:'crop', emoji:'🌽', title:'Maize Production Techniques', pts:35, desc:'Belg and meher season maize management.' },
+  { id:3,  cat:'crop', emoji:'☕', title:'Coffee Cultivation Guide', pts:50, desc:'From seedling to harvest — Ethiopian coffee farming.' },
+  { id:4,  cat:'crop', emoji:'🌻', title:'Sesame Farming Basics', pts:30, desc:'Growing sesame for export markets.' },
+  { id:5,  cat:'crop', emoji:'🥬', title:'Vegetable Farming Guide', pts:30, desc:'High-value vegetable production techniques.' },
+  { id:6,  cat:'crop', emoji:'🍎', title:'Fruit Tree Farming', pts:35, desc:'Planting and caring for fruit orchards.' },
+  { id:7,  cat:'crop', emoji:'🏡', title:'Greenhouse Farming Intro', pts:45, desc:'Getting started with controlled environment farming.' },
+  { id:8,  cat:'machinery', emoji:'🚜', title:'Tractor Operation & Safety', pts:60, desc:'How to safely operate and maintain a tractor.' },
+  { id:9,  cat:'machinery', emoji:'🌾', title:'Combine Harvester Basics', pts:55, desc:'Operating combine harvesters efficiently.' },
+  { id:10, cat:'machinery', emoji:'⚙️', title:'Ploughing Techniques', pts:35, desc:'Proper ploughing methods for different soils.' },
+  { id:11, cat:'machinery', emoji:'🌱', title:'Seeder Operation Guide', pts:35, desc:'Using mechanical seeders for even planting.' },
+  { id:12, cat:'machinery', emoji:'💧', title:'Irrigation Pump Maintenance', pts:40, desc:'Keeping your irrigation pumps running smoothly.' },
+  { id:13, cat:'machinery', emoji:'🔧', title:'Machine Maintenance Basics', pts:45, desc:'Regular upkeep to extend equipment life.' },
+  { id:14, cat:'machinery', emoji:'⛽', title:'Fuel-Saving Practices', pts:30, desc:'Reduce fuel costs on your equipment.' },
+  { id:15, cat:'machinery', emoji:'🛡', title:'Equipment Safety Procedures', pts:50, desc:'Preventing accidents around farm machinery.' },
+  { id:16, cat:'smart', emoji:'🎯', title:'Precision Agriculture Intro', pts:50, desc:'Using data to optimize every hectare.' },
+  { id:17, cat:'smart', emoji:'🌍', title:'Soil Health & Fertilizer Guide', pts:55, desc:'Understanding soil pH, nutrients, and fertilizers.' },
+  { id:18, cat:'smart', emoji:'💧', title:'Efficient Irrigation Techniques', pts:45, desc:'Reduce water waste and improve crop yield.' },
+  { id:19, cat:'smart', emoji:'🐛', title:'Pest Management Guide', pts:40, desc:'Identify and control common crop pests.' },
+  { id:20, cat:'smart', emoji:'🦠', title:'Disease Prevention Basics', pts:40, desc:'Spotting and preventing crop diseases early.' },
+  { id:21, cat:'smart', emoji:'🌦', title:'Climate-Smart Farming', pts:45, desc:'Adapting farming practices to changing weather.' },
+  { id:22, cat:'livestock', emoji:'🐄', title:'Dairy Farming Basics', pts:45, desc:'Milk production and dairy cattle care.' },
+  { id:23, cat:'livestock', emoji:'🐂', title:'Beef Production Guide', pts:40, desc:'Raising cattle for meat production.' },
+  { id:24, cat:'livestock', emoji:'🐔', title:'Poultry Management', pts:35, desc:'Chicken farming for eggs and meat.' },
+  { id:25, cat:'livestock', emoji:'🐑', title:'Sheep & Goat Farming', pts:35, desc:'Small ruminant management basics.' },
+  { id:26, cat:'livestock', emoji:'💉', title:'Vaccination Schedules', pts:30, desc:'Keeping livestock healthy with proper vaccination.' },
+  { id:27, cat:'business', emoji:'📊', title:'Farm Budgeting Basics', pts:40, desc:'Planning your farm finances effectively.' },
+  { id:28, cat:'business', emoji:'📝', title:'Farm Record Keeping', pts:30, desc:'Track expenses, income, and yields properly.' },
+  { id:29, cat:'business', emoji:'📈', title:'Marketing Your Produce', pts:45, desc:'Get the best prices for what you grow.' },
+  { id:30, cat:'business', emoji:'💳', title:'Digital Payments for Farmers', pts:25, desc:'Using mobile money and digital wallets.' },
+];
+
+const AGRI_RANKS = [
+  { icon:'🌱', name:'Beginner Farmer', xp:0 },
+  { icon:'🌿', name:'Skilled Farmer', xp:150 },
+  { icon:'🌾', name:'Advanced Farmer', xp:400 },
+  { icon:'🚜', name:'Equipment Specialist', xp:800 },
+  { icon:'🧠', name:'Agri Expert', xp:1500 },
+  { icon:'👑', name:'Agri Master', xp:3000 },
+];
+
+const DAILY_TIPS = [
+  '🌱 Rotate your crops every season to keep soil healthy and reduce pest buildup.',
+  '💧 Water early morning or late evening to reduce evaporation loss.',
+  '🌾 Test your soil every 2-3 years to know exactly what nutrients it needs.',
+  '🚜 Check tractor oil levels weekly during heavy use season.',
+  '☕ Coffee cherries are ready to pick when fully red — check daily during harvest.',
+];
+
+const VIDEOS = [
+  { emoji:'🎬', title:'How to Operate a Tractor Safely', dur:'8 min' },
+  { emoji:'🎬', title:'Coffee Harvesting Techniques', dur:'6 min' },
+  { emoji:'🎬', title:'Irrigation System Setup', dur:'10 min' },
+  { emoji:'🎬', title:'Tractor Maintenance Basics', dur:'7 min' },
+];
+const ARTICLES = [
+  { emoji:'📄', title:'Understanding Soil pH for Better Yields', read:'4 min' },
+  { emoji:'📄', title:'Fertilizer Timing Guide for Ethiopian Crops', read:'5 min' },
+  { emoji:'📄', title:'Pest Management Without Chemicals', read:'6 min' },
+  { emoji:'📄', title:'Water Conservation Techniques for Farms', read:'4 min' },
+];
+
 // ─── State ────────────────────────────────────────────────
 let currentUser = null;
 let userProfile = null;
@@ -106,6 +178,8 @@ window._app = {
   completeTask, activateVIP,
   submitDeposit, submitWithdraw, showDepositForm, showWithdrawForm, backToWallet,
   submitListing, toggleListingForm, filterEquipment,
+  setAcademyView, startAcademyLesson,
+  showToast,
 };
 
 // ─── Profile ──────────────────────────────────────────────
@@ -161,6 +235,180 @@ function closeSidebar() { document.getElementById('sidebar')?.classList.remove('
 async function handleSignOut() {
   await signOut(auth);
   window.location.href = 'login.html';
+}
+
+// ─── Academy helpers (module scope — NOT inside the switch) ─
+function getAcademyProgress() {
+  return JSON.parse(localStorage.getItem('agriequip_academy') || '{"completed":[],"xp":0,"streak":0,"lastDay":null}');
+}
+function saveAcademyProgress(p) {
+  localStorage.setItem('agriequip_academy', JSON.stringify(p));
+}
+function academyRank(xp) {
+  return [...AGRI_RANKS].reverse().find(r => xp >= r.xp) || AGRI_RANKS[0];
+}
+function academyNextRank(xp) {
+  return AGRI_RANKS.find(r => r.xp > xp) || null;
+}
+
+function setAcademyView(view, cat) {
+  window._academyView = view;
+  if (cat) window._academyCat = cat;
+  renderSection('academy');
+}
+
+function startAcademyLesson(id) {
+  const lesson = ACADEMY_LESSONS.find(l => l.id === id);
+  if (!lesson) return;
+  const prog = getAcademyProgress();
+  if (prog.completed.includes(id)) { showToast('✅ Already completed'); return; }
+  showToast(`📖 Starting: ${lesson.title}...`);
+  setTimeout(() => {
+    prog.completed.push(id);
+    prog.xp += lesson.pts;
+    saveAcademyProgress(prog);
+    showToast(`🎓 Lesson complete! +${lesson.pts} XP`);
+    renderSection('academy');
+  }, 1500);
+}
+
+function renderAcademyHome() {
+  const prog = getAcademyProgress();
+  const rank = academyRank(prog.xp);
+  const dailyTip = DAILY_TIPS[new Date().getDate() % DAILY_TIPS.length];
+  return `
+    <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
+      <h3 style="color:white">🎓 AgriAcademy</h3>
+      <p style="color:rgba(255,255,255,.6);font-size:.8rem;margin-top:4px;font-style:italic">"Learn. Grow. Succeed."</p>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+        <span style="font-size:1.6rem">${rank.icon}</span>
+        <div>
+          <div style="font-weight:700;color:#22C55E;font-size:.95rem">${rank.name}</div>
+          <div style="color:rgba(255,255,255,.4);font-size:.72rem">${prog.xp.toLocaleString()} XP · ${prog.completed.length} lessons done</div>
+        </div>
+      </div>
+      <button class="action-btn" style="margin-top:12px;background:rgba(255,255,255,.12)" onclick="setAcademyView('dashboard')">📊 View Learning Dashboard</button>
+    </div>
+    <div class="section-card">
+      <h3>💡 Daily Farming Tip</h3>
+      <p style="font-size:.86rem;line-height:1.6">${dailyTip}</p>
+    </div>
+    <div class="section-card">
+      <h3>🧠 Ask Teff AI</h3>
+      <p style="color:#64748B;font-size:.82rem;margin-bottom:10px">Not sure what to learn? Ask Teff AI for a lesson recommendation.</p>
+      <button class="action-btn" onclick="showSection('teffai')">🤖 Ask Teff AI</button>
+    </div>
+    <h3 style="margin:16px 0 10px;font-size:.95rem">📚 Learning Categories</h3>
+    ${ACADEMY_CATEGORIES.map(cat => {
+      const count = ACADEMY_LESSONS.filter(l => l.cat === cat.id).length;
+      const done = ACADEMY_LESSONS.filter(l => l.cat === cat.id && prog.completed.includes(l.id)).length;
+      return `
+      <div class="section-card" style="cursor:pointer;border-left:4px solid ${cat.color}" onclick="setAcademyView('category','${cat.id}')">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="font-size:2rem">${cat.icon}</span>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:.92rem">${cat.name}</div>
+            <div style="color:#64748B;font-size:.78rem;margin-top:2px">${cat.desc}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:.78rem;color:${cat.color};font-weight:700">${done}/${count}</div>
+            <div style="font-size:.68rem;color:#64748B">lessons</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}
+    <div class="section-card" style="opacity:.6">
+      <h3>👨‍🏫 Expert Center</h3>
+      <p style="color:#64748B;font-size:.8rem">Live Q&A and expert consultations — coming soon!</p>
+    </div>`;
+}
+
+function renderAcademyCategory(catId) {
+  const cat = ACADEMY_CATEGORIES.find(c => c.id === catId);
+  const lessons = ACADEMY_LESSONS.filter(l => l.cat === catId);
+  const prog = getAcademyProgress();
+  if (!cat) return renderAcademyHome();
+  return `
+    <button class="action-btn" style="width:auto;padding:8px 14px;margin-bottom:12px;background:#334155" onclick="setAcademyView('home')">← Back to Academy</button>
+    <div class="section-card" style="background:linear-gradient(135deg,${cat.color}22,${cat.color}11);border-color:${cat.color}44;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:2.2rem">${cat.icon}</span>
+        <div>
+          <div style="font-weight:800;font-size:1.05rem">${cat.name}</div>
+          <div style="color:#64748B;font-size:.8rem">${cat.desc}</div>
+        </div>
+      </div>
+    </div>
+    ${lessons.map(l => {
+      const done = prog.completed.includes(l.id);
+      return `
+      <div class="section-card" style="cursor:pointer;${done?'opacity:.6':''}" onclick="startAcademyLesson(${l.id})">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="font-size:2rem">${done?'✅':l.emoji}</span>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:.92rem">${l.title}</div>
+            <div style="color:#64748B;font-size:.78rem;margin-top:2px">${l.desc}</div>
+          </div>
+          <span style="background:${cat.color}18;color:${cat.color};border-radius:6px;padding:4px 8px;font-size:.75rem;white-space:nowrap">${done?'Done':'+'+l.pts+' XP'}</span>
+        </div>
+      </div>`;
+    }).join('')}`;
+}
+
+function renderAcademyDashboard() {
+  const prog = getAcademyProgress();
+  const rank = academyRank(prog.xp);
+  const next = academyNextRank(prog.xp);
+  const pct = next ? Math.round((prog.xp - rank.xp) / (next.xp - rank.xp) * 100) : 100;
+  const doneLessons = ACADEMY_LESSONS.filter(l => prog.completed.includes(l.id));
+  return `
+    <button class="action-btn" style="width:auto;padding:8px 14px;margin-bottom:12px;background:#334155" onclick="setAcademyView('home')">← Back to Academy</button>
+    <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
+      <h3 style="color:white">📊 Learning Dashboard</h3>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+        <span style="font-size:1.8rem">${rank.icon}</span>
+        <div>
+          <div style="font-weight:700;color:#22C55E;font-size:1rem">${rank.name}</div>
+          <div style="color:rgba(255,255,255,.4);font-size:.75rem">${prog.xp.toLocaleString()} XP</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.1);border-radius:20px;height:8px;overflow:hidden;margin:10px 0">
+        <div style="background:linear-gradient(90deg,#22C55E,#06B6D4);height:100%;width:${pct}%"></div>
+      </div>
+      <p style="color:rgba(255,255,255,.4);font-size:.72rem;text-align:center">
+        ${next ? prog.xp+' / '+next.xp+' XP to '+next.name : '🎉 Max rank achieved!'}
+      </p>
+    </div>
+
+    <div class="quick-stats">
+      <div class="stat-card"><div class="stat-icon">📚</div><h3>${prog.completed.length}</h3><p>Lessons Done</p></div>
+      <div class="stat-card"><div class="stat-icon">⭐</div><h3>${prog.xp.toLocaleString()}</h3><p>Total XP</p></div>
+    </div>
+
+    <div class="section-card">
+      <h3>✅ Completed Lessons</h3>
+      ${doneLessons.length === 0
+        ? `<p style="color:#64748B;text-align:center;padding:16px">No lessons completed yet — start learning!</p>`
+        : doneLessons.map(l => `
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+            <span style="font-size:1.3rem">${l.emoji}</span>
+            <div style="flex:1;font-size:.85rem">${l.title}</div>
+            <span style="font-size:.72rem;color:#22C55E">✅ +${l.pts} XP</span>
+          </div>`).join('')}
+    </div>
+
+    <div class="section-card">
+      <h3>🏆 Academy Ranks</h3>
+      ${AGRI_RANKS.map(r=>`
+      <div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+        <span style="font-size:1.5rem">${r.icon}</span>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:.88rem;${prog.xp>=r.xp?'color:#22C55E':''}">${r.name}</div>
+          <div style="font-size:.72rem;color:#64748B">${r.xp.toLocaleString()} XP required</div>
+        </div>
+        <span style="font-size:.8rem">${prog.xp>=r.xp?'✅':'🔒'}</span>
+      </div>`).join('')}
+    </div>`;
 }
 
 // ─── Render Sections ──────────────────────────────────────
@@ -470,181 +718,16 @@ function renderSection(id) {
 
     // ── ACADEMY ──────────────────────────────────────────
     case 'academy': {
-  const view = window._academyView || 'home';
-  if (view === 'home') {
-    root.innerHTML = renderAcademyHome();
-  } else if (view === 'category') {
-    root.innerHTML = renderAcademyCategory(window._academyCat);
-  } else if (view === 'dashboard') {
-    root.innerHTML = renderAcademyDashboard();
-  }
-      const ACADEMY_CATEGORIES = [
-  { id:'crop', icon:'🌾', name:'Crop Production', desc:'Teff, wheat, maize, coffee & more', color:'#22C55E' },
-  { id:'machinery', icon:'🚜', name:'Machinery Training', desc:'Tractors, harvesters, safety', color:'#06B6D4' },
-  { id:'smart', icon:'🌱', name:'Smart Farming', desc:'Soil, irrigation, pest control', color:'#8B5CF6' },
-  { id:'livestock', icon:'🐄', name:'Livestock', desc:'Dairy, poultry, animal care', color:'#F59E0B' },
-  { id:'business', icon:'💰', name:'Farm Business', desc:'Budgeting, marketing, growth', color:'#EF4444' },
-];
-
-const ACADEMY_LESSONS = [
-  { id:0,  cat:'crop', emoji:'🌾', title:'Introduction to Teff Farming', pts:40, desc:'Planting, care, and harvest basics for Ethiopia\'s staple crop.' },
-  { id:1,  cat:'crop', emoji:'🌾', title:'Wheat Farming Guide', pts:35, desc:'Highland wheat cultivation from seed to harvest.' },
-  { id:2,  cat:'crop', emoji:'🌽', title:'Maize Production Techniques', pts:35, desc:'Belg and meher season maize management.' },
-  { id:3,  cat:'crop', emoji:'☕', title:'Coffee Cultivation Guide', pts:50, desc:'From seedling to harvest — Ethiopian coffee farming.' },
-  { id:4,  cat:'crop', emoji:'🌻', title:'Sesame Farming Basics', pts:30, desc:'Growing sesame for export markets.' },
-  { id:5,  cat:'crop', emoji:'🥬', title:'Vegetable Farming Guide', pts:30, desc:'High-value vegetable production techniques.' },
-  { id:6,  cat:'crop', emoji:'🍎', title:'Fruit Tree Farming', pts:35, desc:'Planting and caring for fruit orchards.' },
-  { id:7,  cat:'crop', emoji:'🏡', title:'Greenhouse Farming Intro', pts:45, desc:'Getting started with controlled environment farming.' },
-  { id:8,  cat:'machinery', emoji:'🚜', title:'Tractor Operation & Safety', pts:60, desc:'How to safely operate and maintain a tractor.' },
-  { id:9,  cat:'machinery', emoji:'🌾', title:'Combine Harvester Basics', pts:55, desc:'Operating combine harvesters efficiently.' },
-  { id:10, cat:'machinery', emoji:'⚙️', title:'Ploughing Techniques', pts:35, desc:'Proper ploughing methods for different soils.' },
-  { id:11, cat:'machinery', emoji:'🌱', title:'Seeder Operation Guide', pts:35, desc:'Using mechanical seeders for even planting.' },
-  { id:12, cat:'machinery', emoji:'💧', title:'Irrigation Pump Maintenance', pts:40, desc:'Keeping your irrigation pumps running smoothly.' },
-  { id:13, cat:'machinery', emoji:'🔧', title:'Machine Maintenance Basics', pts:45, desc:'Regular upkeep to extend equipment life.' },
-  { id:14, cat:'machinery', emoji:'⛽', title:'Fuel-Saving Practices', pts:30, desc:'Reduce fuel costs on your equipment.' },
-  { id:15, cat:'machinery', emoji:'🛡', title:'Equipment Safety Procedures', pts:50, desc:'Preventing accidents around farm machinery.' },
-  { id:16, cat:'smart', emoji:'🎯', title:'Precision Agriculture Intro', pts:50, desc:'Using data to optimize every hectare.' },
-  { id:17, cat:'smart', emoji:'🌍', title:'Soil Health & Fertilizer Guide', pts:55, desc:'Understanding soil pH, nutrients, and fertilizers.' },
-  { id:18, cat:'smart', emoji:'💧', title:'Efficient Irrigation Techniques', pts:45, desc:'Reduce water waste and improve crop yield.' },
-  { id:19, cat:'smart', emoji:'🐛', title:'Pest Management Guide', pts:40, desc:'Identify and control common crop pests.' },
-  { id:20, cat:'smart', emoji:'🦠', title:'Disease Prevention Basics', pts:40, desc:'Spotting and preventing crop diseases early.' },
-  { id:21, cat:'smart', emoji:'🌦', title:'Climate-Smart Farming', pts:45, desc:'Adapting farming practices to changing weather.' },
-  { id:22, cat:'livestock', emoji:'🐄', title:'Dairy Farming Basics', pts:45, desc:'Milk production and dairy cattle care.' },
-  { id:23, cat:'livestock', emoji:'🐂', title:'Beef Production Guide', pts:40, desc:'Raising cattle for meat production.' },
-  { id:24, cat:'livestock', emoji:'🐔', title:'Poultry Management', pts:35, desc:'Chicken farming for eggs and meat.' },
-  { id:25, cat:'livestock', emoji:'🐑', title:'Sheep & Goat Farming', pts:35, desc:'Small ruminant management basics.' },
-  { id:26, cat:'livestock', emoji:'💉', title:'Vaccination Schedules', pts:30, desc:'Keeping livestock healthy with proper vaccination.' },
-  { id:27, cat:'business', emoji:'📊', title:'Farm Budgeting Basics', pts:40, desc:'Planning your farm finances effectively.' },
-  { id:28, cat:'business', emoji:'📝', title:'Farm Record Keeping', pts:30, desc:'Track expenses, income, and yields properly.' },
-  { id:29, cat:'business', emoji:'📈', title:'Marketing Your Produce', pts:45, desc:'Get the best prices for what you grow.' },
-  { id:30, cat:'business', emoji:'💳', title:'Digital Payments for Farmers', pts:25, desc:'Using mobile money and digital wallets.' },
-];
-
-const AGRI_RANKS = [
-  { icon:'🌱', name:'Beginner Farmer', xp:0 },
-  { icon:'🌿', name:'Skilled Farmer', xp:150 },
-  { icon:'🌾', name:'Advanced Farmer', xp:400 },
-  { icon:'🚜', name:'Equipment Specialist', xp:800 },
-  { icon:'🧠', name:'Agri Expert', xp:1500 },
-  { icon:'👑', name:'Agri Master', xp:3000 },
-];
-
-function getAcademyProgress() {
-  return JSON.parse(localStorage.getItem('agriequip_academy') || '{"completed":[],"xp":0,"streak":0,"lastDay":null}');
-}
-function saveAcademyProgress(p) {
-  localStorage.setItem('agriequip_academy', JSON.stringify(p));
-}
-function academyRank(xp) {
-  return [...AGRI_RANKS].reverse().find(r => xp >= r.xp) || AGRI_RANKS[0];
-}
-function academyNextRank(xp) {
-  return AGRI_RANKS.find(r => r.xp > xp) || null;
-}
-
-function renderAcademyHome() {
-  const prog = getAcademyProgress();
-  const rank = academyRank(prog.xp);
-  const dailyTip = DAILY_TIPS[new Date().getDate() % DAILY_TIPS.length];
-  return `
-    <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
-      <h3 style="color:white">🎓 AgriAcademy</h3>
-      <p style="color:rgba(255,255,255,.6);font-size:.8rem;margin-top:4px;font-style:italic">"Learn. Grow. Succeed."</p>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
-        <span style="font-size:1.6rem">${rank.icon}</span>
-        <div>
-          <div style="font-weight:700;color:#22C55E;font-size:.95rem">${rank.name}</div>
-          <div style="color:rgba(255,255,255,.4);font-size:.72rem">${prog.xp.toLocaleString()} XP · ${prog.completed.length} lessons done</div>
-        </div>
-      </div>
-      <button class="action-btn" style="margin-top:12px;background:rgba(255,255,255,.12)" onclick="setAcademyView('dashboard')">📊 View Learning Dashboard</button>
-    </div>
-    <div class="section-card">
-      <h3>💡 Daily Farming Tip</h3>
-      <p style="font-size:.86rem;line-height:1.6">${dailyTip}</p>
-    </div>
-    <div class="section-card">
-      <h3>🧠 Ask Teff AI</h3>
-      <p style="color:#64748B;font-size:.82rem;margin-bottom:10px">Not sure what to learn? Ask Teff AI for a lesson recommendation.</p>
-      <button class="action-btn" onclick="showSection('teffai')">🤖 Ask Teff AI</button>
-    </div>
-    <h3 style="margin:16px 0 10px;font-size:.95rem">📚 Learning Categories</h3>
-    ${ACADEMY_CATEGORIES.map(cat => {
-      const count = ACADEMY_LESSONS.filter(l => l.cat === cat.id).length;
-      const done = ACADEMY_LESSONS.filter(l => l.cat === cat.id && prog.completed.includes(l.id)).length;
-      return `
-      <div class="section-card" style="cursor:pointer;border-left:4px solid ${cat.color}" onclick="setAcademyView('category','${cat.id}')">
-        <div style="display:flex;align-items:center;gap:14px">
-          <span style="font-size:2rem">${cat.icon}</span>
-          <div style="flex:1">
-            <div style="font-weight:700;font-size:.92rem">${cat.name}</div>
-            <div style="color:#64748B;font-size:.78rem;margin-top:2px">${cat.desc}</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:.78rem;color:${cat.color};font-weight:700">${done}/${count}</div>
-            <div style="font-size:.68rem;color:#64748B">lessons</div>
-          </div>
-        </div>
-      </div>`;
-    }).join('')}
-    <div class="section-card" style="opacity:.6">
-      <h3>👨‍🏫 Expert Center</h3>
-      <p style="color:#64748B;font-size:.8rem">Live Q&A and expert consultations — coming soon!</p>
-    </div>`;
-}
-
-function renderAcademyCategory(catId) {
-  const cat = ACADEMY_CATEGORIES.find(c => c.id === catId);
-  const lessons = ACADEMY_LESSONS.filter(l => l.cat === catId);
-  const prog = getAcademyProgress();
-  if (!cat) return renderAcademyHome();
-  return `
-    <button class="action-btn" style="width:auto;padding:8px 14px;margin-bottom:12px;background:#334155" onclick="setAcademyView('home')">← Back to Academy</button>
-    <div class="section-card" style="background:linear-gradient(135deg,${cat.color}22,${cat.color}11);border-color:${cat.color}44;margin-bottom:16px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <span style="font-size:2.2rem">${cat.icon}</span>
-        <div>
-          <div style="font-weight:800;font-size:1.05rem">${cat.name}</div>
-          <div style="color:#64748B;font-size:.8rem">${cat.desc}</div>
-        </div>
-      </div>
-    </div>
-    ${lessons.map(l => {
-      const done = prog.completed.includes(l.id);
-      return `
-      <div class="section-card" style="cursor:pointer;${done?'opacity:.6':''}" onclick="startAcademyLesson(${l.id})">
-        <div style="display:flex;align-items:center;gap:14px">
-          <span style="font-size:2rem">${done?'✅':l.emoji}</span>
-          <div style="flex:1">
-            <div style="font-weight:700;font-size:.92rem">${l.title}</div>
-            <div style="color:#64748B;font-size:.78rem;margin-top:2px">${l.desc}</div>
-          </div>
-          <span style="background:${cat.color}18;color:${cat.color};border-radius:6px;padding:4px 8px;font-size:.75rem;white-space:nowrap">${done?'Done':'+'+l.pts+' XP'}</span>
-        </div>
-      </div>`;
-    }).join('')}`;
-}
-
-function renderAcademyDashboard() {
-  const prog = getAcademyProgress();
-  const rank = academyRank(prog.xp);
-  const next = academyNextRank(prog.xp);
-  const pct = next ? Math.round((prog.xp - rank.xp) / (next.xp - rank.xp) * 100) : 100;
-  return `
-    <button class="action-btn" style="width:auto;padding:8px 14px;margin-bottom:12px;background:#334155" onclick="setAcademyView('home')">← Back to Academy</button>
-    <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
-      <h3 style="color:white">📊 Learning Dashboard</h3>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
-        <span style="font-size:1.8rem">${rank.icon}</span>
-        <div>
-          <div style="font-weight:700;color:#22C55E;font-size:1rem">${rank.name}</div>
-          <div style="color:rgba(255,255,255,.4);font-size:.75rem">${prog.xp.toLocaleString()} XP</div>
-        </div>
-      </div>
-      <div style="background:rgba(255,255,255,.1);border-radius:20px;height:8px;overflow:hidden;margin:10px 0">
-
-  break;
-}
+      const view = window._academyView || 'home';
+      if (view === 'category') {
+        root.innerHTML = renderAcademyCategory(window._academyCat);
+      } else if (view === 'dashboard') {
+        root.innerHTML = renderAcademyDashboard();
+      } else {
+        root.innerHTML = renderAcademyHome();
+      }
+      break;
+    }
 
     // ── COMMUNITY ────────────────────────────────────────
     case 'community':
@@ -1127,23 +1210,6 @@ async function submitPost() {
   } catch(e) { showToast('❌ Failed to post'); }
 }
 
-window.startLesson = function(i) {
-  const c = ACADEMY[i];
-  if (!c) return;
-  showToast(`📖 Starting: ${c.title}...`);
-  setTimeout(() => {
-    completeTask('lesson_'+i, c.pts);
-    showToast(`🎓 Lesson complete! +${c.pts} XP`);
-  }, 2000);
-};
-
-window.submitPost = submitPost;
-
-window.setLang = function(l) {
-  localStorage.setItem('agriequip_lang', l);
-  showToast(l === 'am' ? '🇪🇹 አማርኛ ተመርጧል' : '🇬🇧 English selected');
-  showSection('settings');
-};
 // ─── Teff AI ─────────────────────────────────────────────
 const TEFF_SYSTEM = `You are Teff AI, the intelligent assistant for AgriEquip — Ethiopia's agricultural equipment rental marketplace. Named after Ethiopia's ancient grain. Be warm, helpful, concise. Use occasional Amharic greetings. Use emojis naturally.
 
@@ -1234,7 +1300,6 @@ function addTypingBubble() {
 
 // ─── Toast ───────────────────────────────────────────────
 function showToast(msg) {
-
   let t = document.getElementById('toast');
   if (!t) {
     t = document.createElement('div');
@@ -1247,67 +1312,6 @@ function showToast(msg) {
   clearTimeout(t._timer);
   t._timer = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 3000);
 }
-window._app.showToast = showToast;
-window.showToast = showToast;
- const VIDEOS = [
-  { emoji:'🎬', title:'How to Operate a Tractor Safely', dur:'8 min' },
-  { emoji:'🎬', title:'Coffee Harvesting Techniques', dur:'6 min' },
-  { emoji:'🎬', title:'Irrigation System Setup', dur:'10 min' },
-  { emoji:'🎬', title:'Tractor Maintenance Basics', dur:'7 min' },
-];
-const ARTICLES = [
-  { emoji:'📄', title:'Understanding Soil pH for Better Yields', read:'4 min' },
-  { emoji:'📄', title:'Fertilizer Timing Guide for Ethiopian Crops', read:'5 min' },
-  { emoji:'📄', title:'Pest Management Without Chemicals', read:'6 min' },
-  { emoji:'📄', title:'Water Conservation Techniques for Farms', read:'4 min' },
-];
-const DAILY_TIPS = [
-  '🌱 Rotate your crops every season to keep soil healthy and reduce pest buildup.',
-  '💧 Water early morning or late evening to reduce evaporation loss.',
-  '🌾 Test your soil every 2-3 years to know exactly what nutrients it needs.',
-  '🚜 Check tractor oil levels weekly during heavy use season.',
-  '☕ Coffee cherries are ready to pick when fully red — check daily during harvest.',
-];
-
-window.setAcademyTab = function(tab) {
-  window._academyTab = tab;
-  renderAcademyTab(tab);
-};
-
-function renderAcademyTab(tab) {
-  const el = document.getElementById('academyContent');
-  if (!el) return;
-  if (tab === 'lessons') {
-    el.innerHTML = ACADEMY.map((c,i) => `
-    <div class="section-card" style="cursor:pointer" onclick="startLesson(${i})">
-      <div style="display:flex;align-items:center;gap:14px">
-        <span style="font-size:2rem">${c.emoji}</span>
-        <div style="flex:1">
-          <div style="font-weight:700;font-size:.92rem">${c.title}</div>
-          <div style="color:#64748B;font-size:.78rem;margin-top:2px">${c.desc}</div>
-        </div>
-        <span style="background:rgba(34,197,94,.1);color:#22C55E;border-radius:6px;padding:4px 8px;font-size:.75rem;white-space:nowrap">+${c.pts} XP</span>
-      </div>
-    </div>`).join('');
-  } else if (tab === 'videos') {
-    el.innerHTML = VIDEOS.map(v => `
-    <div class="section-card" style="cursor:pointer" onclick="showToast('▶️ Playing: ${v.title}')">
-      <div style="display:flex;align-items:center;gap:14px">
-        <span style="font-size:2rem">${v.emoji}</span>
-        <div style="flex:1">
-          <div style="font-weight:700;font-size:.92rem">${v.title}</div>
-          <div style="color:#64748B;font-size:.78rem;margin-top:2px">🎥 ${v.dur} video</div>
-        </div>
-      </div>
-    </div>`).join('');
-  } else if (tab === 'tips') {
-    el.innerHTML = DAILY_TIPS.map((t,i) => `
-    <div class="section-card">
-      <p style="font-size:.86rem;line-height:1.6">${t}</p>
-      <p style="color:#64748B;font-size:.7rem;margin-top:6px">Tip #${i+1}</p>
-    </div>`).join('');
-  }
-}
 
 // ─── XP helpers ──────────────────────────────────────────
 function getXP()         { return parseInt(localStorage.getItem('agriequip_xp') || '0'); }
@@ -1319,6 +1323,37 @@ function nextRank(xp)    { return RANKS.find(r => r.xp > xp) || null; }
 function setText(id, txt) { const el = document.getElementById(id); if (el) el.textContent = txt; }
 function val(id)          { return (document.getElementById(id)?.value || '').trim(); }
 function flashMsg(el, txt, color) { if (!el) return; el.style.cssText = `display:block;color:${color};margin-top:8px;text-align:center;font-size:.84rem`; el.textContent = txt; }
+
+// ─── Expose everything the inline onclick="" HTML calls directly ──
+window.showSection      = showSection;
+window.navBack          = navBack;
+window.navForward       = navForward;
+window.handleSignOut    = handleSignOut;
+window.copyReferral     = copyReferral;
+window.setTheme         = setTheme;
+window.saveProfile      = saveProfile;
+window.askTeff          = askTeff;
+window.sendTeff         = sendTeff;
+window.clearTeffChat    = clearTeffChat;
+window.completeTask     = completeTask;
+window.activateVIP      = activateVIP;
+window.submitDeposit    = submitDeposit;
+window.submitWithdraw   = submitWithdraw;
+window.showDepositForm  = showDepositForm;
+window.showWithdrawForm = showWithdrawForm;
+window.backToWallet     = backToWallet;
+window.submitListing    = submitListing;
+window.toggleListingForm= toggleListingForm;
+window.filterEquipment  = filterEquipment;
+window.submitPost       = submitPost;
+window.setAcademyView   = setAcademyView;
+window.startAcademyLesson = startAcademyLesson;
+window.showToast        = showToast;
+window.setLang = function(l) {
+  localStorage.setItem('agriequip_lang', l);
+  showToast(l === 'am' ? '🇪🇹 አማርኛ ተመርጧል' : '🇬🇧 English selected');
+  showSection('settings');
+};
 
 // Inject blink keyframe
 const st = document.createElement('style');
