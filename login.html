@@ -97,7 +97,7 @@ body{font-family:'Poppins',sans-serif;min-height:100vh;background:linear-gradien
 </div>
 <script type="module">
 import { auth, db } from './firebase.js';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, increment, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
 onAuthStateChanged(auth, async (user) => {
@@ -179,14 +179,23 @@ window.togglePwd = function(id, btn) {
   btn.textContent = input.type==='password'?'🙈':'🐵';
 };
 window.handleGoogle = async function() {
+  const provider = new GoogleAuthProvider();
   try {
-    const provider = new GoogleAuthProvider();
-    // Redirect flow instead of popup — far more reliable on mobile Chrome,
-    // where popups are frequently blocked or silently fail.
-    await signInWithRedirect(auth, provider);
-    // Execution stops here — the browser navigates away to Google,
-    // then back to this page, where getRedirectResult() above picks it up.
-  } catch(e) { showMsg(cleanErr(e.message), 'error'); }
+    // Popup avoids the cross-domain storage handoff that mobile Chrome's
+    // third-party storage restrictions can silently break with the
+    // redirect flow — the result comes back directly via the popup
+    // window instead of being relayed through firebaseapp.com's storage.
+    await signInWithPopup(auth, provider);
+    // onAuthStateChanged above picks this up and redirects automatically.
+  } catch(e) {
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/cancelled-popup-request' || e.code === 'auth/operation-not-supported-in-this-environment') {
+      // Popup got blocked by the browser — fall back to full-page redirect.
+      try { await signInWithRedirect(auth, provider); }
+      catch(e2) { showMsg(cleanErr(e2.message), 'error'); }
+    } else if (e.code !== 'auth/popup-closed-by-user') {
+      showMsg(cleanErr(e.message), 'error');
+    }
+  }
 };
 window.handleLogin = async function() {
   const email = document.getElementById('loginEmail').value.trim();
