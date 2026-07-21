@@ -132,17 +132,355 @@ const ACADEMY_LESSONS = [
 // Leave it as `` (empty) for any lesson you haven't written yet —
 // it'll just show the short description until you fill it in.
 const LESSON_CONTENT = {
-  0: `Teff (Eragrostis tef) is Ethiopia's most important staple crop, used to make injera. It thrives in a wide range of altitudes, from lowlands to highlands above 2,800m, making it one of the most adaptable cereals grown in the country.
+  0: `🌾 Teff Farming Guide (AgriAcademy Lesson 1)
 
-Planting: Teff is typically sown at the start of the main rainy season (Meher), from June to July, though some regions also grow a smaller Belg-season crop. Seeds are broadcast rather than row-planted, and because they are extremely small, a fine, well-prepared seedbed is essential — clumped or rocky soil leads to poor germination.
+📖 Introduction
 
-Soil and water: Teff tolerates poor soils better than most cereals, but yields best in well-drained loam. Waterlogging in the early weeks is one of the most common causes of crop failure, so avoid planting in low-lying fields that pool water after rain.
+Teff is Ethiopia's most important indigenous cereal crop and one of the country's greatest agricultural treasures. It has been cultivated for thousands of years and is the primary ingredient used to make injera, Ethiopia's national staple food. Besides its cultural importance, teff is highly nutritious, naturally gluten-free, and increasingly demanded in international markets.
 
-Weeding: Because teff seedlings are thin and low to the ground early on, weed competition can sharply cut yield. Most farmers weed twice: once around 20 days after planting and again before the crop closes canopy.
+Growing teff successfully requires good land preparation, quality seed, proper planting techniques, and careful crop management. This lesson provides a complete guide for farmers who want to improve productivity and produce high-quality teff.
 
-Harvest: Teff is ready for harvest 2-6 months after planting depending on variety and altitude, when the plant turns golden-yellow and grains feel firm. Cut, dry in the field for a few days, then thresh — traditionally by driving livestock over the stalks, though mechanical threshers are increasingly common.
+---
 
-Storage tip: Dry the grain thoroughly before storage — teff stored above 12% moisture is prone to mold, which can ruin an entire harvest within weeks.`,
+🌍 Best Growing Areas
+
+Teff can grow in almost every region of Ethiopia, but it performs best in:
+
+- Oromia
+- Amhara
+- Central Ethiopia Region
+- Tigray
+- Sidama
+- South Ethiopia Region
+
+Altitude:
+
+1,700–2,800 meters above sea level
+
+---
+
+🌦 Climate Requirements
+
+Ideal temperature:
+
+15°C–27°C
+
+Annual rainfall:
+
+450–850 mm
+
+Teff is relatively drought tolerant compared to many cereals but still performs best with well-distributed rainfall throughout the growing season.
+
+Avoid:
+
+- Long flooding
+- Waterlogged soil
+- Extreme drought during flowering
+
+---
+
+🌱 Soil Requirements
+
+Best soil types:
+
+- Clay loam
+- Sandy loam
+- Well-drained black soils
+
+Ideal soil pH:
+
+5.5–7.5
+
+Healthy soils with sufficient organic matter produce stronger plants and better grain yields.
+
+---
+
+🚜 Land Preparation
+
+Good land preparation is one of the most important factors for successful teff production.
+
+Steps:
+
+1. Remove weeds and previous crop residues.
+2. Plough the field 3–5 times to create a fine seedbed.
+3. Break large soil clods.
+4. Level the field evenly.
+5. Improve drainage where necessary.
+
+Since teff seeds are extremely small, a fine and smooth seedbed helps ensure even germination.
+
+---
+
+🌾 Seed Selection
+
+Choose certified, clean, and disease-free seed.
+
+Characteristics of quality seed:
+
+- High germination rate
+- Pure variety
+- Disease resistant
+- Suitable for your local climate
+
+Never use moldy or damaged seed.
+
+---
+
+📅 Planting Season
+
+Main planting season:
+
+July – August
+
+(Depending on local rainfall and regional agricultural recommendations.)
+
+Planting at the correct time helps avoid drought during flowering and grain filling.
+
+---
+
+🌱 Planting Method
+
+Recommended seed rate:
+
+5–10 kg per hectare
+
+Planting depth:
+
+1–2 cm
+
+Row spacing:
+
+20 cm
+
+Although broadcasting is common, row planting is highly recommended because it:
+
+- Improves airflow
+- Makes weeding easier
+- Reduces seed wastage
+- Produces higher yields
+
+---
+
+💧 Water Management
+
+Most teff in Ethiopia is rain-fed.
+
+If irrigation is available:
+
+- Maintain adequate soil moisture during germination.
+- Avoid overwatering.
+- Reduce irrigation near harvest.
+
+Poor drainage may cause root diseases and lodging.
+
+---
+
+🌿 Fertilizer Management
+
+Essential nutrients include:
+
+- Nitrogen (N)
+- Phosphorus (P)
+
+Common fertilizers:
+
+- NPS or DAP during planting
+- Urea as top dressing
+
+Apply fertilizers according to local soil test recommendations and extension advice.
+
+Organic compost and farmyard manure also improve long-term soil fertility.
+
+---
+
+🌱 Weed Management
+
+Weeds compete strongly with young teff plants.
+
+Recommended practices:
+
+- Early hand weeding
+- Row cultivation
+- Approved herbicides when necessary
+
+The first 30–40 days after planting are the most critical for weed control.
+
+---
+
+🐛 Common Pests
+
+Important pests include:
+
+- Armyworms
+- Aphids
+- Shoot flies
+
+Control methods:
+
+- Regular field monitoring
+- Biological control when possible
+- Use approved pesticides only when necessary
+
+Early detection greatly reduces crop damage.
+
+---
+
+🍂 Common Diseases
+
+Common diseases include:
+
+- Rust
+- Head smudge
+- Damping-off
+
+Disease prevention:
+
+- Plant certified seed
+- Practice crop rotation
+- Avoid excessive moisture
+- Remove infected crop residues
+- Apply recommended fungicides if necessary
+
+---
+
+🌾 Lodging Prevention
+
+Lodging occurs when teff plants fall over before harvest.
+
+To reduce lodging:
+
+- Avoid excessive nitrogen fertilizer.
+- Use improved lodging-resistant varieties.
+- Plant in rows.
+- Maintain proper plant spacing.
+
+Reducing lodging helps improve grain quality and harvesting efficiency.
+
+---
+
+🌾 Harvesting
+
+Harvest when:
+
+- Plants become golden brown.
+- Seeds are fully mature.
+- Grain moisture decreases.
+
+Harvesting too early reduces grain quality.
+
+Harvesting too late increases grain loss due to shattering.
+
+---
+
+🏠 Storage
+
+Before storage:
+
+- Dry grain completely.
+- Clean harvested teff.
+- Store in dry, clean, and ventilated storage facilities.
+
+Protect grain from:
+
+- Moisture
+- Rodents
+- Insects
+- Mold
+
+Proper storage preserves grain quality and market value.
+
+---
+
+💰 Increasing Profitability
+
+Improve farm income by:
+
+- Using improved seed varieties.
+- Planting at the recommended time.
+- Practicing row planting.
+- Applying fertilizer efficiently.
+- Controlling weeds early.
+- Harvesting at the right time.
+- Selling during favorable market prices.
+- Keeping accurate farm records.
+
+---
+
+🌍 Sustainable Farming Practices
+
+Protect your land for future generations by:
+
+- Rotating crops with legumes.
+- Applying compost and organic manure.
+- Conserving soil and water.
+- Reducing unnecessary chemical use.
+- Preventing soil erosion.
+
+Healthy soil leads to better harvests year after year.
+
+---
+
+⚠ Common Mistakes
+
+Avoid:
+
+- Poor land preparation
+- Planting too much seed
+- Broadcasting unevenly
+- Late planting
+- Overusing fertilizer
+- Ignoring weeds
+- Harvesting too early
+- Poor grain storage
+
+---
+
+💡 Best Farming Tips
+
+✅ Prepare a fine seedbed.
+
+✅ Use certified seed.
+
+✅ Plant in rows whenever possible.
+
+✅ Weed early.
+
+✅ Monitor fields every week.
+
+✅ Apply fertilizer correctly.
+
+✅ Prevent lodging.
+
+✅ Harvest at full maturity.
+
+✅ Store grain safely.
+
+---
+
+🎯 Lesson Summary
+
+After completing this lesson, you now understand:
+
+- Teff production basics
+- Climate requirements
+- Soil management
+- Land preparation
+- Seed selection
+- Planting methods
+- Fertilizer management
+- Water management
+- Weed control
+- Pest management
+- Disease prevention
+- Lodging prevention
+- Harvesting
+- Storage
+- Profit improvement strategies
+
+These best practices can significantly increase teff yield, improve grain quality, and boost farm profitability.
+
+
+Continue your AgriAcademy journey to unlock more farming knowledge, certificates, badges, and become a smarter, more productive farmer with AgriEquip.`,
   1: ``,  // Wheat Farming Guide
   2: ``,  // Maize Production Techniques
   3: ``,  // Coffee Cultivation Guide
