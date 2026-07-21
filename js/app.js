@@ -1,7 +1,7 @@
 // AgriEquip — app.js — single clean module
 // Exposes all functions to window._app so bridge in HTML can reach them
 
-import { auth, db } from '../firebase.js';
+import { auth, db, storage } from '../firebase.js';
 import {
   onAuthStateChanged, signOut
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
@@ -9,13 +9,15 @@ import {
   doc, getDoc, setDoc, updateDoc, collection,
   addDoc, query, where, orderBy, getDocs, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+import {
+  ref as storageRef, uploadBytes, getDownloadURL
+} from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js';
 
 // ─── Constants ────────────────────────────────────────────
 const NAV = [
   { id:'home',      icon:'🏠',  label:'Home' },
   { id:'browse',    icon:'🔍',  label:'Browse Equipment' },
   { id:'listings',  icon:'📦',  label:'My Listings' },
-  { id:'bookings',  icon:'📅',  label:'My Bookings' },
   { id:'wallet',    icon:'💳',  label:'Wallet' },
   { id:'vip',       icon:'💎',  label:'VIP Plans' },
   { id:'tasks',     icon:'✅',  label:'Daily Tasks' },
@@ -124,1037 +126,27 @@ const ACADEMY_LESSONS = [
 ];
 
 // ─── Lesson content — PASTE HERE ──────────────────────────
-// To add a lesson's readable text: find its ID number below and paste
-// your text between the backticks ( ` ` ). Backticks are safe with
-// apostrophes, quotes, and multi-line text — no escaping needed.
-// Only avoid typing a literal backtick ( ` ) or a dollar-brace ( ${ )
-// inside the pasted text itself.
-// Leave it as `` (empty) for any lesson you haven't written yet —
-// it'll just show the short description until you fill it in.
 const LESSON_CONTENT = {
-  0: `🌾 Teff Farming Guide (AgriAcademy Lesson 1)
+  0: `Teff (Eragrostis tef) is Ethiopia's most important staple crop, used to make injera. It thrives in a wide range of altitudes, from lowlands to highlands above 2,800m, making it one of the most adaptable cereals grown in the country.
 
-📖 Introduction
+Planting: Teff is typically sown at the start of the main rainy season (Meher), from June to July, though some regions also grow a smaller Belg-season crop. Seeds are broadcast rather than row-planted, and because they are extremely small, a fine, well-prepared seedbed is essential — clumped or rocky soil leads to poor germination.
 
-Teff is Ethiopia's most important indigenous cereal crop and one of the country's greatest agricultural treasures. It has been cultivated for thousands of years and is the primary ingredient used to make injera, Ethiopia's national staple food. Besides its cultural importance, teff is highly nutritious, naturally gluten-free, and increasingly demanded in international markets.
+Soil and water: Teff tolerates poor soils better than most cereals, but yields best in well-drained loam. Waterlogging in the early weeks is one of the most common causes of crop failure, so avoid planting in low-lying fields that pool water after rain.
 
-Growing teff successfully requires good land preparation, quality seed, proper planting techniques, and careful crop management. This lesson provides a complete guide for farmers who want to improve productivity and produce high-quality teff.
+Weeding: Because teff seedlings are thin and low to the ground early on, weed competition can sharply cut yield. Most farmers weed twice: once around 20 days after planting and again before the crop closes canopy.
 
+Harvest: Teff is ready for harvest 2-6 months after planting depending on variety and altitude, when the plant turns golden-yellow and grains feel firm. Cut, dry in the field for a few days, then thresh — traditionally by driving livestock over the stalks, though mechanical threshers are increasingly common.
 
-🌍 Best Growing Areas
-
-Teff can grow in almost every region of Ethiopia, but it performs best in:
-
-- Oromia
-- Amhara
-- Central Ethiopia Region
-- Tigray
-- Sidama
-- South Ethiopia Region
-
-Altitude:
-
-1,700–2,800 meters above sea level
-
-
-
-🌦 Climate Requirements
-
-Ideal temperature:
-
-15°C–27°C
-
-Annual rainfall:
-
-450–850 mm
-
-Teff is relatively drought tolerant compared to many cereals but still performs best with well-distributed rainfall throughout the growing season.
-
-Avoid:
-
-- Long flooding
-- Waterlogged soil
-- Extreme drought during flowering
-
-🌱 Soil Requirements
-
-Best soil types:
-
-- Clay loam
-- Sandy loam
-- Well-drained black soils
-
-Ideal soil pH:
-
-5.5–7.5
-
-Healthy soils with sufficient organic matter produce stronger plants and better grain yields.
-
-🚜 Land Preparation
-
-Good land preparation is one of the most important factors for successful teff production.
-
-Steps:
-
-1. Remove weeds and previous crop residues.
-2. Plough the field 3–5 times to create a fine seedbed.
-3. Break large soil clods.
-4. Level the field evenly.
-5. Improve drainage where necessary.
-
-Since teff seeds are extremely small, a fine and smooth seedbed helps ensure even germination.
-
-🌾 Seed Selection
-
-Choose certified, clean, and disease-free seed.
-
-Characteristics of quality seed:
-
-- High germination rate
-- Pure variety
-- Disease resistant
-- Suitable for your local climate
-
-Never use moldy or damaged seed.
-
-📅 Planting Season
-
-Main planting season:
-
-July – August
-
-(Depending on local rainfall and regional agricultural recommendations.)
-
-Planting at the correct time helps avoid drought during flowering and grain filling.
-
-🌱 Planting Method
-
-Recommended seed rate:
-
-5–10 kg per hectare
-
-Planting depth:
-
-1–2 cm
-
-Row spacing:
-
-20 cm
-
-Although broadcasting is common, row planting is highly recommended because it:
-
-- Improves airflow
-- Makes weeding easier
-- Reduces seed wastage
-- Produces higher yields
-
-💧 Water Management
-
-Most teff in Ethiopia is rain-fed.
-
-If irrigation is available:
-
-- Maintain adequate soil moisture during germination.
-- Avoid overwatering.
-- Reduce irrigation near harvest.
-
-Poor drainage may cause root diseases and lodging.
-
-🌿 Fertilizer Management
-
-Essential nutrients include:
-
-- Nitrogen (N)
-- Phosphorus (P)
-
-Common fertilizers:
-
-- NPS or DAP during planting
-- Urea as top dressing
-
-Apply fertilizers according to local soil test recommendations and extension advice.
-
-Organic compost and farmyard manure also improve long-term soil fertility.
-
-🌱 Weed Management
-
-Weeds compete strongly with young teff plants.
-
-Recommended practices:
-
-- Early hand weeding
-- Row cultivation
-- Approved herbicides when necessary
-
-The first 30–40 days after planting are the most critical for weed control.
-
-🐛 Common Pests
-
-Important pests include:
-
-- Armyworms
-- Aphids
-- Shoot flies
-
-Control methods:
-
-- Regular field monitoring
-- Biological control when possible
-- Use approved pesticides only when necessary
-
-Early detection greatly reduces crop damage.
-
-🍂 Common Diseases
-
-Common diseases include:
-
-- Rust
-- Head smudge
-- Damping-off
-
-Disease prevention:
-
-- Plant certified seed
-- Practice crop rotation
-- Avoid excessive moisture
-- Remove infected crop residues
-- Apply recommended fungicides if necessary
-
-🌾 Lodging Prevention
-
-Lodging occurs when teff plants fall over before harvest.
-
-To reduce lodging:
-
-- Avoid excessive nitrogen fertilizer.
-- Use improved lodging-resistant varieties.
-- Plant in rows.
-- Maintain proper plant spacing.
-
-Reducing lodging helps improve grain quality and harvesting efficiency.
-
-🌾 Harvesting
-
-Harvest when:
-
-- Plants become golden brown.
-- Seeds are fully mature.
-- Grain moisture decreases.
-
-Harvesting too early reduces grain quality.
-
-Harvesting too late increases grain loss due to shattering.
-
-🏠 Storage
-
-Before storage:
-
-- Dry grain completely.
-- Clean harvested teff.
-- Store in dry, clean, and ventilated storage facilities.
-
-Protect grain from:
-
-- Moisture
-- Rodents
-- Insects
-- Mold
-
-Proper storage preserves grain quality and market value.
-
-💰 Increasing Profitability
-
-Improve farm income by:
-
-- Using improved seed varieties.
-- Planting at the recommended time.
-- Practicing row planting.
-- Applying fertilizer efficiently.
-- Controlling weeds early.
-- Harvesting at the right time.
-- Selling during favorable market prices.
-- Keeping accurate farm records.
-
-🌍 Sustainable Farming Practices
-
-Protect your land for future generations by:
-
-- Rotating crops with legumes.
-- Applying compost and organic manure.
-- Conserving soil and water.
-- Reducing unnecessary chemical use.
-- Preventing soil erosion.
-
-Healthy soil leads to better harvests year after year.
-
-⚠️ Common Mistakes
-
-Avoid:
-
-- Poor land preparation
-- Planting too much seed
-- Broadcasting unevenly
-- Late planting
-- Overusing fertilizer
-- Ignoring weeds
-- Harvesting too early
-- Poor grain storage
-
-💡 Best Farming Tips
-
-✅ Prepare a fine seedbed.
-
-✅ Use certified seed.
-
-✅ Plant in rows whenever possible.
-
-✅ Weed early.
-
-✅ Monitor fields every week.
-
-✅ Apply fertilizer correctly.
-
-✅ Prevent lodging.
-
-✅ Harvest at full maturity.
-
-✅ Store grain safely.
-
-🎯 Lesson Summary
-
-After completing this lesson, you now understand:
-
-- Teff production basics
-- Climate requirements
-- Soil management
-- Land preparation
-- Seed selection
-- Planting methods
-- Fertilizer management
-- Water management
-- Weed control
-- Pest management
-- Disease prevention
-- Lodging prevention
-- Harvesting
-- Storage
-- Profit improvement strategies
-
-These best practices can significantly increase teff yield, improve grain quality, and boost farm profitability.
-
-
-Continue your AgriAcademy journey to unlock more farming knowledge, certificates, badges, and become a smarter, more productive farmer with AgriEquip.`,
-
-
-
-  
-  
-  1: ` 🌽 Maize Production Techniques (AgriAcademy Lesson 2)
-
-📖 Introduction
-
-Maize is one of the world's most important cereal crops and is widely grown across Ethiopia. It is an important source of food, animal feed, and income for millions of farmers.
-
-Maize can be used to prepare different foods and is also an important raw material for livestock feed and various industries. With good management, improved seed varieties, proper soil fertility, timely planting, and effective pest and disease control, farmers can significantly improve maize production.
-
-This lesson provides a practical guide to help farmers understand the complete maize production process—from selecting a field and seed to planting, crop management, harvesting, storage, and marketing.
-
-
-🌍 Best Growing Areas
-
-Maize can be grown in many parts of Ethiopia, particularly in areas with suitable rainfall and temperature.
-
-Important maize-producing areas include:
-
-Oromia
-
-Amhara
-
-Southwest Ethiopia Region
-
-Central Ethiopia Region
-
-Sidama
-
-South Ethiopia Region
-
-Gambela
-
-Benishangul-Gumuz
-
-
-Maize production is especially common in warm and moderately warm areas with adequate rainfall.
-
-Altitude:
-
-Approximately 500–2,500 meters above sea level, depending on the maize variety.
-
-
-🌦 Climate Requirements
-
-Maize grows best in warm conditions with sufficient moisture.
-
-Ideal temperature:
-
-Approximately 18°C–30°C
-
-Annual rainfall:
-
-Approximately 500–1,200 mm, depending on the variety and growing period.
-
-Maize requires adequate moisture during:
-
-🌱 Germination
-🌿 Vegetative growth
-🌼 Flowering
-🌽 Grain filling
-
-The flowering and grain-filling stages are especially sensitive to water stress.
-
-Avoid:
-
-Severe drought during flowering
-
-Prolonged waterlogging
-
-Extreme cold
-
-Strong moisture stress during grain filling
-
-
-💡 FARMER TIP:
-
-If rainfall is unreliable, choose an appropriate early-maturing or drought-tolerant variety recommended for your area.
-
-
-🌱 Soil Requirements
-
-Maize performs best in fertile, well-drained soils.
-
-Best soil types:
-
-Loam
-
-Sandy loam
-
-Clay loam
-
-Fertile black soils with good drainage
-
-
-Ideal soil pH:
-
-Approximately 5.5–7.5
-
-Healthy soil with sufficient organic matter supports strong root development and better grain production.
-
-Avoid poorly drained fields where water remains standing for long periods.
-
-
-🚜 Land Preparation
-
-Good land preparation creates favorable conditions for strong maize establishment.
-
-Steps:
-
-1. Clear weeds and previous crop residues where necessary.
-
-
-2. Plough the field properly.
-
-
-3. Break large soil clods.
-
-
-4. Level uneven areas.
-
-
-5. Prepare a suitable seedbed.
-
-
-6. Ensure good drainage.
-
-
-
-Good land preparation helps maize seeds germinate evenly and allows roots to develop properly.
-
-💡 FARMER TIP:
-
-Avoid unnecessary repeated ploughing because excessive soil disturbance can damage soil structure and increase erosion.
-
-
-🌾 Seed Selection
-
-Choosing the right seed is one of the most important decisions in maize production.
-
-Use:
-
-Certified seed
-
-Clean seed
-
-High-germination seed
-
-Disease-resistant varieties where available
-
-Varieties recommended for your local area
-
-
-Choose varieties based on:
-
-🌦 Climate
-⛰️ Altitude
-🌧️ Rainfall
-🌱 Soil conditions
-🦠 Disease risks
-📅 Growing period
-
-Farmers should select varieties that mature within the available growing season.
-
-⚠️ Never plant damaged, moldy, or poor-quality seed.
-
-
-📅 Planting Season
-
-The best planting time depends on local rainfall patterns and agricultural recommendations.
-
-In many rain-fed areas of Ethiopia, maize is planted at the beginning of the main rainy season.
-
-Plant when:
-
-🌧️ Sufficient rainfall is expected.
-
-🌱 Soil moisture is adequate.
-
-🌡️ Temperature is suitable for germination.
-
-⚠️ Avoid planting too early when soil moisture is insufficient.
-
-⚠️ Avoid planting too late because the crop may experience moisture stress during flowering or grain filling.
-
-
----
-
-🌱 Planting Method
-
-Maize is generally planted in rows.
-
-Recommended planting practices:
-
-Plant at the recommended depth for your variety.
-
-Maintain appropriate row spacing.
-
-Maintain suitable spacing between plants.
-
-Place seeds at relatively uniform depth.
-
-Avoid overcrowding.
-
-
-Proper spacing helps plants receive sufficient:
-
-☀️ Sunlight
-💧 Water
-🧪 Nutrients
-🌬️ Air circulation
-
-Planting too closely can increase competition between plants.
-
-
-
-📏 Plant Population
-
-The recommended plant population depends on:
-
-Maize variety
-
-Soil fertility
-
-Rainfall
-
-Available moisture
-
-Production system
-
-
-Follow the recommended spacing and seed rate provided by local agricultural extension services or the seed supplier.
-
-💡 FARMER TIP:
-
-The goal is to achieve a healthy plant population—not simply to plant as many seeds as possible.
-
-
-💧 Water Management
-
-Most maize production in Ethiopia is rain-fed.
-
-Maize requires adequate moisture throughout its growth cycle, especially during:
-
-🌱 Germination
-🌿 Vegetative growth
-🌼 Tasseling
-🌸 Silking
-🌽 Grain filling
-
-Water stress around flowering can significantly reduce grain production.
-
-If irrigation is available:
-
-Irrigate when necessary.
-
-Avoid over-irrigation.
-
-Maintain good drainage.
-
-Reduce unnecessary watering near maturity.
-
-
-⚠️ Waterlogging can damage maize roots and reduce plant growth.
-
-
-🧪 Fertilizer Management
-
-Maize is a nutrient-demanding crop and responds well to proper soil fertility management.
-
-Important nutrients include:
-
-🟢 Nitrogen (N) → Supports leaf and plant growth.
-
-🔵 Phosphorus (P) → Supports root development and early growth.
-
-🟡 Potassium (K) → Supports plant strength and overall crop health.
-
-Common fertilizers may include:
-
-NPS or blended fertilizers
-
-Urea
-
-Organic compost
-
-Farmyard manure
-
-
-Apply fertilizer based on:
-
-🧪 Soil test results
-🌱 Crop requirements
-📍 Local recommendations
-
-⚠️ Avoid excessive fertilizer application.
-
-💡 FARMER TIP:
-
-Combining appropriate mineral fertilizer with organic matter can improve soil fertility and support long-term productivity.
-
-
-🌿 Weed Management
-
-Weeds compete with maize for:
-
-💧 Water
-🧪 Nutrients
-☀️ Sunlight
-🌱 Growing space
-
-Early weed control is extremely important.
-
-Recommended methods include:
-
-Hand weeding
-
-Hoeing
-
-Mechanical cultivation
-
-Mulching where appropriate
-
-Approved herbicides when necessary
-
-
-The early growth period is especially important for keeping the field weed-free.
-
-⚠️ Always follow local recommendations and product labels when using herbicides.
-
-
-🐛 Common Pests
-
-Maize can be affected by several insect pests.
-
-Important pests may include:
-
-Fall armyworm
-
-Stalk borers
-
-Aphids
-
-Cutworms
-
-Maize earworms
-
-
-Control methods:
-
-🔍 Regular field monitoring
-🌱 Use healthy seed
-🛡️ Plant resistant varieties where available
-🔄 Practice crop rotation
-🧹 Maintain field sanitation
-🦋 Encourage natural enemies
-🧪 Use approved pesticides only when necessary
-
-Fall Armyworm Warning ⚠️
-
-Check young maize plants regularly for:
-
-Window-like damage on leaves
-
-Holes in leaves
-
-Caterpillars
-
-Sawdust-like material inside the whorl
-
-Fresh insect droppings
-
-
-Early detection can greatly reduce crop damage.
-
-
-🍂 Common Diseases
-
-Maize diseases can reduce both yield and grain quality.
-
-Common diseases may include:
-
-Maize rust
-
-Maize leaf blights
-
-Maize streak disease
-
-Ear and grain diseases
-
-
-Disease prevention:
-
-🌾 Use healthy seed.
-
-🛡️ Choose resistant varieties when available.
-
-🔄 Practice crop rotation.
-
-🧹 Remove or properly manage infected crop residues.
-
-🌱 Maintain good field management.
-
-🔍 Monitor the crop regularly.
-
-If serious disease symptoms appear, seek advice from agricultural experts or extension officers.
-
-
-🌱 Thinning and Gap Filling
-
-After germination, inspect the field.
-
-If some areas have missing plants, farmers may fill gaps early while soil moisture is still suitable.
-
-Remove weak or excess plants where necessary to maintain the recommended plant population.
-
-💡 FARMER TIP:
-
-Uniform plant growth helps the crop mature more evenly and can make harvesting easier.
-
-
-🌿 Crop Management
-
-During the growing season:
-
-✅ Monitor plant growth.
-
-✅ Control weeds early.
-
-✅ Check for pests regularly.
-
-✅ Watch for disease symptoms.
-
-✅ Maintain adequate moisture.
-
-✅ Apply fertilizer at the recommended time.
-
-✅ Protect the crop from livestock damage.
-
-Regular field visits allow farmers to identify problems before they become serious.
-
-
-🌽 Harvesting
-
-Maize should be harvested when the crop reaches physiological maturity.
-
-Signs of maturity may include:
-
-🌿 Leaves drying and turning brown.
-
-🌽 Husks becoming dry.
-
-🌾 Grains becoming hard.
-
-🟡 Grain moisture decreasing.
-
-Harvesting too early can result in:
-
-High moisture content
-
-Poor storage quality
-
-Increased drying costs
-
-
-Harvesting too late can increase the risk of:
-
-Birds
-
-Rodents
-
-Insects
-
-Mold
-
-Field losses
-
-
-
-📦 Post-Harvest Handling
-
-After harvesting:
-
-1️⃣ Remove damaged ears.
-
-2️⃣ Sort the maize.
-
-3️⃣ Dry the grain properly.
-
-4️⃣ Clean the grain.
-
-5️⃣ Remove contaminated or moldy grain.
-
-6️⃣ Store in a clean, dry facility.
-
-Good post-harvest handling helps protect both food safety and market value.
-
-
-🏠 Storage
-
-Before storing maize, ensure that the grain is properly dried.
-
-Protect stored maize from:
-
-💧 Moisture
-🐛 Insects
-🐀 Rodents
-🦠 Mold
-
-Storage facilities should be:
-
-✅ Clean
-✅ Dry
-✅ Well ventilated
-✅ Protected from pests
-
-Regularly inspect stored grain for signs of damage.
-
-⚠️ Never mix newly harvested wet grain with properly dried grain.
-
-
-💰 Increasing Profitability
-
-Farmers can improve maize profitability by:
-
-🌾 Using improved varieties.
-
-📅 Planting at the right time.
-
-🌱 Maintaining the correct plant population.
-
-🧪 Applying fertilizer efficiently.
-
-🌿 Controlling weeds early.
-
-🐛 Monitoring pests.
-
-🌽 Harvesting at the right maturity.
-
-📦 Reducing post-harvest losses.
-
-💰 Selling when market conditions are favorable.
-
-📊 Keeping accurate farm records.
-
-
-🌍 Sustainable Maize Farming
-
-Protect your soil and farm for future generations by:
-
-🔄 Rotating maize with legumes.
-
-🌱 Using compost and organic manure.
-
-💧 Conserving water.
-
-🚜 Reducing unnecessary soil disturbance.
-
-🌿 Preventing soil erosion.
-
-🧪 Using agricultural chemicals responsibly.
-
-🌾 Returning appropriate crop residues to the soil.
-
-Healthy soil is the foundation of productive farming.
-
-
-⚠️ Common Mistakes
-
-Avoid:
-
-❌ Planting poor-quality seed.
-
-❌ Planting too early or too late.
-
-❌ Using incorrect plant spacing.
-
-❌ Overcrowding the field.
-
-❌ Applying too much fertilizer.
-
-❌ Ignoring weeds during early growth.
-
-❌ Failing to monitor fall armyworm.
-
-❌ Harvesting too early.
-
-❌ Storing wet grain.
-
-❌ Ignoring post-harvest losses.
-
-
-
-💡 Best Farming Tips
-
-✅ Choose the right maize variety for your area.
-
-✅ Use certified, quality seed.
-
-✅ Prepare the field properly.
-
-✅ Plant when soil moisture is adequate.
-
-✅ Maintain recommended spacing.
-
-✅ Control weeds early.
-
-✅ Monitor for fall armyworm and other pests.
-
-✅ Apply fertilizer based on soil and crop needs.
-
-✅ Protect the crop during flowering.
-
-✅ Harvest at the correct maturity.
-
-✅ Dry grain properly before storage.
-
-✅ Keep detailed farm records.
-
-
-🎯 Lesson Summary
-
-After completing this lesson, you now understand:
-
-Maize production basics
-
-Suitable growing areas
-
-Climate requirements
-
-Soil management
-
-Land preparation
-
-Seed selection
-
-Planting season
-
-Planting methods
-
-Plant population
-
-Water management
-
-Fertilizer management
-
-Weed control
-
-Pest management
-
-Disease prevention
-
-Crop management
-
-Harvesting
-
-Post-harvest handling
-
-Safe storage
-
-Profit improvement
-
-Sustainable farming
-
-
-Following good maize production practices can help farmers improve crop establishment, increase yields, reduce losses, improve grain quality, and increase farm profitability.
-
-
-
-🚜🌱 Learn. Grow. Produce. Prosper. 🌍`,  // Wheat Farming Guide
-  2: ``,  // Maize Production Techniques
-  3: ``,  // Coffee Cultivation Guide
-  4: ``,  // Sesame Farming Basics
-  5: ``,  // Vegetable Farming Guide
-  6: ``,  // Fruit Tree Farming
-  7: ``,  // Greenhouse Farming Intro
-  8: ``,  // Tractor Operation & Safety
-  9: ``,  // Combine Harvester Basics
-  10: ``, // Ploughing Techniques
-  11: ``, // Seeder Operation Guide
-  12: ``, // Irrigation Pump Maintenance
-  13: ``, // Machine Maintenance Basics
-  14: ``, // Fuel-Saving Practices
-  15: ``, // Equipment Safety Procedures
-  16: ``, // Precision Agriculture Intro
-  17: ``, // Soil Health & Fertilizer Guide
-  18: ``, // Efficient Irrigation Techniques
-  19: ``, // Pest Management Guide
-  20: ``, // Disease Prevention Basics
-  21: ``, // Climate-Smart Farming
-  22: ``, // Dairy Farming Basics
-  23: ``, // Beef Production Guide
-  24: ``, // Poultry Management
-  25: ``, // Sheep & Goat Farming
-  26: ``, // Vaccination Schedules
-  27: ``, // Farm Budgeting Basics
-  28: ``, // Farm Record Keeping
-  29: ``, // Marketing Your Produce
-  30: ``, // Digital Payments for Farmers
+Storage tip: Dry the grain thoroughly before storage — teff stored above 12% moisture is prone to mold, which can ruin an entire harvest within weeks.`,
+  1: ``, 2: ``, 3: ``, 4: ``, 5: ``, 6: ``, 7: ``, 8: ``, 9: ``, 10: ``,
+  11: ``, 12: ``, 13: ``, 14: ``, 15: ``, 16: ``, 17: ``, 18: ``, 19: ``,
+  20: ``, 21: ``, 22: ``, 23: ``, 24: ``, 25: ``, 26: ``, 27: ``, 28: ``,
+  29: ``, 30: ``,
 };
 
-// Optional header image per lesson ID. Upload files to /assets/academy/
-// in your repo, then reference them here by that path.
-// Example: 0: 'assets/academy/teff-field.jpg',
 const LESSON_IMAGES = {
 };
 
-// Optional downloadable attachment (PDF etc.) per lesson ID, same pattern as above.
 const LESSON_FILES = {
 };
 
@@ -1196,6 +188,9 @@ let currentSection = 'home';
 let sectionHistory = ['home'];
 let historyIndex = 0;
 let teffHistory = [];
+let selectedEquipFiles = [];       // File objects staged for upload on the listings form
+let currentDetailImages = [];      // Images for the equipment detail overlay's gallery
+let currentDetailIndex = 0;
 
 // ─── Init ─────────────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
@@ -1216,7 +211,8 @@ window._app = {
   submitDeposit, submitWithdraw, showDepositForm, showWithdrawForm, backToWallet,
   submitListing, toggleListingForm, filterEquipment,
   setAcademyView, openLessonReader, closeLessonReader, completeLessonFromReader,
-  openBookingModal, closeBookingModal, updateBookingTotal, submitBookingRequest, respondBooking,
+  openEquipmentDetail, closeEquipmentDetail, detailPrevImage, detailNextImage,
+  previewEquipPhotos, removeEquipPhoto,
   showToast,
 };
 
@@ -1249,14 +245,11 @@ function showSection(id) {
     historyIndex = sectionHistory.length - 1;
   }
   closeSidebar();
-  // Update nav active state
   document.querySelectorAll('.nav-link').forEach(el => {
     el.classList.toggle('active', el.dataset.section === id);
   });
-  // Update page title
   const item = NAV.find(n => n.id === id);
   setText('pageTitle', item ? item.icon + ' ' + item.label : id);
-  // Render
   renderSection(id);
 }
 
@@ -1564,7 +557,7 @@ function renderSection(id) {
         <div class="section-card">
           <h3>🎁 Referral Program</h3>
           <p style="color:#64748B;font-size:.82rem;margin-bottom:12px">Invite friends — earn <strong style="color:#22C55E">50 ETB</strong> per referral!</p>
-          <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:between;gap:10px">
             <div>
               <p style="color:#64748B;font-size:.7rem;margin-bottom:2px">Your code</p>
               <span style="font-weight:700;font-size:1rem;letter-spacing:3px;color:#22C55E">${ref}</span>
@@ -1618,26 +611,15 @@ function renderSection(id) {
           <input type="number" id="equipPrice"    placeholder="Price per day (ETB) *"   class="form-input">
           <input type="text"   id="equipLocation" placeholder="Your city/location *"    class="form-input">
           <textarea            id="equipDesc"     placeholder="Describe your equipment..." class="form-input" rows="3"></textarea>
-          <button class="action-btn" onclick="submitListing()">✅ Submit Listing (+30 pts)</button>
+          <label style="color:#64748B;font-size:.78rem;display:block;margin:4px 0 6px">📷 Photos (up to 5)</label>
+          <input type="file" id="equipPhotos" accept="image/*" multiple class="form-input" onchange="previewEquipPhotos(event)">
+          <div id="equipPhotoPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"></div>
+          <button class="action-btn" id="submitListingBtn" onclick="submitListing()">✅ Submit Listing (+30 pts)</button>
           <button class="action-btn" style="background:#64748B;margin-top:8px" onclick="toggleListingForm()">✕ Cancel</button>
           <p id="listingMsg" style="display:none;margin-top:8px;text-align:center;font-size:.85rem"></p>
         </div>
         <div id="myListings"></div>`;
       loadMyListings();
-      break;
-
-    // ── BOOKINGS ─────────────────────────────────────────
-    case 'bookings':
-      root.innerHTML = `
-        <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
-          <h3 style="color:white">📅 My Bookings</h3>
-          <p style="color:rgba(255,255,255,.55);font-size:.82rem;margin-top:6px">Requests you've sent, and requests owners have sent you.</p>
-        </div>
-        <h3 style="margin:4px 0 10px;font-size:.92rem">📤 Sent by Me</h3>
-        <div id="sentBookings"><p style="color:#64748B;text-align:center;padding:16px">Loading...</p></div>
-        <h3 style="margin:20px 0 10px;font-size:.92rem">📥 Received (My Listings)</h3>
-        <div id="receivedBookings"><p style="color:#64748B;text-align:center;padding:16px">Loading...</p></div>`;
-      loadMyBookings();
       break;
 
     // ── WALLET ───────────────────────────────────────────
@@ -1897,7 +879,7 @@ function renderSection(id) {
           <input type="text" id="profileFatherName" placeholder="Father's name"     class="form-input" value="${p2.fatherName||''}">
           <input type="tel"  id="profilePhone"      placeholder="Phone (+251...)"   class="form-input" value="${p2.phoneNumber||''}">
           <input type="text" id="profileCity"       placeholder="City"              class="form-input" value="${p2.address||''}">
-          <button class="action-btn" onclick="saveProfile()">💾 Save Changes</button>
+          <button class="action-btn" id="profileSaveBtn" onclick="saveProfile()">💾 Save Changes</button>
           <p id="profileMsg" style="display:none;margin-top:8px;text-align:center;font-size:.85rem"></p>
         </div>
         <div class="section-card">
@@ -2079,20 +1061,37 @@ async function loadEquipment() {
       el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#64748B"><div style="font-size:3rem">🚜</div><p>No equipment listed yet.<br>Be the first!</p><button class="action-btn" style="margin-top:14px" onclick="showSection('listings')">+ List Equipment</button></div>`;
       return;
     }
-    el.innerHTML = snap.docs.map(d => {
+    const icons = {tractor:'🚜',plow:'🔧',harvester:'🌾',pump:'💧',thresher:'⚙️',other:'📦'};
+    // Client-side search/category filter — Firestore doesn't do free-text
+    // search, so we fetch available equipment and filter here.
+    const searchTerm = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+    const catFilter   = document.getElementById('categoryFilter')?.value || '';
+    let docsToShow = snap.docs.filter(d => {
       const eq = d.data();
-      const icons = {tractor:'🚜',plow:'🔧',harvester:'🌾',pump:'💧',thresher:'⚙️',other:'📦'};
-      const isOwn = eq.ownerId === currentUser?.uid;
-      return `<div class="equipment-card">
-        <div class="equipment-img">${icons[eq.category]||'🚜'}</div>
+      if (catFilter && eq.category !== catFilter) return false;
+      if (searchTerm) {
+        const hay = `${eq.name||''} ${eq.category||''} ${eq.location?.city||''} ${eq.description||''}`.toLowerCase();
+        if (!hay.includes(searchTerm)) return false;
+      }
+      return true;
+    });
+    if (docsToShow.length === 0) {
+      el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#64748B"><div style="font-size:3rem">🔍</div><p>No equipment matches your search.</p></div>`;
+      return;
+    }
+    el.innerHTML = docsToShow.map(d => {
+      const eq = d.data();
+      const thumb = (eq.images && eq.images.length)
+        ? `<img src="${eq.images[0]}" alt="${eq.name}" style="width:100%;height:100%;object-fit:cover">`
+        : (icons[eq.category]||'🚜');
+      return `<div class="equipment-card" style="cursor:pointer" onclick="openEquipmentDetail('${d.id}')">
+        <div class="equipment-img">${thumb}</div>
         <div class="equipment-info">
           <p class="equipment-name">${eq.name}</p>
           <p style="color:#64748B;font-size:.78rem">📍 ${eq.location?.city||'Ethiopia'} · ${eq.category||'Equipment'}</p>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
             <span style="color:#22C55E;font-weight:700">${(eq.pricePerDay||0).toLocaleString()} ETB/day</span>
-            ${isOwn
-              ? `<span style="color:#64748B;font-size:.72rem">Your listing</span>`
-              : `<button class="action-btn" style="width:auto;padding:6px 12px;font-size:.76rem" onclick="openBookingModal('${d.id}')">Book</button>`}
+            <button class="action-btn" style="width:auto;padding:6px 12px;font-size:.76rem" onclick="event.stopPropagation();openEquipmentDetail('${d.id}')">View</button>
           </div>
         </div>
       </div>`;
@@ -2110,8 +1109,11 @@ async function loadMyListings() {
     const icons = {tractor:'🚜',plow:'🔧',harvester:'🌾',pump:'💧',thresher:'⚙️',other:'📦'};
     el.innerHTML = snap.docs.map(d => {
       const eq = d.data();
-      return `<div class="equipment-card">
-        <div class="equipment-img">${icons[eq.category]||'🚜'}</div>
+      const thumb = (eq.images && eq.images.length)
+        ? `<img src="${eq.images[0]}" alt="${eq.name}" style="width:100%;height:100%;object-fit:cover">`
+        : (icons[eq.category]||'🚜');
+      return `<div class="equipment-card" style="cursor:pointer" onclick="openEquipmentDetail('${d.id}')">
+        <div class="equipment-img">${thumb}</div>
         <div class="equipment-info">
           <p class="equipment-name">${eq.name}</p>
           <p style="color:#64748B;font-size:.78rem">📍 ${eq.location?.city||''} · ${eq.pricePerDay||0} ETB/day</p>
@@ -2141,183 +1143,160 @@ async function loadCommunity() {
   } catch(e) {}
 }
 
-// ─── Booking Request Flow ─────────────────────────────────
-const BOOKING_STATUS_STYLE = {
-  pending:   { label:'⏳ Pending',   color:'#F59E0B' },
-  accepted:  { label:'✅ Accepted',  color:'#22C55E' },
-  declined:  { label:'❌ Declined',  color:'#EF4444' },
-  completed: { label:'🏁 Completed', color:'#64748B' },
-};
-
-async function openBookingModal(equipmentId) {
-  if (!currentUser) return;
-  let eq;
-  try {
-    const eqSnap = await getDoc(doc(db,'equipment',equipmentId));
-    if (!eqSnap.exists()) { showToast('❌ Listing not found'); return; }
-    eq = eqSnap.data();
-  } catch(e) { showToast('❌ Could not load listing'); return; }
-  if (eq.ownerId === currentUser.uid) { showToast('⚠️ This is your own listing'); return; }
-
-  const today = new Date().toISOString().split('T')[0];
+// ─── Equipment Detail Overlay ─────────────────────────────
+async function openEquipmentDetail(id) {
   const overlay = document.createElement('div');
-  overlay.id = 'bookingModalOverlay';
-  overlay.dataset.price = eq.pricePerDay || 0;
-  overlay.dataset.ownerId = eq.ownerId;
-  overlay.dataset.equipName = eq.name;
+  overlay.id = 'equipDetailOverlay';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:flex-end;justify-content:center';
-  overlay.onclick = (e) => { if (e.target === overlay) closeBookingModal(); };
+  overlay.onclick = (e) => { if (e.target === overlay) closeEquipmentDetail(); };
   overlay.innerHTML = `
-    <div style="background:#0F172A;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:20px 20px 28px;animation:sheetUp .3s ease">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <span style="font-size:.75rem;color:#64748B">📅 Book Equipment</span>
-        <button onclick="closeBookingModal()" style="background:rgba(255,255,255,.08);border:none;color:white;width:28px;height:28px;border-radius:8px;font-size:1rem;cursor:pointer">✕</button>
+    <div style="background:#0F172A;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;border-radius:20px 20px 0 0;animation:sheetUp .3s ease">
+      <div style="padding:16px;display:flex;justify-content:flex-end">
+        <button onclick="closeEquipmentDetail()" style="background:rgba(255,255,255,.08);border:none;color:white;width:28px;height:28px;border-radius:8px;font-size:1rem;cursor:pointer">✕</button>
       </div>
-      <h2 style="color:white;font-size:1.1rem;margin-bottom:4px">${eq.name}</h2>
-      <p style="color:#64748B;font-size:.8rem;margin-bottom:16px">${(eq.pricePerDay||0).toLocaleString()} ETB/day · 📍 ${eq.location?.city||'Ethiopia'}</p>
-
-      <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">Start Date *</label>
-      <input type="date" id="bookStart" class="form-input" min="${today}" onchange="updateBookingTotal()">
-      <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">End Date *</label>
-      <input type="date" id="bookEnd" class="form-input" min="${today}" onchange="updateBookingTotal()">
-
-      <label style="display:flex;align-items:center;gap:8px;padding:10px 0 0;font-size:.85rem"><input type="checkbox" id="bookOperator" style="width:18px;height:18px"> Operator needed</label>
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 0 10px;font-size:.85rem"><input type="checkbox" id="bookDelivery" style="width:18px;height:18px"> Owner delivers to my location</label>
-
-      <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">Message to owner (optional)</label>
-      <textarea id="bookMessage" class="form-input" rows="2" placeholder="e.g. Need it for ploughing 4 hectares"></textarea>
-
-      <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:12px;margin-top:10px" id="bookTotalBox">
-        <p style="color:#64748B;font-size:.75rem">Select dates to see estimated total</p>
-      </div>
-
-      <button class="action-btn" style="margin-top:16px" onclick="submitBookingRequest('${equipmentId}')">📩 Send Booking Request</button>
-      <p id="bookingMsg" style="display:none;margin-top:8px;text-align:center;font-size:.85rem"></p>
+      <div style="text-align:center;color:#64748B;padding:40px 20px">Loading...</div>
     </div>`;
   document.body.appendChild(overlay);
-}
 
-function closeBookingModal() {
-  document.getElementById('bookingModalOverlay')?.remove();
-}
-
-function updateBookingTotal() {
-  const overlay = document.getElementById('bookingModalOverlay');
-  const box = document.getElementById('bookTotalBox');
-  if (!overlay || !box) return;
-  const price = parseFloat(overlay.dataset.price) || 0;
-  const start = document.getElementById('bookStart').value;
-  const end   = document.getElementById('bookEnd').value;
-  if (!start || !end) { box.innerHTML = `<p style="color:#64748B;font-size:.75rem">Select dates to see estimated total</p>`; return; }
-  if (new Date(end) < new Date(start)) { box.innerHTML = `<p style="color:#EF4444;font-size:.78rem">⚠️ End date must be after start date</p>`; return; }
-  const days = Math.max(1, Math.round((new Date(end) - new Date(start)) / 86400000) + 1);
-  const total = days * price;
-  box.innerHTML = `<p style="color:#64748B;font-size:.75rem">${days} day${days>1?'s':''} × ${price.toLocaleString()} ETB</p>
-    <p style="color:#22C55E;font-weight:700;font-size:1.1rem;margin-top:4px">Est. ${total.toLocaleString()} ETB</p>
-    <p style="color:#64748B;font-size:.68rem;margin-top:2px">Final price confirmed by owner. Payment isn't collected yet — coming soon.</p>`;
-}
-
-async function submitBookingRequest(equipmentId) {
-  const overlay = document.getElementById('bookingModalOverlay');
-  const msgEl   = document.getElementById('bookingMsg');
-  const start   = document.getElementById('bookStart').value;
-  const end     = document.getElementById('bookEnd').value;
-  const operator = document.getElementById('bookOperator').checked;
-  const delivery = document.getElementById('bookDelivery').checked;
-  const message  = document.getElementById('bookMessage').value.trim();
-  if (!start || !end) { flashMsg(msgEl,'⚠️ Choose start and end dates','#F59E0B'); return; }
-  if (new Date(end) < new Date(start)) { flashMsg(msgEl,'⚠️ End date must be after start date','#F59E0B'); return; }
-  const days  = Math.max(1, Math.round((new Date(end) - new Date(start)) / 86400000) + 1);
-  const price = parseFloat(overlay.dataset.price) || 0;
-  const ownerId   = overlay.dataset.ownerId;
-  const equipName = overlay.dataset.equipName;
-  if (ownerId === currentUser.uid) { flashMsg(msgEl,'⚠️ You can\'t book your own listing','#F59E0B'); return; }
   try {
-    await addDoc(collection(db,'bookings'), {
-      equipmentId, equipmentName: equipName,
-      ownerId, renterId: currentUser.uid,
-      renterName: userProfile?.fullName || currentUser.email?.split('@')[0] || 'Farmer',
-      renterEmail: currentUser.email,
-      startDate: start, endDate: end, days,
-      pricePerDay: price, estimatedTotal: days * price,
-      operatorNeeded: operator, delivery, message,
-      status: 'pending', createdAt: serverTimestamp(), updatedAt: serverTimestamp()
-    });
-    flashMsg(msgEl, '✅ Request sent! The owner will respond soon.', '#22C55E');
-    setTimeout(() => { closeBookingModal(); showSection('bookings'); }, 1200);
-  } catch(e) { flashMsg(msgEl, '❌ Failed to send request. Try again.', '#EF4444'); }
-}
-
-async function loadMyBookings() {
-  if (!currentUser) return;
-  const sentEl = document.getElementById('sentBookings');
-  const recvEl = document.getElementById('receivedBookings');
-  if (!sentEl || !recvEl) return;
-  try {
-    const sentSnap = await getDocs(query(collection(db,'bookings'), where('renterId','==',currentUser.uid), orderBy('createdAt','desc')));
-    sentEl.innerHTML = sentSnap.empty
-      ? `<p style="color:#64748B;text-align:center;padding:16px">No requests sent yet. Browse equipment to get started.</p>`
-      : await renderBookingCards(sentSnap.docs, 'renter');
-  } catch(e) { sentEl.innerHTML = `<p style="color:#64748B;text-align:center;padding:16px">Couldn't load requests. (If this is your first time, Firestore may need an index — check the browser console for a setup link.)</p>`; }
-  try {
-    const recvSnap = await getDocs(query(collection(db,'bookings'), where('ownerId','==',currentUser.uid), orderBy('createdAt','desc')));
-    recvEl.innerHTML = recvSnap.empty
-      ? `<p style="color:#64748B;text-align:center;padding:16px">No requests received yet.</p>`
-      : await renderBookingCards(recvSnap.docs, 'owner');
-  } catch(e) { recvEl.innerHTML = `<p style="color:#64748B;text-align:center;padding:16px">Couldn't load requests. (If this is your first time, Firestore may need an index — check the browser console for a setup link.)</p>`; }
-}
-
-async function renderBookingCards(docs, viewAs) {
-  const cards = await Promise.all(docs.map(async d => {
-    const b = d.data();
-    const st = BOOKING_STATUS_STYLE[b.status] || BOOKING_STATUS_STYLE.pending;
-    let contactLine = '';
-    if (b.status === 'accepted' || b.status === 'completed') {
-      const otherUid = viewAs === 'renter' ? b.ownerId : b.renterId;
-      try {
-        const uSnap = await getDoc(doc(db,'users',otherUid));
-        const phone = uSnap.exists() ? (uSnap.data().phoneNumber || '') : '';
-        contactLine = phone
-          ? `<a href="tel:${phone}" style="color:#22C55E;font-size:.8rem;text-decoration:none">📞 ${phone}</a>`
-          : `<span style="color:#64748B;font-size:.78rem">📞 Contact info not added yet</span>`;
-      } catch(e) {}
+    const snap = await getDoc(doc(db, 'equipment', id));
+    if (!snap.exists()) {
+      overlay.querySelector('div > div:last-child').innerHTML = `<p style="text-align:center;color:#64748B;padding:20px">Listing not found — it may have been removed.</p>`;
+      return;
     }
-    const actions = (viewAs === 'owner' && b.status === 'pending')
-      ? `<div style="display:flex;gap:8px;margin-top:10px">
-           <button class="action-btn" style="background:linear-gradient(135deg,#22C55E,#16A34A)" onclick="respondBooking('${d.id}','accepted')">✅ Accept</button>
-           <button class="action-btn" style="background:#334155" onclick="respondBooking('${d.id}','declined')">❌ Decline</button>
-         </div>`
-      : (b.status === 'accepted'
-          ? `<button class="action-btn" style="margin-top:10px;background:#334155" onclick="respondBooking('${d.id}','completed')">🏁 Mark Completed</button>`
-          : '');
-    return `<div class="section-card" style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
-        <div>
-          <p style="font-weight:700;font-size:.9rem">${b.equipmentName || 'Equipment'}</p>
-          <p style="color:#64748B;font-size:.76rem;margin-top:2px">${b.startDate} → ${b.endDate} · ${b.days} day${b.days>1?'s':''}</p>
-          <p style="color:#64748B;font-size:.76rem">${viewAs==='owner' ? 'Renter: '+(b.renterName||b.renterEmail||'') : 'Your request'}</p>
+    const eq = snap.data();
+    const icons = {tractor:'🚜',plow:'🔧',harvester:'🌾',pump:'💧',thresher:'⚙️',other:'📦'};
+    currentDetailImages = (eq.images && eq.images.length) ? eq.images : [];
+    currentDetailIndex = 0;
+    const isOwner = currentUser && eq.ownerId === currentUser.uid;
+
+    const sheet = overlay.querySelector('div');
+    sheet.innerHTML = `
+      <div style="position:relative">
+        <div id="detailGallery" style="width:100%;aspect-ratio:4/3;background:#1E293B;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative">
+          ${currentDetailImages.length
+            ? `<img id="detailImg" src="${currentDetailImages[0]}" style="width:100%;height:100%;object-fit:cover">`
+            : `<span style="font-size:4rem">${icons[eq.category]||'🚜'}</span>`}
+          ${currentDetailImages.length > 1 ? `
+            <button onclick="detailPrevImage()" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem">‹</button>
+            <button onclick="detailNextImage()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem">›</button>
+            <div id="detailDots" style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px">
+              ${currentDetailImages.map((_,i)=>`<span style="width:6px;height:6px;border-radius:50%;background:${i===0?'#22C55E':'rgba(255,255,255,.4)'}"></span>`).join('')}
+            </div>` : ''}
         </div>
-        <span style="color:${st.color};font-size:.76rem;font-weight:700;white-space:nowrap">${st.label}</span>
+        <button onclick="closeEquipmentDetail()" style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.5);border:none;color:white;width:30px;height:30px;border-radius:8px;font-size:1rem;cursor:pointer">✕</button>
+        ${isOwner ? `<span style="position:absolute;top:12px;left:12px;background:rgba(34,197,94,.85);color:white;font-size:.72rem;padding:4px 10px;border-radius:8px">Your listing</span>` : ''}
       </div>
-      ${b.message ? `<p style="color:#94A3B8;font-size:.8rem;margin-top:8px;font-style:italic">"${b.message.replace(/</g,'&lt;')}"</p>` : ''}
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:6px">
-        <span style="color:#22C55E;font-weight:700;font-size:.9rem">Est. ${(b.estimatedTotal||0).toLocaleString()} ETB</span>
-        ${contactLine}
-      </div>
-      ${actions}
-    </div>`;
-  }));
-  return cards.join('');
+      <div style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+          <h2 style="color:white;font-size:1.2rem">${eq.name||'Equipment'}</h2>
+          <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:#22C55E;border-radius:6px;padding:3px 10px;font-size:.75rem;white-space:nowrap">${eq.availability||'available'}</span>
+        </div>
+        <p style="color:#64748B;font-size:.82rem;margin-top:4px">📍 ${eq.location?.city||'Ethiopia'} · ${icons[eq.category]||'📦'} ${eq.category||'Equipment'}</p>
+        <div style="color:#22C55E;font-weight:700;font-size:1.4rem;margin-top:12px">${(eq.pricePerDay||0).toLocaleString()} ETB<span style="color:#64748B;font-size:.8rem;font-weight:400">/day</span></div>
+
+        ${eq.description ? `
+        <div style="margin-top:16px">
+          <h3 style="font-size:.85rem;margin-bottom:6px">📝 Description</h3>
+          <p style="color:#94A3B8;font-size:.84rem;line-height:1.7">${eq.description.replace(/</g,'&lt;')}</p>
+        </div>` : ''}
+
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06)">
+          <h3 style="font-size:.85rem;margin-bottom:6px">👤 Owner</h3>
+          <p style="color:#94A3B8;font-size:.84rem">${eq.ownerEmail||'—'}</p>
+        </div>
+
+        ${isOwner
+          ? `<button class="action-btn" style="margin-top:20px;background:#334155" onclick="showSection('listings');closeEquipmentDetail()">📦 Manage in My Listings</button>`
+          : `<button class="action-btn" style="margin-top:20px" onclick="showToast('📞 Contact owner via Teff AI');closeEquipmentDetail();showSection('teffai')">📩 Request to Book</button>`}
+      </div>`;
+  } catch(e) {
+    overlay.querySelector('div > div:last-child').innerHTML = `<p style="text-align:center;color:#ef4444;padding:20px">Error loading listing.</p>`;
+  }
 }
 
-async function respondBooking(bookingId, newStatus) {
-  try {
-    await updateDoc(doc(db,'bookings',bookingId), { status: newStatus, updatedAt: serverTimestamp() });
-    if (newStatus === 'accepted')      showToast('✅ Booking accepted! Contact info unlocked.');
-    else if (newStatus === 'declined') showToast('Booking declined.');
-    else if (newStatus === 'completed') { showToast('🏁 Booking marked complete!'); completeTask('booking_'+bookingId, 25); }
-    loadMyBookings();
-  } catch(e) { showToast('❌ Failed to update booking'); }
+function closeEquipmentDetail() {
+  document.getElementById('equipDetailOverlay')?.remove();
+  currentDetailImages = [];
+  currentDetailIndex = 0;
+}
+
+function detailPrevImage() {
+  if (!currentDetailImages.length) return;
+  currentDetailIndex = (currentDetailIndex - 1 + currentDetailImages.length) % currentDetailImages.length;
+  renderDetailImage();
+}
+function detailNextImage() {
+  if (!currentDetailImages.length) return;
+  currentDetailIndex = (currentDetailIndex + 1) % currentDetailImages.length;
+  renderDetailImage();
+}
+function renderDetailImage() {
+  const img = document.getElementById('detailImg');
+  if (img) img.src = currentDetailImages[currentDetailIndex];
+  const dots = document.getElementById('detailDots');
+  if (dots) {
+    [...dots.children].forEach((dot,i) => { dot.style.background = i===currentDetailIndex ? '#22C55E' : 'rgba(255,255,255,.4)'; });
+  }
+}
+
+// ─── Photo upload (listings form) ─────────────────────────
+function previewEquipPhotos(event) {
+  const files = Array.from(event.target.files || []).slice(0, 5);
+  selectedEquipFiles = files;
+  renderEquipPhotoPreview();
+}
+
+function removeEquipPhoto(idx) {
+  selectedEquipFiles.splice(idx, 1);
+  renderEquipPhotoPreview();
+}
+
+function renderEquipPhotoPreview() {
+  const el = document.getElementById('equipPhotoPreview');
+  if (!el) return;
+  el.innerHTML = selectedEquipFiles.map((file, i) => `
+    <div style="position:relative;width:64px;height:64px">
+      <img src="${URL.createObjectURL(file)}" style="width:100%;height:100%;object-fit:cover;border-radius:8px">
+      <button onclick="removeEquipPhoto(${i})" style="position:absolute;top:-6px;right:-6px;background:#EF4444;border:none;color:white;width:20px;height:20px;border-radius:50%;font-size:.7rem;cursor:pointer;line-height:1">✕</button>
+    </div>`).join('');
+}
+
+// Resize/compress an image file client-side before upload — keeps uploads
+// fast and cheap on mobile data, which matters a lot for this audience.
+function resizeImageFile(file, maxDim = 1280, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) { height = Math.round(height * maxDim / width); width = maxDim; }
+        else { width = Math.round(width * maxDim / height); height = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      canvas.toBlob(blob => {
+        URL.revokeObjectURL(url);
+        blob ? resolve(blob) : reject(new Error('Image compression failed'));
+      }, 'image/jpeg', quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not read image')); };
+    img.src = url;
+  });
+}
+
+async function uploadEquipmentImages(files, ownerId) {
+  const urls = [];
+  for (let i = 0; i < files.length; i++) {
+    const blob = await resizeImageFile(files[i]);
+    const path = `equipment/${ownerId}/${Date.now()}_${i}.jpg`;
+    const sRef = storageRef(storage, path);
+    await uploadBytes(sRef, blob, { contentType: 'image/jpeg' });
+    urls.push(await getDownloadURL(sRef));
+  }
+  return urls;
 }
 
 // ─── Actions ─────────────────────────────────────────────
@@ -2413,41 +1392,58 @@ function toggleListingForm() {
 }
 
 async function submitListing() {
+  const name  = val('equipName');
+  const cat   = val('equipCategory');
+  const price = parseFloat(val('equipPrice'));
+  const city  = val('equipLocation');
+  const desc  = val('equipDesc');
   const msgEl = document.getElementById('listingMsg');
+  const btn   = document.getElementById('submitListingBtn');
+  if (!name)             { flashMsg(msgEl,'⚠️ Enter equipment name','#F59E0B'); return; }
+  if (!price || price<=0){ flashMsg(msgEl,'⚠️ Enter a valid price','#F59E0B'); return; }
+  if (!city)             { flashMsg(msgEl,'⚠️ Enter your city','#F59E0B'); return; }
+  if (btn) { btn.disabled = true; }
   try {
-    const name  = val('equipName');
-    const cat   = val('equipCategory');
-    const price = parseFloat(val('equipPrice'));
-    const city  = val('equipLocation');
-    const desc  = val('equipDesc');
-    if (!currentUser)      { flashMsg(msgEl,'⚠️ Not signed in — please reload and log in again','#F59E0B'); return; }
-    if (!name)             { flashMsg(msgEl,'⚠️ Enter equipment name','#F59E0B'); return; }
-    if (!price || price<=0){ flashMsg(msgEl,'⚠️ Enter a valid price','#F59E0B'); return; }
-    if (!city)             { flashMsg(msgEl,'⚠️ Enter your city','#F59E0B'); return; }
-    await addDoc(collection(db,'equipment'), { ownerId:currentUser.uid, ownerEmail:currentUser.email, name, category:cat, description:desc||'', pricePerDay:price, location:{city}, availability:'available', createdAt:serverTimestamp() });
+    let images = [];
+    if (selectedEquipFiles.length) {
+      flashMsg(msgEl, `📤 Uploading ${selectedEquipFiles.length} photo${selectedEquipFiles.length>1?'s':''}...`, '#06B6D4');
+      images = await uploadEquipmentImages(selectedEquipFiles, currentUser.uid);
+    }
+    await addDoc(collection(db,'equipment'), { ownerId:currentUser.uid, ownerEmail:currentUser.email, name, category:cat, description:desc||'', pricePerDay:price, location:{city}, images, availability:'available', createdAt:serverTimestamp() });
     completeTask('list_equipment', 30);
     flashMsg(msgEl,'✅ Equipment listed! (+30 XP)','#22C55E');
+    selectedEquipFiles = [];
     setTimeout(() => { toggleListingForm(); loadMyListings(); }, 1500);
-  } catch(e) {
-    flashMsg(msgEl, '❌ Failed: ' + (e && e.message ? e.message : 'unknown error') + ' — try again.', '#EF4444');
-  }
+  } catch(e) { flashMsg(msgEl,'❌ Failed to list: ' + (e.message||'Try again.'),'#EF4444'); }
+  finally { if (btn) btn.disabled = false; }
 }
 
 function filterEquipment() { loadEquipment(); }
 
 async function saveProfile() {
   const msgEl = document.getElementById('profileMsg');
+  const btn = document.getElementById('profileSaveBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
   try {
-    await updateDoc(doc(db,'users',currentUser.uid), {
+    // setDoc + merge instead of updateDoc: updateDoc THROWS if the target
+    // document (or any assumption about its existing shape) is missing,
+    // which silently fails the save and looks like data "resets" next visit.
+    // merge:true creates the doc if needed and only touches these fields.
+    await setDoc(doc(db,'users',currentUser.uid), {
       fullName:    val('profileName'),
       fatherName:  val('profileFatherName'),
       phoneNumber: val('profilePhone'),
       address:     val('profileCity'),
       updatedAt:   serverTimestamp()
-    });
+    }, { merge: true });
     await loadUserProfile();
     flashMsg(msgEl,'✅ Profile updated!','#22C55E');
-  } catch(e) { flashMsg(msgEl,'❌ Failed to save','#EF4444'); }
+  } catch(e) {
+    console.error('saveProfile failed:', e);
+    flashMsg(msgEl,'❌ Failed to save: ' + (e.message || e.code || 'unknown error'),'#EF4444');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '💾 Save Changes'; }
+  }
 }
 
 function copyReferral() {
@@ -2619,11 +1615,12 @@ window.setAcademyView   = setAcademyView;
 window.openLessonReader = openLessonReader;
 window.closeLessonReader = closeLessonReader;
 window.completeLessonFromReader = completeLessonFromReader;
-window.openBookingModal = openBookingModal;
-window.closeBookingModal = closeBookingModal;
-window.updateBookingTotal = updateBookingTotal;
-window.submitBookingRequest = submitBookingRequest;
-window.respondBooking = respondBooking;
+window.openEquipmentDetail = openEquipmentDetail;
+window.closeEquipmentDetail = closeEquipmentDetail;
+window.detailPrevImage  = detailPrevImage;
+window.detailNextImage  = detailNextImage;
+window.previewEquipPhotos = previewEquipPhotos;
+window.removeEquipPhoto = removeEquipPhoto;
 window.showToast        = showToast;
 window.setLang = function(l) {
   localStorage.setItem('agriequip_lang', l);
