@@ -35,16 +35,26 @@
   function navForward()          { if(window._app) window._app.navForward(); }
 
   // Error display
-  window.onerror = function(msg, url, line) {
+  function showErrBanner(text) {
     const existing = document.getElementById('errBanner');
     if (existing) existing.remove();
     const d = document.createElement('div');
     d.id = 'errBanner';
     d.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#dc2626;color:white;padding:12px 16px;z-index:99999;font-size:11px;word-break:break-all;line-height:1.4';
-    d.textContent = 'ERROR: ' + msg + ' | ' + (url||'').split('/').pop() + ' L' + line;
+    d.textContent = text;
     document.body.prepend(d);
     setTimeout(() => d.remove(), 8000);
+  }
+  window.onerror = function(msg, url, line) {
+    showErrBanner('ERROR: ' + msg + ' | ' + (url||'').split('/').pop() + ' L' + line);
   };
+  // Catches failures inside async functions (e.g. "await someCall()" throwing)
+  // that window.onerror alone misses — these fail silently otherwise.
+  window.addEventListener('unhandledrejection', function(event) {
+    const reason = event.reason;
+    const msg = reason && reason.message ? reason.message : String(reason);
+    showErrBanner('ASYNC ERROR: ' + msg);
+  });
 </script>
 </head>
 <body>
@@ -129,7 +139,7 @@
 </script>
 
 <!-- Load ONLY ONE dashboard module -->
-<script type="module" src="js/app.js?v=9"></script>
+<script type="module" src="js/app.js?v=10"></script>
 
 </body>
 </html>
