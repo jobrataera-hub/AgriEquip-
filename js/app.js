@@ -140,7 +140,6 @@ Teff is Ethiopia's most important indigenous cereal crop and one of the country'
 
 Growing teff successfully requires good land preparation, quality seed, proper planting techniques, and careful crop management. This lesson provides a complete guide for farmers who want to improve productivity and produce high-quality teff.
 
----
 
 🌍 Best Growing Areas
 
@@ -157,7 +156,7 @@ Altitude:
 
 1,700–2,800 meters above sea level
 
----
+
 
 🌦 Climate Requirements
 
@@ -177,8 +176,6 @@ Avoid:
 - Waterlogged soil
 - Extreme drought during flowering
 
----
-
 🌱 Soil Requirements
 
 Best soil types:
@@ -192,8 +189,6 @@ Ideal soil pH:
 5.5–7.5
 
 Healthy soils with sufficient organic matter produce stronger plants and better grain yields.
-
----
 
 🚜 Land Preparation
 
@@ -209,8 +204,6 @@ Steps:
 
 Since teff seeds are extremely small, a fine and smooth seedbed helps ensure even germination.
 
----
-
 🌾 Seed Selection
 
 Choose certified, clean, and disease-free seed.
@@ -224,8 +217,6 @@ Characteristics of quality seed:
 
 Never use moldy or damaged seed.
 
----
-
 📅 Planting Season
 
 Main planting season:
@@ -235,8 +226,6 @@ July – August
 (Depending on local rainfall and regional agricultural recommendations.)
 
 Planting at the correct time helps avoid drought during flowering and grain filling.
-
----
 
 🌱 Planting Method
 
@@ -259,8 +248,6 @@ Although broadcasting is common, row planting is highly recommended because it:
 - Reduces seed wastage
 - Produces higher yields
 
----
-
 💧 Water Management
 
 Most teff in Ethiopia is rain-fed.
@@ -272,8 +259,6 @@ If irrigation is available:
 - Reduce irrigation near harvest.
 
 Poor drainage may cause root diseases and lodging.
-
----
 
 🌿 Fertilizer Management
 
@@ -291,8 +276,6 @@ Apply fertilizers according to local soil test recommendations and extension adv
 
 Organic compost and farmyard manure also improve long-term soil fertility.
 
----
-
 🌱 Weed Management
 
 Weeds compete strongly with young teff plants.
@@ -304,8 +287,6 @@ Recommended practices:
 - Approved herbicides when necessary
 
 The first 30–40 days after planting are the most critical for weed control.
-
----
 
 🐛 Common Pests
 
@@ -323,8 +304,6 @@ Control methods:
 
 Early detection greatly reduces crop damage.
 
----
-
 🍂 Common Diseases
 
 Common diseases include:
@@ -341,8 +320,6 @@ Disease prevention:
 - Remove infected crop residues
 - Apply recommended fungicides if necessary
 
----
-
 🌾 Lodging Prevention
 
 Lodging occurs when teff plants fall over before harvest.
@@ -356,8 +333,6 @@ To reduce lodging:
 
 Reducing lodging helps improve grain quality and harvesting efficiency.
 
----
-
 🌾 Harvesting
 
 Harvest when:
@@ -369,8 +344,6 @@ Harvest when:
 Harvesting too early reduces grain quality.
 
 Harvesting too late increases grain loss due to shattering.
-
----
 
 🏠 Storage
 
@@ -389,8 +362,6 @@ Protect grain from:
 
 Proper storage preserves grain quality and market value.
 
----
-
 💰 Increasing Profitability
 
 Improve farm income by:
@@ -404,8 +375,6 @@ Improve farm income by:
 - Selling during favorable market prices.
 - Keeping accurate farm records.
 
----
-
 🌍 Sustainable Farming Practices
 
 Protect your land for future generations by:
@@ -418,9 +387,7 @@ Protect your land for future generations by:
 
 Healthy soil leads to better harvests year after year.
 
----
-
-⚠ Common Mistakes
+⚠️ Common Mistakes
 
 Avoid:
 
@@ -432,8 +399,6 @@ Avoid:
 - Ignoring weeds
 - Harvesting too early
 - Poor grain storage
-
----
 
 💡 Best Farming Tips
 
@@ -454,8 +419,6 @@ Avoid:
 ✅ Harvest at full maturity.
 
 ✅ Store grain safely.
-
----
 
 🎯 Lesson Summary
 
@@ -481,7 +444,679 @@ These best practices can significantly increase teff yield, improve grain qualit
 
 
 Continue your AgriAcademy journey to unlock more farming knowledge, certificates, badges, and become a smarter, more productive farmer with AgriEquip.`,
-  1: ``,  // Wheat Farming Guide
+
+
+
+  
+  
+  1: ` 🌽 Maize Production Techniques (AgriAcademy Lesson 2)
+
+📖 Introduction
+
+Maize is one of the world's most important cereal crops and is widely grown across Ethiopia. It is an important source of food, animal feed, and income for millions of farmers.
+
+Maize can be used to prepare different foods and is also an important raw material for livestock feed and various industries. With good management, improved seed varieties, proper soil fertility, timely planting, and effective pest and disease control, farmers can significantly improve maize production.
+
+This lesson provides a practical guide to help farmers understand the complete maize production process—from selecting a field and seed to planting, crop management, harvesting, storage, and marketing.
+
+
+🌍 Best Growing Areas
+
+Maize can be grown in many parts of Ethiopia, particularly in areas with suitable rainfall and temperature.
+
+Important maize-producing areas include:
+
+Oromia
+
+Amhara
+
+Southwest Ethiopia Region
+
+Central Ethiopia Region
+
+Sidama
+
+South Ethiopia Region
+
+Gambela
+
+Benishangul-Gumuz
+
+
+Maize production is especially common in warm and moderately warm areas with adequate rainfall.
+
+Altitude:
+
+Approximately 500–2,500 meters above sea level, depending on the maize variety.
+
+
+🌦 Climate Requirements
+
+Maize grows best in warm conditions with sufficient moisture.
+
+Ideal temperature:
+
+Approximately 18°C–30°C
+
+Annual rainfall:
+
+Approximately 500–1,200 mm, depending on the variety and growing period.
+
+Maize requires adequate moisture during:
+
+🌱 Germination
+🌿 Vegetative growth
+🌼 Flowering
+🌽 Grain filling
+
+The flowering and grain-filling stages are especially sensitive to water stress.
+
+Avoid:
+
+Severe drought during flowering
+
+Prolonged waterlogging
+
+Extreme cold
+
+Strong moisture stress during grain filling
+
+
+💡 FARMER TIP:
+
+If rainfall is unreliable, choose an appropriate early-maturing or drought-tolerant variety recommended for your area.
+
+
+🌱 Soil Requirements
+
+Maize performs best in fertile, well-drained soils.
+
+Best soil types:
+
+Loam
+
+Sandy loam
+
+Clay loam
+
+Fertile black soils with good drainage
+
+
+Ideal soil pH:
+
+Approximately 5.5–7.5
+
+Healthy soil with sufficient organic matter supports strong root development and better grain production.
+
+Avoid poorly drained fields where water remains standing for long periods.
+
+
+🚜 Land Preparation
+
+Good land preparation creates favorable conditions for strong maize establishment.
+
+Steps:
+
+1. Clear weeds and previous crop residues where necessary.
+
+
+2. Plough the field properly.
+
+
+3. Break large soil clods.
+
+
+4. Level uneven areas.
+
+
+5. Prepare a suitable seedbed.
+
+
+6. Ensure good drainage.
+
+
+
+Good land preparation helps maize seeds germinate evenly and allows roots to develop properly.
+
+💡 FARMER TIP:
+
+Avoid unnecessary repeated ploughing because excessive soil disturbance can damage soil structure and increase erosion.
+
+
+🌾 Seed Selection
+
+Choosing the right seed is one of the most important decisions in maize production.
+
+Use:
+
+Certified seed
+
+Clean seed
+
+High-germination seed
+
+Disease-resistant varieties where available
+
+Varieties recommended for your local area
+
+
+Choose varieties based on:
+
+🌦 Climate
+⛰️ Altitude
+🌧️ Rainfall
+🌱 Soil conditions
+🦠 Disease risks
+📅 Growing period
+
+Farmers should select varieties that mature within the available growing season.
+
+⚠️ Never plant damaged, moldy, or poor-quality seed.
+
+
+📅 Planting Season
+
+The best planting time depends on local rainfall patterns and agricultural recommendations.
+
+In many rain-fed areas of Ethiopia, maize is planted at the beginning of the main rainy season.
+
+Plant when:
+
+🌧️ Sufficient rainfall is expected.
+
+🌱 Soil moisture is adequate.
+
+🌡️ Temperature is suitable for germination.
+
+⚠️ Avoid planting too early when soil moisture is insufficient.
+
+⚠️ Avoid planting too late because the crop may experience moisture stress during flowering or grain filling.
+
+
+---
+
+🌱 Planting Method
+
+Maize is generally planted in rows.
+
+Recommended planting practices:
+
+Plant at the recommended depth for your variety.
+
+Maintain appropriate row spacing.
+
+Maintain suitable spacing between plants.
+
+Place seeds at relatively uniform depth.
+
+Avoid overcrowding.
+
+
+Proper spacing helps plants receive sufficient:
+
+☀️ Sunlight
+💧 Water
+🧪 Nutrients
+🌬️ Air circulation
+
+Planting too closely can increase competition between plants.
+
+
+
+📏 Plant Population
+
+The recommended plant population depends on:
+
+Maize variety
+
+Soil fertility
+
+Rainfall
+
+Available moisture
+
+Production system
+
+
+Follow the recommended spacing and seed rate provided by local agricultural extension services or the seed supplier.
+
+💡 FARMER TIP:
+
+The goal is to achieve a healthy plant population—not simply to plant as many seeds as possible.
+
+
+💧 Water Management
+
+Most maize production in Ethiopia is rain-fed.
+
+Maize requires adequate moisture throughout its growth cycle, especially during:
+
+🌱 Germination
+🌿 Vegetative growth
+🌼 Tasseling
+🌸 Silking
+🌽 Grain filling
+
+Water stress around flowering can significantly reduce grain production.
+
+If irrigation is available:
+
+Irrigate when necessary.
+
+Avoid over-irrigation.
+
+Maintain good drainage.
+
+Reduce unnecessary watering near maturity.
+
+
+⚠️ Waterlogging can damage maize roots and reduce plant growth.
+
+
+🧪 Fertilizer Management
+
+Maize is a nutrient-demanding crop and responds well to proper soil fertility management.
+
+Important nutrients include:
+
+🟢 Nitrogen (N) → Supports leaf and plant growth.
+
+🔵 Phosphorus (P) → Supports root development and early growth.
+
+🟡 Potassium (K) → Supports plant strength and overall crop health.
+
+Common fertilizers may include:
+
+NPS or blended fertilizers
+
+Urea
+
+Organic compost
+
+Farmyard manure
+
+
+Apply fertilizer based on:
+
+🧪 Soil test results
+🌱 Crop requirements
+📍 Local recommendations
+
+⚠️ Avoid excessive fertilizer application.
+
+💡 FARMER TIP:
+
+Combining appropriate mineral fertilizer with organic matter can improve soil fertility and support long-term productivity.
+
+
+🌿 Weed Management
+
+Weeds compete with maize for:
+
+💧 Water
+🧪 Nutrients
+☀️ Sunlight
+🌱 Growing space
+
+Early weed control is extremely important.
+
+Recommended methods include:
+
+Hand weeding
+
+Hoeing
+
+Mechanical cultivation
+
+Mulching where appropriate
+
+Approved herbicides when necessary
+
+
+The early growth period is especially important for keeping the field weed-free.
+
+⚠️ Always follow local recommendations and product labels when using herbicides.
+
+
+🐛 Common Pests
+
+Maize can be affected by several insect pests.
+
+Important pests may include:
+
+Fall armyworm
+
+Stalk borers
+
+Aphids
+
+Cutworms
+
+Maize earworms
+
+
+Control methods:
+
+🔍 Regular field monitoring
+🌱 Use healthy seed
+🛡️ Plant resistant varieties where available
+🔄 Practice crop rotation
+🧹 Maintain field sanitation
+🦋 Encourage natural enemies
+🧪 Use approved pesticides only when necessary
+
+Fall Armyworm Warning ⚠️
+
+Check young maize plants regularly for:
+
+Window-like damage on leaves
+
+Holes in leaves
+
+Caterpillars
+
+Sawdust-like material inside the whorl
+
+Fresh insect droppings
+
+
+Early detection can greatly reduce crop damage.
+
+
+🍂 Common Diseases
+
+Maize diseases can reduce both yield and grain quality.
+
+Common diseases may include:
+
+Maize rust
+
+Maize leaf blights
+
+Maize streak disease
+
+Ear and grain diseases
+
+
+Disease prevention:
+
+🌾 Use healthy seed.
+
+🛡️ Choose resistant varieties when available.
+
+🔄 Practice crop rotation.
+
+🧹 Remove or properly manage infected crop residues.
+
+🌱 Maintain good field management.
+
+🔍 Monitor the crop regularly.
+
+If serious disease symptoms appear, seek advice from agricultural experts or extension officers.
+
+
+🌱 Thinning and Gap Filling
+
+After germination, inspect the field.
+
+If some areas have missing plants, farmers may fill gaps early while soil moisture is still suitable.
+
+Remove weak or excess plants where necessary to maintain the recommended plant population.
+
+💡 FARMER TIP:
+
+Uniform plant growth helps the crop mature more evenly and can make harvesting easier.
+
+
+🌿 Crop Management
+
+During the growing season:
+
+✅ Monitor plant growth.
+
+✅ Control weeds early.
+
+✅ Check for pests regularly.
+
+✅ Watch for disease symptoms.
+
+✅ Maintain adequate moisture.
+
+✅ Apply fertilizer at the recommended time.
+
+✅ Protect the crop from livestock damage.
+
+Regular field visits allow farmers to identify problems before they become serious.
+
+
+🌽 Harvesting
+
+Maize should be harvested when the crop reaches physiological maturity.
+
+Signs of maturity may include:
+
+🌿 Leaves drying and turning brown.
+
+🌽 Husks becoming dry.
+
+🌾 Grains becoming hard.
+
+🟡 Grain moisture decreasing.
+
+Harvesting too early can result in:
+
+High moisture content
+
+Poor storage quality
+
+Increased drying costs
+
+
+Harvesting too late can increase the risk of:
+
+Birds
+
+Rodents
+
+Insects
+
+Mold
+
+Field losses
+
+
+
+📦 Post-Harvest Handling
+
+After harvesting:
+
+1️⃣ Remove damaged ears.
+
+2️⃣ Sort the maize.
+
+3️⃣ Dry the grain properly.
+
+4️⃣ Clean the grain.
+
+5️⃣ Remove contaminated or moldy grain.
+
+6️⃣ Store in a clean, dry facility.
+
+Good post-harvest handling helps protect both food safety and market value.
+
+
+🏠 Storage
+
+Before storing maize, ensure that the grain is properly dried.
+
+Protect stored maize from:
+
+💧 Moisture
+🐛 Insects
+🐀 Rodents
+🦠 Mold
+
+Storage facilities should be:
+
+✅ Clean
+✅ Dry
+✅ Well ventilated
+✅ Protected from pests
+
+Regularly inspect stored grain for signs of damage.
+
+⚠️ Never mix newly harvested wet grain with properly dried grain.
+
+
+💰 Increasing Profitability
+
+Farmers can improve maize profitability by:
+
+🌾 Using improved varieties.
+
+📅 Planting at the right time.
+
+🌱 Maintaining the correct plant population.
+
+🧪 Applying fertilizer efficiently.
+
+🌿 Controlling weeds early.
+
+🐛 Monitoring pests.
+
+🌽 Harvesting at the right maturity.
+
+📦 Reducing post-harvest losses.
+
+💰 Selling when market conditions are favorable.
+
+📊 Keeping accurate farm records.
+
+
+🌍 Sustainable Maize Farming
+
+Protect your soil and farm for future generations by:
+
+🔄 Rotating maize with legumes.
+
+🌱 Using compost and organic manure.
+
+💧 Conserving water.
+
+🚜 Reducing unnecessary soil disturbance.
+
+🌿 Preventing soil erosion.
+
+🧪 Using agricultural chemicals responsibly.
+
+🌾 Returning appropriate crop residues to the soil.
+
+Healthy soil is the foundation of productive farming.
+
+
+⚠️ Common Mistakes
+
+Avoid:
+
+❌ Planting poor-quality seed.
+
+❌ Planting too early or too late.
+
+❌ Using incorrect plant spacing.
+
+❌ Overcrowding the field.
+
+❌ Applying too much fertilizer.
+
+❌ Ignoring weeds during early growth.
+
+❌ Failing to monitor fall armyworm.
+
+❌ Harvesting too early.
+
+❌ Storing wet grain.
+
+❌ Ignoring post-harvest losses.
+
+
+
+💡 Best Farming Tips
+
+✅ Choose the right maize variety for your area.
+
+✅ Use certified, quality seed.
+
+✅ Prepare the field properly.
+
+✅ Plant when soil moisture is adequate.
+
+✅ Maintain recommended spacing.
+
+✅ Control weeds early.
+
+✅ Monitor for fall armyworm and other pests.
+
+✅ Apply fertilizer based on soil and crop needs.
+
+✅ Protect the crop during flowering.
+
+✅ Harvest at the correct maturity.
+
+✅ Dry grain properly before storage.
+
+✅ Keep detailed farm records.
+
+
+🎯 Lesson Summary
+
+After completing this lesson, you now understand:
+
+Maize production basics
+
+Suitable growing areas
+
+Climate requirements
+
+Soil management
+
+Land preparation
+
+Seed selection
+
+Planting season
+
+Planting methods
+
+Plant population
+
+Water management
+
+Fertilizer management
+
+Weed control
+
+Pest management
+
+Disease prevention
+
+Crop management
+
+Harvesting
+
+Post-harvest handling
+
+Safe storage
+
+Profit improvement
+
+Sustainable farming
+
+
+Following good maize production practices can help farmers improve crop establishment, increase yields, reduce losses, improve grain quality, and increase farm profitability.
+
+
+
+🚜🌱 Learn. Grow. Produce. Prosper. 🌍`,  // Wheat Farming Guide
   2: ``,  // Maize Production Techniques
   3: ``,  // Coffee Cultivation Guide
   4: ``,  // Sesame Farming Basics
