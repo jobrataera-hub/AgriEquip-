@@ -1440,21 +1440,24 @@ function toggleListingForm() {
 }
 
 async function submitListing() {
-  const name  = val('equipName');
-  const cat   = val('equipCategory');
-  const price = parseFloat(val('equipPrice'));
-  const city  = val('equipLocation');
-  const desc  = val('equipDesc');
   const msgEl = document.getElementById('listingMsg');
-  if (!name)             { flashMsg(msgEl,'⚠️ Enter equipment name','#F59E0B'); return; }
-  if (!price || price<=0){ flashMsg(msgEl,'⚠️ Enter a valid price','#F59E0B'); return; }
-  if (!city)             { flashMsg(msgEl,'⚠️ Enter your city','#F59E0B'); return; }
   try {
+    const name  = val('equipName');
+    const cat   = val('equipCategory');
+    const price = parseFloat(val('equipPrice'));
+    const city  = val('equipLocation');
+    const desc  = val('equipDesc');
+    if (!currentUser)      { flashMsg(msgEl,'⚠️ Not signed in — please reload and log in again','#F59E0B'); return; }
+    if (!name)             { flashMsg(msgEl,'⚠️ Enter equipment name','#F59E0B'); return; }
+    if (!price || price<=0){ flashMsg(msgEl,'⚠️ Enter a valid price','#F59E0B'); return; }
+    if (!city)             { flashMsg(msgEl,'⚠️ Enter your city','#F59E0B'); return; }
     await addDoc(collection(db,'equipment'), { ownerId:currentUser.uid, ownerEmail:currentUser.email, name, category:cat, description:desc||'', pricePerDay:price, location:{city}, availability:'available', createdAt:serverTimestamp() });
     completeTask('list_equipment', 30);
     flashMsg(msgEl,'✅ Equipment listed! (+30 XP)','#22C55E');
     setTimeout(() => { toggleListingForm(); loadMyListings(); }, 1500);
-  } catch(e) { flashMsg(msgEl,'❌ Failed. Try again.','#EF4444'); }
+  } catch(e) {
+    flashMsg(msgEl, '❌ Failed: ' + (e && e.message ? e.message : 'unknown error') + ' — try again.', '#EF4444');
+  }
 }
 
 function filterEquipment() { loadEquipment(); }
