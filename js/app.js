@@ -7,7 +7,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import {
   doc, getDoc, setDoc, updateDoc, collection,
-  addDoc, query, where, orderBy, getDocs, serverTimestamp
+  addDoc, query, where, orderBy, getDocs, serverTimestamp, increment
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 import {
   ref as storageRef, uploadBytes, getDownloadURL
@@ -18,6 +18,7 @@ const NAV = [
   { id:'home',      icon:'🏠',  label:'Home' },
   { id:'browse',    icon:'🔍',  label:'Browse Equipment' },
   { id:'listings',  icon:'📦',  label:'My Listings' },
+  { id:'bookings',  icon:'📅',  label:'My Bookings' },
   { id:'wallet',    icon:'💳',  label:'Wallet' },
   { id:'vip',       icon:'💎',  label:'VIP Plans' },
   { id:'tasks',     icon:'✅',  label:'Daily Tasks' },
@@ -138,6 +139,8 @@ Weeding: Because teff seedlings are thin and low to the ground early on, weed co
 Harvest: Teff is ready for harvest 2-6 months after planting depending on variety and altitude, when the plant turns golden-yellow and grains feel firm. Cut, dry in the field for a few days, then thresh — traditionally by driving livestock over the stalks, though mechanical threshers are increasingly common.
 
 Storage tip: Dry the grain thoroughly before storage — teff stored above 12% moisture is prone to mold, which can ruin an entire harvest within weeks.`,
+
+  
   1: `Wheat is a major cereal crop in Ethiopia's highlands, grown mainly between 1,500 and 2,800 meters altitude where cooler temperatures suit its growth cycle.
 Planting: Highland wheat is typically sown at the start of the Meher rains (June-July). Row planting rather than broadcasting gives better yields and makes weeding easier, though broadcasting remains common due to lower labor needs.
 Seed rate and spacing: About 100-150 kg of seed per hectare is standard for row planting, with rows spaced 20-25cm apart. Using certified seed rather than saved grain significantly improves yield and disease resistance.
@@ -180,6 +183,7 @@ Soil preparation: Vegetables generally need well-drained, fertile soil rich in o
 Irrigation: Consistent watering is critical — irregular watering causes problems like blossom-end rot in tomatoes and bolting (premature flowering) in leafy greens. Drip or furrow irrigation used consistently outperforms sporadic hand-watering.
 Pest and disease management: Vegetables are more pest-prone than cereals. Inspect plants regularly for aphids, whiteflies, and fungal spots, and rotate crop families (avoid planting tomatoes after peppers, for example) to reduce disease buildup in soil.
 Harvest and market timing: Harvest at the right maturity stage for your market — slightly underripe for produce that will travel further, fully ripe for local same-day sale. Staggered planting every 1-2 weeks extends your harvest window and gives more consistent income rather than one large glut.`,
+
   
   6: ``, 7: ``, 8: ``, 9: ``, 10: ``,
   11: ``, 12: ``, 13: ``, 14: ``, 15: ``, 16: ``, 17: ``, 18: ``, 19: ``,
@@ -256,6 +260,7 @@ window._app = {
   setAcademyView, openLessonReader, closeLessonReader, completeLessonFromReader,
   openEquipmentDetail, closeEquipmentDetail, detailPrevImage, detailNextImage,
   previewEquipPhotos, removeEquipPhoto,
+  openBookingModal, closeBookingModal, updateBookingTotal, submitBookingRequest, respondBooking,
   showToast,
 };
 
@@ -663,6 +668,20 @@ function renderSection(id) {
         </div>
         <div id="myListings"></div>`;
       loadMyListings();
+      break;
+
+    // ── BOOKINGS ─────────────────────────────────────────
+    case 'bookings':
+      root.innerHTML = `
+        <div class="section-card" style="background:linear-gradient(135deg,#0F172A,#1a3a2a);margin-bottom:16px">
+          <h3 style="color:white">📅 My Bookings</h3>
+          <p style="color:rgba(255,255,255,.55);font-size:.82rem;margin-top:6px">Requests you've sent, and requests owners have sent you.</p>
+        </div>
+        <h3 style="margin:4px 0 10px;font-size:.92rem">📤 Sent by Me</h3>
+        <div id="sentBookings"><p style="color:#64748B;text-align:center;padding:16px">Loading...</p></div>
+        <h3 style="margin:20px 0 10px;font-size:.92rem">📥 Received (My Listings)</h3>
+        <div id="receivedBookings"><p style="color:#64748B;text-align:center;padding:16px">Loading...</p></div>`;
+      loadMyBookings();
       break;
 
     // ── WALLET ───────────────────────────────────────────
@@ -1251,7 +1270,7 @@ async function openEquipmentDetail(id) {
 
         ${isOwner
           ? `<button class="action-btn" style="margin-top:20px;background:#334155" onclick="showSection('listings');closeEquipmentDetail()">📦 Manage in My Listings</button>`
-          : `<button class="action-btn" style="margin-top:20px" onclick="showToast('📞 Contact owner via Teff AI');closeEquipmentDetail();showSection('teffai')">📩 Request to Book</button>`}
+          : `<button class="action-btn" style="margin-top:20px" onclick="openBookingModal('${id}')">📩 Request to Book</button>`}
       </div>`;
   } catch(e) {
     overlay.querySelector('div > div:last-child').innerHTML = `<p style="text-align:center;color:#ef4444;padding:20px">Error loading listing.</p>`;
@@ -1340,6 +1359,216 @@ async function uploadEquipmentImages(files, ownerId) {
     urls.push(await getDownloadURL(sRef));
   }
   return urls;
+}
+
+// ─── Booking Request Flow ─────────────────────────────────
+// Schema written to /bookings matches the fields already set up in
+// Firestore: equipmentID, equipmentName, ownerID, renterID, startDate,
+// endDate, durationDays, pricePerDay, totalAmount, commissionRate,
+// commission, ownersEarning, paymentStatus, status, notes, createdAt, updatedAt.
+const BOOKING_STATUS_STYLE = {
+  pending:   { label:'⏳ Pending',   color:'#F59E0B' },
+  accepted:  { label:'✅ Accepted',  color:'#22C55E' },
+  declined:  { label:'❌ Declined',  color:'#EF4444' },
+  completed: { label:'🏁 Completed', color:'#64748B' },
+  cancelled: { label:'🚫 Cancelled', color:'#64748B' },
+};
+
+// Commission rate mirrors the VIP tier of the equipment OWNER (they're
+// the one whose earnings the commission is deducted from), not the renter.
+function commissionRateForVip(vipLevel) {
+  const key = (vipLevel || 'free').toLowerCase().replace(/\s+/g,'');
+  const map = { free:0.10, vip1:0.08, vip2:0.07, vip3:0.06, vip4:0.05, vip5:0.04 };
+  return map[key] ?? 0.10;
+}
+
+async function openBookingModal(equipmentId) {
+  if (!currentUser) return;
+  let eq;
+  try {
+    const eqSnap = await getDoc(doc(db,'equipment',equipmentId));
+    if (!eqSnap.exists()) { showToast('❌ Listing not found'); return; }
+    eq = eqSnap.data();
+  } catch(e) { showToast('❌ Could not load listing'); return; }
+  if (eq.ownerId === currentUser.uid) { showToast('⚠️ This is your own listing'); return; }
+
+  const today = new Date().toISOString().split('T')[0];
+  const overlay = document.createElement('div');
+  overlay.id = 'bookingModalOverlay';
+  overlay.dataset.price = eq.pricePerDay || 0;
+  overlay.dataset.ownerId = eq.ownerId;
+  overlay.dataset.equipName = eq.name || 'Equipment';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2100;display:flex;align-items:flex-end;justify-content:center';
+  overlay.onclick = (e) => { if (e.target === overlay) closeBookingModal(); };
+  overlay.innerHTML = `
+    <div style="background:#0F172A;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:20px 20px 28px;animation:sheetUp .3s ease">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:.75rem;color:#64748B">📅 Book Equipment</span>
+        <button onclick="closeBookingModal()" style="background:rgba(255,255,255,.08);border:none;color:white;width:28px;height:28px;border-radius:8px;font-size:1rem;cursor:pointer">✕</button>
+      </div>
+      <h2 style="color:white;font-size:1.1rem;margin-bottom:4px">${eq.name||'Equipment'}</h2>
+      <p style="color:#64748B;font-size:.8rem;margin-bottom:16px">${(eq.pricePerDay||0).toLocaleString()} ETB/day · 📍 ${eq.location?.city||'Ethiopia'}</p>
+
+      <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">Start Date *</label>
+      <input type="date" id="bookStart" class="form-input" min="${today}" onchange="updateBookingTotal()">
+      <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">End Date *</label>
+      <input type="date" id="bookEnd" class="form-input" min="${today}" onchange="updateBookingTotal()">
+
+      <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">Message to owner (optional)</label>
+      <textarea id="bookMessage" class="form-input" rows="2" placeholder="e.g. Need it for ploughing 4 hectares"></textarea>
+
+      <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:12px;margin-top:10px" id="bookTotalBox">
+        <p style="color:#64748B;font-size:.75rem">Select dates to see estimated total</p>
+      </div>
+
+      <button class="action-btn" id="submitBookingBtn" style="margin-top:16px" onclick="submitBookingRequest('${equipmentId}')">📩 Send Booking Request</button>
+      <p id="bookingMsg" style="display:none;margin-top:8px;text-align:center;font-size:.85rem"></p>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function closeBookingModal() {
+  document.getElementById('bookingModalOverlay')?.remove();
+}
+
+function updateBookingTotal() {
+  const overlay = document.getElementById('bookingModalOverlay');
+  const box = document.getElementById('bookTotalBox');
+  if (!overlay || !box) return;
+  const price = parseFloat(overlay.dataset.price) || 0;
+  const start = document.getElementById('bookStart').value;
+  const end   = document.getElementById('bookEnd').value;
+  if (!start || !end) { box.innerHTML = `<p style="color:#64748B;font-size:.75rem">Select dates to see estimated total</p>`; return; }
+  if (new Date(end) < new Date(start)) { box.innerHTML = `<p style="color:#EF4444;font-size:.78rem">⚠️ End date must be after start date</p>`; return; }
+  const days = Math.max(1, Math.round((new Date(end) - new Date(start)) / 86400000) + 1);
+  const total = days * price;
+  box.innerHTML = `<p style="color:#64748B;font-size:.75rem">${days} day${days>1?'s':''} × ${price.toLocaleString()} ETB</p>
+    <p style="color:#22C55E;font-weight:700;font-size:1.1rem;margin-top:4px">Est. ${total.toLocaleString()} ETB</p>
+    <p style="color:#64748B;font-size:.68rem;margin-top:2px">Final total confirmed by owner. Payment isn't collected yet — coming soon.</p>`;
+}
+
+async function submitBookingRequest(equipmentId) {
+  const overlay = document.getElementById('bookingModalOverlay');
+  const msgEl   = document.getElementById('bookingMsg');
+  const btn     = document.getElementById('submitBookingBtn');
+  const start   = document.getElementById('bookStart').value;
+  const end     = document.getElementById('bookEnd').value;
+  const notes   = document.getElementById('bookMessage').value.trim();
+  if (!start || !end) { flashMsg(msgEl,'⚠️ Choose start and end dates','#F59E0B'); return; }
+  if (new Date(end) < new Date(start)) { flashMsg(msgEl,'⚠️ End date must be after start date','#F59E0B'); return; }
+  const durationDays = Math.max(1, Math.round((new Date(end) - new Date(start)) / 86400000) + 1);
+  const pricePerDay  = parseFloat(overlay.dataset.price) || 0;
+  const ownerID      = overlay.dataset.ownerId;
+  const equipmentName = overlay.dataset.equipName;
+  if (ownerID === currentUser.uid) { flashMsg(msgEl,'⚠️ You can\'t book your own listing','#F59E0B'); return; }
+  if (btn) btn.disabled = true;
+  try {
+    const totalAmount = durationDays * pricePerDay;
+    // Commission is based on the OWNER's VIP tier — fetch their profile.
+    let commissionRate = 0.10;
+    try {
+      const ownerSnap = await getDoc(doc(db,'users',ownerID));
+      if (ownerSnap.exists()) commissionRate = commissionRateForVip(ownerSnap.data().vipLevel);
+    } catch(e) { /* fall back to default 10% */ }
+    const commission    = Math.round(totalAmount * commissionRate);
+    const ownersEarning = totalAmount - commission;
+
+    await addDoc(collection(db,'bookings'), {
+      equipmentID: equipmentId,
+      equipmentName,
+      ownerID,
+      renterID: currentUser.uid,
+      renterEmail: currentUser.email,
+      startDate: new Date(start),
+      endDate: new Date(end),
+      durationDays,
+      pricePerDay,
+      totalAmount,
+      commissionRate,
+      commission,
+      ownersEarning,
+      paymentStatus: 'unpaid',
+      status: 'pending',
+      notes,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    completeTask('first_booking_request', 20);
+    flashMsg(msgEl, '✅ Booking request sent! The owner will respond soon.', '#22C55E');
+    setTimeout(() => { closeBookingModal(); closeEquipmentDetail(); showSection('bookings'); }, 1500);
+  } catch(e) {
+    flashMsg(msgEl, '❌ Failed to send request: ' + (e.message || 'Try again.'), '#EF4444');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function respondBooking(bookingId, status) {
+  try {
+    const bSnap = await getDoc(doc(db,'bookings',bookingId));
+    if (!bSnap.exists()) { showToast('❌ Booking not found'); return; }
+    const b = bSnap.data();
+    await updateDoc(doc(db,'bookings',bookingId), { status, updatedAt: serverTimestamp() });
+    if (status === 'accepted' && b.equipmentID) {
+      // Best-effort — don't block the accept flow if this fails.
+      try { await updateDoc(doc(db,'equipment',b.equipmentID), { totalbookings: increment(1) }); } catch(e) {}
+    }
+    showToast(status === 'accepted' ? '✅ Booking accepted!' : '❌ Booking declined');
+    loadMyBookings();
+  } catch(e) { showToast('❌ Failed to update booking'); }
+}
+
+async function loadMyBookings() {
+  if (!currentUser) return;
+  const sentEl = document.getElementById('sentBookings');
+  const recvEl = document.getElementById('receivedBookings');
+  if (!sentEl || !recvEl) return;
+  try {
+    const sentSnap = await getDocs(query(collection(db,'bookings'), where('renterID','==',currentUser.uid), orderBy('createdAt','desc')));
+    sentEl.innerHTML = sentSnap.empty
+      ? `<p style="color:#64748B;text-align:center;padding:16px">No booking requests sent yet.</p>`
+      : sentSnap.docs.map(d => renderBookingCard(d.id, d.data(), false)).join('');
+  } catch(e) { sentEl.innerHTML = `<p style="color:#ef4444;text-align:center;padding:16px">Error loading your bookings</p>`; }
+  try {
+    const recvSnap = await getDocs(query(collection(db,'bookings'), where('ownerID','==',currentUser.uid), orderBy('createdAt','desc')));
+    recvEl.innerHTML = recvSnap.empty
+      ? `<p style="color:#64748B;text-align:center;padding:16px">No booking requests received yet.</p>`
+      : recvSnap.docs.map(d => renderBookingCard(d.id, d.data(), true)).join('');
+  } catch(e) { recvEl.innerHTML = `<p style="color:#ef4444;text-align:center;padding:16px">Error loading requests</p>`; }
+}
+
+function fmtBookingDate(v) {
+  if (!v) return '?';
+  const d = v.toDate ? v.toDate() : new Date(v);
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+function renderBookingCard(id, b, isOwnerView) {
+  const st = BOOKING_STATUS_STYLE[b.status] || BOOKING_STATUS_STYLE.pending;
+  const dateRange = `${fmtBookingDate(b.startDate)} → ${fmtBookingDate(b.endDate)}`;
+  return `<div class="section-card" style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+      <div>
+        <div style="font-weight:700;font-size:.9rem">${b.equipmentName||'Equipment'}</div>
+        <div style="color:#64748B;font-size:.76rem;margin-top:2px">📅 ${dateRange} · ${b.durationDays||1} day${(b.durationDays||1)>1?'s':''}</div>
+        ${isOwnerView ? `<div style="color:#64748B;font-size:.76rem;margin-top:2px">👤 ${b.renterEmail||''}</div>` : ''}
+        ${b.notes ? `<div style="color:#94A3B8;font-size:.78rem;margin-top:6px;font-style:italic">"${b.notes.replace(/</g,'&lt;')}"</div>` : ''}
+      </div>
+      <span style="color:${st.color};font-size:.75rem;white-space:nowrap">${st.label}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px">
+      <div>
+        <div style="color:#22C55E;font-weight:700;font-size:.95rem">${(b.totalAmount||0).toLocaleString()} ETB</div>
+        ${isOwnerView ? `<div style="color:#64748B;font-size:.7rem">Your earnings: ${(b.ownersEarning||0).toLocaleString()} ETB (after ${Math.round((b.commissionRate||0)*100)}% commission)</div>` : ''}
+      </div>
+      <span style="color:#64748B;font-size:.7rem">${b.paymentStatus||'unpaid'}</span>
+    </div>
+    ${isOwnerView && b.status === 'pending' ? `
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="action-btn" style="background:#22C55E" onclick="respondBooking('${id}','accepted')">✅ Accept</button>
+      <button class="action-btn" style="background:#EF4444" onclick="respondBooking('${id}','declined')">❌ Decline</button>
+    </div>` : ''}
+  </div>`;
 }
 
 // ─── Actions ─────────────────────────────────────────────
@@ -1664,6 +1893,11 @@ window.detailPrevImage  = detailPrevImage;
 window.detailNextImage  = detailNextImage;
 window.previewEquipPhotos = previewEquipPhotos;
 window.removeEquipPhoto = removeEquipPhoto;
+window.openBookingModal = openBookingModal;
+window.closeBookingModal = closeBookingModal;
+window.updateBookingTotal = updateBookingTotal;
+window.submitBookingRequest = submitBookingRequest;
+window.respondBooking   = respondBooking;
 window.showToast        = showToast;
 window.setLang = function(l) {
   localStorage.setItem('agriequip_lang', l);
