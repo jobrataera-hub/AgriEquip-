@@ -1,7 +1,7 @@
 // AgriEquip — app.js — single clean module
 // Exposes all functions to window._app so bridge in HTML can reach them
 
-import { auth, db, storage } from '../firebase.js';
+import { auth, db } from '../firebase.js';
 import {
   onAuthStateChanged, signOut
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
@@ -9,9 +9,6 @@ import {
   doc, getDoc, setDoc, updateDoc, collection,
   addDoc, query, where, orderBy, getDocs, serverTimestamp, increment
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
-import {
-  ref as storageRef, uploadBytes, getDownloadURL
-} from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js';
 
 // ─── Constants ────────────────────────────────────────────
 const NAV = [
@@ -183,8 +180,6 @@ Soil preparation: Vegetables generally need well-drained, fertile soil rich in o
 Irrigation: Consistent watering is critical — irregular watering causes problems like blossom-end rot in tomatoes and bolting (premature flowering) in leafy greens. Drip or furrow irrigation used consistently outperforms sporadic hand-watering.
 Pest and disease management: Vegetables are more pest-prone than cereals. Inspect plants regularly for aphids, whiteflies, and fungal spots, and rotate crop families (avoid planting tomatoes after peppers, for example) to reduce disease buildup in soil.
 Harvest and market timing: Harvest at the right maturity stage for your market — slightly underripe for produce that will travel further, fully ripe for local same-day sale. Staggered planting every 1-2 weeks extends your harvest window and gives more consistent income rather than one large glut.`,
-
-  
   6: ``, 7: ``, 8: ``, 9: ``, 10: ``,
   11: ``, 12: ``, 13: ``, 14: ``, 15: ``, 16: ``, 17: ``, 18: ``, 19: ``,
   20: ``, 21: ``, 22: ``, 23: ``, 24: ``, 25: ``, 26: ``, 27: ``, 28: ``,
@@ -1113,12 +1108,25 @@ async function loadTransactions() {
   } catch(e) { el.innerHTML = `<p style="color:#64748B;text-align:center;padding:16px">Error loading transactions</p>`; }
 }
 
+// Races a promise against a timeout — Firestore's SDK has no built-in
+// abort, so a genuinely stalled request would otherwise spin on
+// "Loading..." forever with no error shown.
+function withTimeout(promise, ms, timeoutMessage) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error(timeoutMessage)), ms))
+  ]);
+}
+
 async function loadEquipment() {
   const el = document.getElementById('equipmentList');
   if (!el) return;
   el.innerHTML = `<p style="color:#64748B;text-align:center;padding:20px">Loading...</p>`;
   try {
-    const snap = await getDocs(query(collection(db,'equipment'), where('availability','==','available')));
+    const snap = await withTimeout(
+      getDocs(query(collection(db,'equipment'), where('availability','==','available'))),
+      15000, '⏱️ Timed out — check your connection'
+    );
     if (snap.empty) {
       el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#64748B"><div style="font-size:3rem">🚜</div><p>No equipment listed yet.<br>Be the first!</p><button class="action-btn" style="margin-top:14px" onclick="showSection('listings')">+ List Equipment</button></div>`;
       return;
@@ -1158,7 +1166,7 @@ async function loadEquipment() {
         </div>
       </div>`;
     }).join('');
-  } catch(e) { el.innerHTML = `<p style="color:#ef4444;text-align:center;padding:20px">Error loading equipment</p>`; }
+  } catch(e) { el.innerHTML = `<p style="color:#ef4444;text-align:center;padding:20px">${(e.message||'Error loading equipment').replace(/</g,'&lt;')}</p>`; }
 }
 
 async function loadMyListings() {
@@ -1349,14 +1357,45 @@ function resizeImageFile(file, maxDim = 1280, quality = 0.8) {
   });
 }
 
+// Cloudinary free-tier image hosting — used instead of Firebase Storage,
+// which requires the paid Blaze plan. Unsigned preset means no secret key
+// needs to live in this public client-side file.
+const CLOUDINARY_CLOUD_NAME   = 'gycdynp3';
+const CLOUDINARY_UPLOAD_PRESET = 'agriequip_unsigned';
+
+// Wraps fetch with a hard timeout — without this, a stalled network
+// request just spins on "Uploading..." forever with no error shown.
+function fetchWithTimeout(url, options = {}, ms = 20000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  return fetch(url, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(timer));
+}
+
 async function uploadEquipmentImages(files, ownerId) {
   const urls = [];
   for (let i = 0; i < files.length; i++) {
     const blob = await resizeImageFile(files[i]);
-    const path = `equipment/${ownerId}/${Date.now()}_${i}.jpg`;
-    const sRef = storageRef(storage, path);
-    await uploadBytes(sRef, blob, { contentType: 'image/jpeg' });
-    urls.push(await getDownloadURL(sRef));
+    const formData = new FormData();
+    formData.append('file', blob);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('folder', `equipment/${ownerId}`);
+    let res;
+    try {
+      res = await fetchWithTimeout(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        { method: 'POST', body: formData },
+        20000
+      );
+    } catch (e) {
+      throw new Error(e.name === 'AbortError' ? 'Upload timed out — check your connection' : e.message);
+    }
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      throw new Error(errBody?.error?.message || `Upload failed (${res.status})`);
+    }
+    const data = await res.json();
+    urls.push(data.secure_url);
   }
   return urls;
 }
