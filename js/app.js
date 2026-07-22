@@ -138,7 +138,50 @@ Weeding: Because teff seedlings are thin and low to the ground early on, weed co
 Harvest: Teff is ready for harvest 2-6 months after planting depending on variety and altitude, when the plant turns golden-yellow and grains feel firm. Cut, dry in the field for a few days, then thresh — traditionally by driving livestock over the stalks, though mechanical threshers are increasingly common.
 
 Storage tip: Dry the grain thoroughly before storage — teff stored above 12% moisture is prone to mold, which can ruin an entire harvest within weeks.`,
-  1: ``, 2: ``, 3: ``, 4: ``, 5: ``, 6: ``, 7: ``, 8: ``, 9: ``, 10: ``,
+  1: `Wheat is a major cereal crop in Ethiopia's highlands, grown mainly between 1,500 and 2,800 meters altitude where cooler temperatures suit its growth cycle.
+Planting: Highland wheat is typically sown at the start of the Meher rains (June-July). Row planting rather than broadcasting gives better yields and makes weeding easier, though broadcasting remains common due to lower labor needs.
+Seed rate and spacing: About 100-150 kg of seed per hectare is standard for row planting, with rows spaced 20-25cm apart. Using certified seed rather than saved grain significantly improves yield and disease resistance.
+Fertilizer: Wheat responds strongly to nitrogen and phosphorus. Apply DAP at planting for root establishment, then top-dress with urea 30-40 days after emergence when the crop is actively tillering.
+Common problems: Rust diseases (yellow, stem, and leaf rust) are the biggest threat to wheat in Ethiopia. Watch for orange-yellow pustules on leaves, especially during humid weather, and consider resistant varieties recommended by local agricultural offices.
+Harvest: Wheat is ready when the grain is hard and the straw has turned golden, usually 3-5 months after planting depending on variety and altitude. Harvest promptly once mature — delayed harvest increases shattering losses and lodging risk from wind or rain.`,
+
+  
+  2: `Maize is one of Ethiopia's most widely grown cereals, valued for both food security and its relatively short growing cycle compared to other staples.
+Planting seasons: Depending on your region, maize can be planted in the Belg season (February-March, shorter rains) or the main Meher season (June-July). Meher-season maize generally has more reliable rainfall and higher yield potential.
+Spacing: Plant in rows 75cm apart with 25-30cm between plants, placing 1-2 seeds per hole at about 5cm depth. Proper spacing prevents overcrowding, which stunts growth and reduces cob size.
+Fertilizer timing: Apply DAP or NPS at planting. Side-dress with urea when the plant has 6-8 leaves (about 3-4 weeks after emergence), and again at knee-height if soil fertility is low — split applications reduce nitrogen loss and boost yield more than a single dose.
+Weed control: The first 6 weeks are critical — maize competes poorly with weeds early on. Weed at 2-3 weeks and again at 5-6 weeks after planting for best results.
+Pest watch: Fall armyworm has become a serious threat to maize across Ethiopia. Check the whorl (the tight rolled leaves at the plant center) regularly for small holes or caterpillar droppings, and act early since infestations spread fast.
+Harvest: Maize is ready when husks turn brown and dry, and kernels are hard when pressed with a thumbnail — typically 90-140 days after planting depending on variety.`,
+
+  
+  3: `Coffee is Ethiopia's most important export crop and the birthplace crop of Arabica coffee, grown mainly in the southern and southwestern highlands between 1,200 and 2,200 meters.
+Shade and spacing: Coffee grows best under partial shade from trees like Cordia africana or banana, which protect it from direct sun and help regulate soil moisture. Space plants 2x2 meters or 2x2.5 meters depending on variety and slope.
+Planting: Use healthy seedlings 6-9 months old, planted at the start of the rainy season into holes dug and filled with topsoil mixed with compost several weeks beforehand to let the soil settle.
+Care during establishment: Young coffee plants need consistent weeding and mulching to conserve moisture. Avoid deep cultivation near the stem, which can damage shallow feeder roots.
+Pruning: Regular pruning removes dead, diseased, or overcrowded branches and encourages the plant to focus energy on cherry production rather than excessive vegetative growth. Prune after the main harvest, not during flowering.
+Pest and disease watch: Coffee berry disease and coffee wilt disease are major threats — inspect cherries and stems regularly, and remove and destroy infected plant material promptly to prevent spread.
+Harvest: Coffee cherries ripen unevenly, so selective hand-picking of only fully red cherries — repeated every 1-2 weeks during the main harvest season — produces the best quality and highest prices. Avoid stripping green or overripe cherries together, as this lowers overall grade.`,
+
+  
+  4: `Sesame is an important export oilseed crop in Ethiopia, particularly suited to lowland areas with well-drained soils and a single reliable rainy season.
+Climate needs: Sesame grows best in warm lowland areas with 500-650mm of rainfall spread evenly through the growing season. It is sensitive to waterlogging, so avoid heavy clay soils that hold water after rain.
+Planting: Sow at the start of the rains once soil moisture is reliable, using a fine, well-prepared seedbed since sesame seeds are very small and germinate poorly in cloddy soil. Broadcasting or row planting both work, though rows make weeding and harvesting easier.
+Seed rate: Around 3-5 kg per hectare is typical — over-seeding leads to overcrowding and thin, weak plants that lodge easily.
+Weeding: Sesame seedlings are slow to establish and compete poorly with weeds in the first 3-4 weeks. Early weeding is essential for a good stand.
+Harvest timing: This is the most critical part of sesame farming — pods shatter and drop seed once fully dry, so harvest when about 50-75% of pods have turned yellow-brown but before they split open. Cut plants and stack them upright to dry further, then thresh carefully to minimize seed loss.
+Storage: Dry sesame thoroughly before storage — seeds above 6-7% moisture are prone to rancidity and mold, which sharply reduces export quality and price.`,
+
+  
+  5: `Vegetable farming offers Ethiopian farmers a path to higher income per hectare compared to staple grains, especially near urban markets where demand is strong and consistent.
+Choosing crops: Common high-value vegetables include tomatoes, onions, cabbage, kale (gomen), peppers, and carrots. Choose crops based on local market demand, water availability, and your access to irrigation — most vegetables need more consistent moisture than cereals.
+Nursery and transplanting: Crops like tomatoes, onions, and cabbage are typically started in a nursery bed and transplanted after 4-6 weeks, once seedlings have 3-4 true leaves. This gives better control over early growth and reduces losses from pests and weather.
+Soil preparation: Vegetables generally need well-drained, fertile soil rich in organic matter. Incorporate compost or well-rotted manure before planting to improve structure and provide steady nutrients.
+Irrigation: Consistent watering is critical — irregular watering causes problems like blossom-end rot in tomatoes and bolting (premature flowering) in leafy greens. Drip or furrow irrigation used consistently outperforms sporadic hand-watering.
+Pest and disease management: Vegetables are more pest-prone than cereals. Inspect plants regularly for aphids, whiteflies, and fungal spots, and rotate crop families (avoid planting tomatoes after peppers, for example) to reduce disease buildup in soil.
+Harvest and market timing: Harvest at the right maturity stage for your market — slightly underripe for produce that will travel further, fully ripe for local same-day sale. Staggered planting every 1-2 weeks extends your harvest window and gives more consistent income rather than one large glut.`,
+  
+  6: ``, 7: ``, 8: ``, 9: ``, 10: ``,
   11: ``, 12: ``, 13: ``, 14: ``, 15: ``, 16: ``, 17: ``, 18: ``, 19: ``,
   20: ``, 21: ``, 22: ``, 23: ``, 24: ``, 25: ``, 26: ``, 27: ``, 28: ``,
   29: ``, 30: ``,
