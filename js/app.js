@@ -6,9 +6,10 @@ import {
   onAuthStateChanged, signOut
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import {
-  doc, getDoc, setDoc, updateDoc, collection,
+  doc, getDoc, setDoc, updateDoc, deleteDoc, collection,
   addDoc, query, where, orderBy, getDocs, serverTimestamp, increment
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+// ^ EDIT 1: added deleteDoc to imports
 
 // ─── Constants ────────────────────────────────────────────
 const NAV = [
@@ -226,6 +227,8 @@ const ARTICLES = [
 // ─── State ────────────────────────────────────────────────
 let currentUser = null;
 let userProfile = null;
+let isAdminUser = false;
+// ^ EDIT 2: added isAdminUser state
 let currentSection = 'home';
 let sectionHistory = ['home'];
 let historyIndex = 0;
@@ -239,6 +242,8 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'login.html'; return; }
   currentUser = user;
   await loadUserProfile();
+  isAdminUser = await checkIsAdmin();
+  // ^ EDIT 3: admin check runs at login
   renderUserInfo();
   applyTheme(localStorage.getItem('agriequip_theme') || 'dark');
   showSection('home');
@@ -256,6 +261,7 @@ window._app = {
   openEquipmentDetail, closeEquipmentDetail, detailPrevImage, detailNextImage,
   previewEquipPhotos, removeEquipPhoto,
   openBookingModal, closeBookingModal, updateBookingTotal, submitBookingRequest, respondBooking,
+  deleteListing,
   showToast,
 };
 
@@ -266,6 +272,15 @@ async function loadUserProfile() {
     const snap = await getDoc(doc(db, 'users', currentUser.uid));
     if (snap.exists()) userProfile = snap.data();
   } catch(e) { console.warn('Profile:', e.message); }
+}
+
+// EDIT 2 (continued): admin-check function
+async function checkIsAdmin() {
+  if (!currentUser) return false;
+  try {
+    const snap = await getDoc(doc(db, 'admins', currentUser.uid));
+    return snap.exists();
+  } catch(e) { return false; }
 }
 
 function renderUserInfo() {
@@ -1162,9 +1177,11 @@ async function loadEquipment() {
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
             <span style="color:#22C55E;font-weight:700">${(eq.pricePerDay||0).toLocaleString()} ETB/day</span>
             <button class="action-btn" style="width:auto;padding:6px 12px;font-size:.76rem" onclick="event.stopPropagation();openEquipmentDetail('${d.id}')">View</button>
+            ${(isAdminUser && eq.ownerId !== currentUser.uid) ? `<button class="action-btn" style="background:#EF4444;width:auto;padding:6px 12px;font-size:.76rem;margin-left:6px" onclick="event.stopPropagation();deleteListing('${d.id}')">🗑 Admin</button>` : ''}
           </div>
         </div>
       </div>`;
+      // ^ EDIT 6: admin delete button added above
     }).join('');
   } catch(e) { el.innerHTML = `<p style="color:#ef4444;text-align:center;padding:20px">${(e.message||'Error loading equipment').replace(/</g,'&lt;')}</p>`; }
 }
@@ -1188,8 +1205,10 @@ async function loadMyListings() {
           <p class="equipment-name">${eq.name}</p>
           <p style="color:#64748B;font-size:.78rem">📍 ${eq.location?.city||''} · ${eq.pricePerDay||0} ETB/day</p>
           <span style="display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:#22C55E;border-radius:6px;padding:3px 10px;font-size:.75rem;margin-top:6px">${eq.availability||'available'}</span>
+          <button class="action-btn" style="background:#EF4444;width:auto;padding:5px 12px;font-size:.72rem;margin-top:8px" onclick="event.stopPropagation();deleteListing('${d.id}')">🗑 Delete Listing</button>
         </div>
       </div>`;
+      // ^ EDIT 5: owner delete button added above
     }).join('');
   } catch(e) {}
 }
@@ -1279,7 +1298,9 @@ async function openEquipmentDetail(id) {
         ${isOwner
           ? `<button class="action-btn" style="margin-top:20px;background:#334155" onclick="showSection('listings');closeEquipmentDetail()">📦 Manage in My Listings</button>`
           : `<button class="action-btn" style="margin-top:20px" onclick="openBookingModal('${id}')">📩 Request to Book</button>`}
+        ${(isAdminUser && !isOwner) ? `<button class="action-btn" style="margin-top:10px;background:#EF4444" onclick="deleteListing('${id}');closeEquipmentDetail()">🗑 Admin Delete Listing</button>` : ''}
       </div>`;
+    
   } catch(e) {
     overlay.querySelector('div > div:last-child').innerHTML = `<p style="text-align:center;color:#ef4444;padding:20px">Error loading listing.</p>`;
   }
@@ -1400,11 +1421,32 @@ async function uploadEquipmentImages(files, ownerId) {
   return urls;
 }
 
+// ─── Delete Listing (owner or admin) ──────────────────────
+// EDIT 4: new function
+async function deleteListing(id) {
+  if (!confirm('Delete this listing? This can\'t be undone.')) return;
+  try {
+    await deleteDoc(doc(db, 'equipment', id));
+    showToast('🗑 Listing deleted');
+    loadMyListings();
+    if (currentSection === 'browse') loadEquipment();
+  } catch(e) {
+    showToast('❌ Failed to delete: ' + (e.message || 'Try again.'));
+  }
+}
+
 // ─── Booking Request Flow ─────────────────────────────────
 // Schema written to /bookings matches the fields already set up in
 // Firestore: equipmentID, equipmentName, ownerID, renterID, startDate,
 // endDate, durationDays, pricePerDay, totalAmount, commissionRate,
 // commission, ownersEarning, paymentStatus, status, notes, createdAt, updatedAt.
+//
+// ⚠️ REMINDER (unresolved from earlier): this schema uses ownerID/renterID
+// (capital ID), but the published Firestore rule for /bookings checks
+// resource.data.ownerId / renterId (lowercase d). Those are different
+// field names to Firestore — every write here is likely being silently
+// denied until one side is changed to match the other. Flagging again
+// since it wasn't part of this specific edit request.
 const BOOKING_STATUS_STYLE = {
   pending:   { label:'⏳ Pending',   color:'#F59E0B' },
   accepted:  { label:'✅ Accepted',  color:'#22C55E' },
@@ -1937,6 +1979,7 @@ window.closeBookingModal = closeBookingModal;
 window.updateBookingTotal = updateBookingTotal;
 window.submitBookingRequest = submitBookingRequest;
 window.respondBooking   = respondBooking;
+window.deleteListing    = deleteListing;
 window.showToast        = showToast;
 window.setLang = function(l) {
   localStorage.setItem('agriequip_lang', l);
