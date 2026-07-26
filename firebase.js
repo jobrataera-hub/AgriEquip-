@@ -1,35 +1,22 @@
-// Firebase Configuration
-// Initialize Firebase with your credentials from Firebase Console
-
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
 import { getAuth, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js';
 
-// TODO: Replace with your Firebase config from Firebase Console
-// Go to Firebase Console > Project Settings > Web App > Config
 const firebaseConfig = {
-
   apiKey: "AIzaSyDQL4d38G1ZQwARORaszwsf1YIRypKjP_M",
-    authDomain: "agriequip-8124b.firebaseapp.com",
-      projectId: "agriequip-8124b",
-        storageBucket: "agriequip-8124b.appspot.com",
-          messagingSenderId: "662047538853",
-            appId: "1:662047538853:web:84dd49584bface153a174c"
-            };
+  authDomain: "agriequip-8124b.firebaseapp.com",
+  projectId: "agriequip-8124b",
+  storageBucket: "agriequip-8124b.appspot.com",
+  messagingSenderId: "662047538853",
+  appId: "1:662047538853:web:84dd49584bface153a174c"
+};
 
-            // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-            // Initialize Authentication with persistence
-            const auth = getAuth(app);
-            await setPersistence(auth, browserLocalPersistence);
+setPersistence(auth, browserLocalPersistence).catch(e => console.warn('Auth persistence:', e));
 
-            // Initialize Firestore
-            const db = getFirestore(app);
-
-            // Initialize Storage
-            const storage = getStorage(app);
-
-            export { auth, db, storage, app };
-
+export { auth, db, storage, app };
