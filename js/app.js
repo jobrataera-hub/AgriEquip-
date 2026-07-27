@@ -125,6 +125,8 @@ const ACADEMY_LESSONS = [
 ];
 
 // ─── Lesson content — PASTE HERE ──────────────────────────
+
+cat > /tmp/lesson_content.js << 'ENDOFFILE'
 const LESSON_CONTENT = {
   0: `Teff (Eragrostis tef) is Ethiopia's most important staple crop, used to make injera. It thrives in a wide range of altitudes, from lowlands to highlands above 2,800m, making it one of the most adaptable cereals grown in the country.
 
@@ -134,57 +136,524 @@ Soil and water: Teff tolerates poor soils better than most cereals, but yields b
 
 Weeding: Because teff seedlings are thin and low to the ground early on, weed competition can sharply cut yield. Most farmers weed twice: once around 20 days after planting and again before the crop closes canopy.
 
-Harvest: Teff is ready for harvest 2-6 months after planting depending on variety and altitude, when the plant turns golden-yellow and grains feel firm. Cut, dry in the field for a few days, then thresh — traditionally by driving livestock over the stalks, though mechanical threshers are increasingly common.
+Harvest: Teff is ready for harvest 2–6 months after planting depending on variety and altitude, when the plant turns golden-yellow and grains feel firm. Cut, dry in the field for a few days, then thresh — traditionally by driving livestock over the stalks, though mechanical threshers are increasingly common.
 
 Storage tip: Dry the grain thoroughly before storage — teff stored above 12% moisture is prone to mold, which can ruin an entire harvest within weeks.`,
 
-  
-  1: `Wheat is a major cereal crop in Ethiopia's highlands, grown mainly between 1,500 and 2,800 meters altitude where cooler temperatures suit its growth cycle.
-Planting: Highland wheat is typically sown at the start of the Meher rains (June-July). Row planting rather than broadcasting gives better yields and makes weeding easier, though broadcasting remains common due to lower labor needs.
-Seed rate and spacing: About 100-150 kg of seed per hectare is standard for row planting, with rows spaced 20-25cm apart. Using certified seed rather than saved grain significantly improves yield and disease resistance.
-Fertilizer: Wheat responds strongly to nitrogen and phosphorus. Apply DAP at planting for root establishment, then top-dress with urea 30-40 days after emergence when the crop is actively tillering.
-Common problems: Rust diseases (yellow, stem, and leaf rust) are the biggest threat to wheat in Ethiopia. Watch for orange-yellow pustules on leaves, especially during humid weather, and consider resistant varieties recommended by local agricultural offices.
-Harvest: Wheat is ready when the grain is hard and the straw has turned golden, usually 3-5 months after planting depending on variety and altitude. Harvest promptly once mature — delayed harvest increases shattering losses and lodging risk from wind or rain.`,
+  1: `Wheat is Ethiopia's second most important cereal crop and the primary grain for bread, pasta, and local foods like ambasha. Ethiopia is one of Africa's top wheat producers, with major growing areas in Arsi, Bale, Shewa, and the highlands of Tigray.
 
-  
-  2: `Maize is one of Ethiopia's most widely grown cereals, valued for both food security and its relatively short growing cycle compared to other staples.
-Planting seasons: Depending on your region, maize can be planted in the Belg season (February-March, shorter rains) or the main Meher season (June-July). Meher-season maize generally has more reliable rainfall and higher yield potential.
-Spacing: Plant in rows 75cm apart with 25-30cm between plants, placing 1-2 seeds per hole at about 5cm depth. Proper spacing prevents overcrowding, which stunts growth and reduces cob size.
-Fertilizer timing: Apply DAP or NPS at planting. Side-dress with urea when the plant has 6-8 leaves (about 3-4 weeks after emergence), and again at knee-height if soil fertility is low — split applications reduce nitrogen loss and boost yield more than a single dose.
-Weed control: The first 6 weeks are critical — maize competes poorly with weeds early on. Weed at 2-3 weeks and again at 5-6 weeks after planting for best results.
-Pest watch: Fall armyworm has become a serious threat to maize across Ethiopia. Check the whorl (the tight rolled leaves at the plant center) regularly for small holes or caterpillar droppings, and act early since infestations spread fast.
-Harvest: Maize is ready when husks turn brown and dry, and kernels are hard when pressed with a thumbnail — typically 90-140 days after planting depending on variety.`,
+Varieties: Choose certified varieties suited to your altitude. Kakaba and Danda'a are popular improved varieties for mid-highlands. Ask your local agricultural extension office for the most recommended variety in your specific zone.
 
-  
-  3: `Coffee is Ethiopia's most important export crop and the birthplace crop of Arabica coffee, grown mainly in the southern and southwestern highlands between 1,200 and 2,200 meters.
-Shade and spacing: Coffee grows best under partial shade from trees like Cordia africana or banana, which protect it from direct sun and help regulate soil moisture. Space plants 2x2 meters or 2x2.5 meters depending on variety and slope.
-Planting: Use healthy seedlings 6-9 months old, planted at the start of the rainy season into holes dug and filled with topsoil mixed with compost several weeks beforehand to let the soil settle.
-Care during establishment: Young coffee plants need consistent weeding and mulching to conserve moisture. Avoid deep cultivation near the stem, which can damage shallow feeder roots.
-Pruning: Regular pruning removes dead, diseased, or overcrowded branches and encourages the plant to focus energy on cherry production rather than excessive vegetative growth. Prune after the main harvest, not during flowering.
-Pest and disease watch: Coffee berry disease and coffee wilt disease are major threats — inspect cherries and stems regularly, and remove and destroy infected plant material promptly to prevent spread.
-Harvest: Coffee cherries ripen unevenly, so selective hand-picking of only fully red cherries — repeated every 1-2 weeks during the main harvest season — produces the best quality and highest prices. Avoid stripping green or overripe cherries together, as this lowers overall grade.`,
+Land preparation: Prepare land thoroughly with 2–3 ploughings before planting. Break clods well and level the seedbed so water drains evenly. Wheat does poorly in compacted or waterlogged soil.
 
-  
-  4: `Sesame is an important export oilseed crop in Ethiopia, particularly suited to lowland areas with well-drained soils and a single reliable rainy season.
-Climate needs: Sesame grows best in warm lowland areas with 500-650mm of rainfall spread evenly through the growing season. It is sensitive to waterlogging, so avoid heavy clay soils that hold water after rain.
-Planting: Sow at the start of the rains once soil moisture is reliable, using a fine, well-prepared seedbed since sesame seeds are very small and germinate poorly in cloddy soil. Broadcasting or row planting both work, though rows make weeding and harvesting easier.
-Seed rate: Around 3-5 kg per hectare is typical — over-seeding leads to overcrowding and thin, weak plants that lodge easily.
-Weeding: Sesame seedlings are slow to establish and compete poorly with weeds in the first 3-4 weeks. Early weeding is essential for a good stand.
-Harvest timing: This is the most critical part of sesame farming — pods shatter and drop seed once fully dry, so harvest when about 50-75% of pods have turned yellow-brown but before they split open. Cut plants and stack them upright to dry further, then thresh carefully to minimize seed loss.
-Storage: Dry sesame thoroughly before storage — seeds above 6-7% moisture are prone to rancidity and mold, which sharply reduces export quality and price.`,
+Planting: Sow wheat in rows 20cm apart, 3–4cm deep, at a seed rate of 100–150 kg per hectare. Row planting gives better yields and easier weeding than broadcasting. Plant at the start of the main rains — in most highlands, this is October for Belg or July for Meher.
 
-  
-  5: `Vegetable farming offers Ethiopian farmers a path to higher income per hectare compared to staple grains, especially near urban markets where demand is strong and consistent.
-Choosing crops: Common high-value vegetables include tomatoes, onions, cabbage, kale (gomen), peppers, and carrots. Choose crops based on local market demand, water availability, and your access to irrigation — most vegetables need more consistent moisture than cereals.
-Nursery and transplanting: Crops like tomatoes, onions, and cabbage are typically started in a nursery bed and transplanted after 4-6 weeks, once seedlings have 3-4 true leaves. This gives better control over early growth and reduces losses from pests and weather.
-Soil preparation: Vegetables generally need well-drained, fertile soil rich in organic matter. Incorporate compost or well-rotted manure before planting to improve structure and provide steady nutrients.
-Irrigation: Consistent watering is critical — irregular watering causes problems like blossom-end rot in tomatoes and bolting (premature flowering) in leafy greens. Drip or furrow irrigation used consistently outperforms sporadic hand-watering.
-Pest and disease management: Vegetables are more pest-prone than cereals. Inspect plants regularly for aphids, whiteflies, and fungal spots, and rotate crop families (avoid planting tomatoes after peppers, for example) to reduce disease buildup in soil.
-Harvest and market timing: Harvest at the right maturity stage for your market — slightly underripe for produce that will travel further, fully ripe for local same-day sale. Staggered planting every 1-2 weeks extends your harvest window and gives more consistent income rather than one large glut.`,
-  6: ``, 7: ``, 8: ``, 9: ``, 10: ``,
-  11: ``, 12: ``, 13: ``, 14: ``, 15: ``, 16: ``, 17: ``, 18: ``, 19: ``,
-  20: ``, 21: ``, 22: ``, 23: ``, 24: ``, 25: ``, 26: ``, 27: ``, 28: ``,
-  29: ``, 30: ``,
+Fertilizer: Apply DAP (100 kg/ha) at planting to supply phosphorus. Apply Urea (100 kg/ha) as a top-dressing 30–40 days after planting when the crop is actively growing. Always apply fertilizer to moist soil — never dry.
+
+Weeding: Weed twice — at 3 weeks and 6 weeks after germination. Weeds in wheat fields can reduce yield by 40% if not controlled.
+
+Disease watch: Wheat rust (yellow, stem, and leaf rust) is the biggest threat to Ethiopian wheat. If you see orange or yellow powder on leaves, report immediately to your extension agent and spray fungicide early.
+
+Harvest: Wheat matures 90–120 days after planting. Harvest when 90% of the grain is golden and the straw is dry. Thresh promptly to prevent losses from birds and rain damage.`,
+
+  2: `Maize (corn) is Ethiopia's highest-yielding cereal and a key food security crop, especially in western, southern, and central regions including Oromia, SNNPR, and Amhara.
+
+Seasons: In Ethiopia, maize is grown in two seasons. The main Meher season runs June–July planting with October–November harvest. The Belg season (March–April planting) is shorter and suits lower altitudes.
+
+Land and spacing: Maize needs deep, fertile, well-drained soil. Plant in rows 75cm apart, with 25–30cm between plants within the row. This gives roughly 40,000–50,000 plants per hectare, which most improved varieties need for maximum yield.
+
+Seed: Use certified hybrid or improved open-pollinated varieties such as BH-660, BHQPY-545, or Limu. These yield 3–5 times more than local varieties under good management. Never re-plant seeds from hybrid maize — buy fresh certified seed each season.
+
+Fertilizer: Apply DAP (100 kg/ha) at planting in the planting hole. Apply Urea (100 kg/ha) when the plant is knee-high (about 4–6 weeks) as side-dressing, 5cm from the stem. Cover with soil to prevent nitrogen loss.
+
+Weeding: Weed at 2 weeks and 5 weeks after emergence. Maize is highly sensitive to weeds in the first 6 weeks — competition during this time can cut yield in half.
+
+Water: Maize needs consistent moisture, especially during tasselling and grain-fill (60–80 days after planting). Drought stress at this stage causes poor kernel development and low yield.
+
+Harvest: Harvest when the husks are dry and the grain is hard. Delay causes bird and rodent losses. Dry grain to below 13% moisture before storage in bags or metal silos.`,
+
+  3: `Coffee (Coffea arabica) originated in Ethiopia and remains the country's most important export crop, contributing over 30% of export revenue. Growing regions include Kaffa, Jimma, Sidama, Yirgacheffe, and Harrar — each producing distinct flavor profiles.
+
+Types of coffee farming: Forest coffee grows wild under natural shade. Garden coffee is grown around homesteads. Semi-forest coffee is managed in natural forests. Plantation coffee is grown on large farms. Most smallholders in Ethiopia practice garden or semi-forest coffee farming.
+
+Planting: Coffee seedlings are started in nurseries and transplanted when 30–40cm tall, usually at the onset of rains in June–July. Space trees 2.5–3 meters apart in rows. Plant in pits 60x60x60cm filled with compost and topsoil.
+
+Shade management: Coffee thrives under shade — traditionally from Cordia africana, Albizia, or Erythrina trees. Shade reduces temperature stress, keeps moisture longer, and improves cup quality. Aim for 30–50% shade cover.
+
+Pruning: Prune dead, diseased, and crossing branches after the main harvest each year. Remove suckers that sprout from the base to direct the tree's energy into fruiting branches. Well-pruned trees yield more and are easier to harvest.
+
+Fertilizer: Apply compost at the base of each tree every year. Supplement with DAP and Urea according to soil test results. Coffee responds well to organic matter — prioritize compost from farm waste and coffee pulp.
+
+Harvest: Coffee cherries are ready when fully red. Green or yellow cherries have not developed full flavor. Selectively pick only red cherries — stripping all cherries together reduces quality and fetches lower prices.
+
+Processing: Wet-processed (washed) coffee commands premium prices. Remove the pulp within 24 hours of picking using a pulping machine, ferment for 36–72 hours, wash thoroughly, and dry on raised beds for 10–15 days.
+
+Storage: Store dry parchment coffee in clean, dry, ventilated bags. Avoid mixing with other crops or storing near chemicals.`,
+
+  4: `Sesame (Sesamum indicum) is one of Ethiopia's most valuable export crops, with major production in Tigray, Amhara (particularly Humera and Metema), Benishangul-Gumuz, and parts of Oromia. Ethiopia is among the world's top sesame exporters.
+
+Why sesame: Sesame is drought-tolerant, grows on marginal soils, and brings good market prices — particularly white sesame for the international market. It requires less water than most cereals and can be a profitable cash crop on land not suitable for teff or maize.
+
+Land preparation: Sesame needs well-drained, sandy-loam to clay-loam soils. Avoid heavy clay or waterlogged fields — sesame roots rot quickly in standing water. Plough 2–3 times to create a fine, weed-free seedbed.
+
+Planting: Plant at the start of the rainy season (June–July in most areas). Broadcast or row-plant at 2–3 kg seed per hectare. Row planting at 40cm row spacing with 10cm between plants gives better results. Mix seed with sand for more even distribution when broadcasting.
+
+Fertilizer: Sesame has moderate fertilizer needs. Apply DAP at 50 kg/ha at planting. Avoid excess nitrogen — it promotes leafy growth at the expense of seeds.
+
+Weeding: Weed twice in the first 6 weeks. After canopy closure, sesame shades out most weeds. Early weed control is critical — sesame seedlings are slow to establish and easily outcompeted.
+
+Harvest timing: This is the most critical part of sesame production. Harvest when the lower capsules begin to turn yellow and before the top capsules are fully dry — if you wait too long, capsules burst open and seeds shatter on the ground, causing 30–50% yield loss. Cut plants early morning when capsules are less likely to open.
+
+Post-harvest: Bundle cut plants and stand upright in the field to dry for 5–7 days. Then thresh by beating bundles against a clean surface or tarpaulin. Clean and dry seed to below 6% moisture for export quality.`,
+
+  5: `Vegetable farming offers Ethiopian smallholders the opportunity to earn income year-round, especially in peri-urban areas and irrigated lowlands. Key vegetables grown include tomato, onion, cabbage, pepper, potato, carrot, kale, and garlic.
+
+Market selection: Before planting, know your market. Onions and tomatoes have high demand but also high supply — price drops at peak harvest. Consider growing less common but high-value crops like bell pepper, broccoli, or fresh herbs if you have urban market access.
+
+Soil: Vegetables need rich, well-drained soil with plenty of organic matter. Add compost or well-rotted manure before planting — aim for 2–5 kg per square meter. Never use fresh manure as it burns roots and spreads disease.
+
+Irrigation: Most vegetables need consistent, regular watering — drought stress during flowering or fruit development reduces yield sharply. Drip irrigation is most efficient, but furrow irrigation is widely used. Water in the morning, not the evening, to reduce fungal disease.
+
+Onion production: Onions are Ethiopia's most profitable vegetable export. Start from seedlings in nurseries. Transplant at 4–6 weeks. Space 10x20cm. Reduce irrigation 2 weeks before harvest to improve storability. Cure harvested onions in shade for 2–3 weeks before selling.
+
+Tomato production: Tomatoes are highly profitable but disease-prone. Use stakes or cages to keep plants off the ground. Remove suckers regularly. Watch for early blight, late blight, and bacterial wilt — report symptoms to extension agents early. Harvest when fully colored for best price.
+
+Pest management: Common vegetable pests include aphids, whitefly, thrips, and caterpillars. Inspect crops every 2–3 days. Use yellow sticky traps, neem-based sprays, and remove infested leaves. Pesticide should be last resort — observe pre-harvest intervals carefully.`,
+
+  6: `Fruit trees offer Ethiopian farmers a long-term income source. Once established, a well-managed fruit orchard can produce for 20–50 years. Common fruits grown in Ethiopia include mango, avocado, banana, papaya, citrus (orange, lemon, lime), guava, and apple (in highlands).
+
+Site selection: Most fruit trees need deep, well-drained soil and 6+ hours of direct sunlight. Avocado and banana need higher rainfall or irrigation. Mango tolerates dry conditions once established. Apple requires cold highland conditions — best above 2,000m altitude.
+
+Planting pit preparation: Dig pits 60x60x60cm (or larger for mango/avocado). Fill with a mixture of topsoil and 20kg compost. Allow to settle for 2 weeks before transplanting. This gives roots an excellent start.
+
+Spacing: Mango: 8–10m apart. Avocado: 6–8m. Banana: 2–3m. Papaya: 2–3m. Citrus: 5–6m. Guava: 5m. Proper spacing ensures sunlight penetration and air circulation, reducing disease.
+
+Establishment care: Water young trees every 2–3 days in dry weather for the first 2 years. Mulch around the base with dry grass or straw to retain moisture and reduce weeds. Protect from browsing animals with fencing or thorny branches.
+
+Pruning: Prune fruit trees annually after harvest. Remove dead, diseased, crossing, and downward-growing branches. For mango, open up the center to allow light in. For banana, keep only 1 main stem and 1–2 ratoon shoots at a time.
+
+Fertilizer: Apply compost annually at the drip line (edge of canopy). Supplement with DAP and Urea in the growing season according to tree age and soil test. Fruit trees respond strongly to potassium — banana and mango especially.
+
+Harvest and post-harvest: Harvest at the right maturity — most fruits for local market are picked ripe; for distant markets, harvest slightly before full ripeness to survive transport. Store in cool, shaded, ventilated conditions.`,
+
+  7: `Greenhouse farming — also called protected agriculture — is growing rapidly in Ethiopia, particularly around Addis Ababa and in export-oriented farms. A greenhouse controls temperature, humidity, and pests, allowing year-round production of high-value crops like tomatoes, peppers, cucumbers, roses, and herbs.
+
+Types of greenhouses: Low-cost plastic tunnels (100,000–500,000 ETB range) are most accessible for smallholders. Net houses are cheaper and suitable for insect exclusion without full climate control. Glass or polycarbonate structures are used by large commercial farms.
+
+Key benefits: Year-round production regardless of rain or dry season. Protection from hail, heavy rain, and insects. Higher yields — 3–5x more than open-field in the same area. Premium prices for off-season produce.
+
+Ventilation: The most common greenhouse mistake is poor ventilation, which causes overheating and fungal disease. Open sides and ridge vents daily in morning, close before evening cold. Aim to keep temperature below 32°C for most vegetables.
+
+Irrigation: Drip irrigation is standard in greenhouses. It delivers water directly to roots, keeps foliage dry (reducing disease), and uses 40–60% less water than furrow irrigation. Check drippers daily for blockages.
+
+Growing media: Greenhouse crops can be grown in soil, or in soilless media (substrate culture using coco peat, perlite, or pumice). Soilless systems give highest yields and reduce soil-borne disease, but require careful nutrient management through fertigation (fertilizer in irrigation water).
+
+Pest and disease in greenhouses: The enclosed environment can allow pests like whitefly, spider mite, and thrips to build up rapidly. Install sticky traps, introduce biological control agents (predatory insects), and scout every 2 days. Fungal diseases spread fast in humid conditions — maintain good air flow.
+
+Economics: A well-managed 500m² greenhouse growing tomatoes can yield 15,000–25,000 kg per year and generate significant profit. Calculate your break-even point before investing — factor in structure cost, labor, seeds, fertilizer, and marketing.`,
+
+  8: `Tractors are the most important piece of machinery on a modern Ethiopian farm. Proper operation and maintenance dramatically extends tractor life and prevents costly breakdowns during the critical planting and harvest windows.
+
+Before starting — daily checks: Never skip the pre-operation inspection. Check engine oil level (use dipstick — should be between MIN and MAX marks). Check coolant level in radiator — engine should be cold when you check. Check fuel level. Check tire pressure — under-inflated tires increase fuel use and cause uneven tillage. Check all fluid levels including hydraulic oil and transmission oil.
+
+Starting procedure: Set parking brake. Put transmission in neutral. Turn key to ON — check that warning lights illuminate then go off. Start engine. Let idle for 2–3 minutes before working — this allows oil to circulate fully. Never rev a cold engine.
+
+Operating safely: Always use seat belt if fitted. Never allow passengers on the tractor unless a proper seat is provided. Keep PTO (power take-off) guards in place at all times. Be especially careful on slopes — never turn sharply on a hillside. When hitching implements, never stand between the tractor and implement with engine running.
+
+Gear selection: Use the lowest practical gear for heavy tillage work. Higher gears for lighter operations and transport. Forcing a tractor in too high a gear under heavy load damages the transmission. If the engine is straining, shift down.
+
+After operation: Let engine idle for 3–5 minutes before shutting off — allows turbocharger to cool. Park on flat ground. Apply parking brake. Remove key. Check for leaks under tractor while engine is warm.
+
+Maintenance schedule: Change engine oil every 250 hours or as specified in manual. Change fuel filter every 500 hours. Check and adjust valve clearances annually. Grease all grease points every 50 hours. Keep a log of all maintenance performed.`,
+
+  9: `Combine harvesters dramatically reduce labor costs and harvest losses for wheat, barley, teff, and maize. In Ethiopia, combines are increasingly available for hire through cooperatives, private operators, and service providers like AgriEquip.
+
+How a combine works: The combine cuts the standing crop (header), feeds it into the threshing cylinder which separates grain from straw, then cleans the grain through sieves and fans, collecting it in a grain tank while blowing straw out the back.
+
+Header adjustment: Set cutting height just above ground level — cutting too low picks up soil and stones which damage the threshing cylinder. For lodged (fallen) crops, use a crop lifter attachment and cut at a slight angle to the direction of lodging.
+
+Ground speed: Match speed to crop density and yield. In thick, high-yielding crops, slow down — overfeeding causes blockages. In thin crops, increase speed to maintain efficiency. Watch the grain loss monitor and grain sample quality continuously.
+
+Cylinder and concave settings: Higher cylinder speed and wider concave gap for dry, brittle crops (wheat at harvest). Lower speed and tighter gap for moist or tough-strawed crops. Incorrect settings cause either incomplete threshing (grain stays in straw) or cracked grain.
+
+Cleaning system: Adjust fan speed and sieve opening to crop conditions. Too much wind blows light grain out with chaff — a loss. Too little wind leaves chaff in the grain tank — poor quality. Check the grain sample from the tank every 30 minutes.
+
+Grain tank management: Monitor grain tank level — an overfull tank causes blockages and spillage. Unload regularly into a truck or trailer running alongside the combine.
+
+Maintenance during harvest: Daily grease all grease points. Check belts and chains for wear and tension. Remove crop residue from around the engine and radiator area — fire risk. Clean the radiator screen every few hours to prevent overheating.`,
+
+  10: `Ploughing is the foundation of good crop production. Proper tillage prepares a seedbed that allows roots to penetrate, water to infiltrate, and weeds to be buried — all critical for achieving good yield.
+
+Types of ploughing: Primary tillage (deep ploughing) breaks up and turns the soil to 20–30cm depth using a mouldboard or disc plough. Secondary tillage (harrowing) breaks clods and levels the surface to create a fine seedbed. Most Ethiopian crops need both operations.
+
+Timing: Plough when soil moisture is right — not too wet (soil compacts and smears) and not too bone-dry (too hard, high fuel use). Ideal soil crumbles when squeezed and does not stick together in a ball. Plough as early as possible before the rains to allow time for secondary tillage.
+
+Ploughing depth: For teff and other small-seeded crops: 15–20cm is sufficient. For maize, sorghum, and root crops: 25–30cm gives roots more room. Avoid over-tilling — excessive tillage destroys soil structure and increases erosion risk.
+
+Contour ploughing: On sloping land, always plough along the contour (across the slope) — never up-and-down the hill. Contour ploughing dramatically reduces soil erosion and retains rainwater on the field rather than letting it run off.
+
+Tractor-drawn plough settings: Set the front furrow wheel in the previous furrow. Adjust the top link to keep the plough level front-to-back. Set side draft to keep the tractor pulling straight. Adjust working depth with the depth wheel. Check that all mouldboards are turning soil cleanly.
+
+Animal-drawn tillage: The traditional Ethiopian maresha is suited to light soils and small plots. Use 2–3 ploughings at different angles for best seedbed preparation. Cross-ploughing (second pass at 90°) breaks clods effectively.
+
+After ploughing: Harrow or disc immediately after ploughing to prevent soil drying and clod formation. Apply any pre-plant fertilizer before the final harrowing and incorporate into the soil.`,
+
+  11: `Mechanical seeders — from simple hand-pushed jab planters to tractor-drawn precision planters — give more uniform planting than broadcasting, saving seed and improving yields.
+
+Why use a seeder: Broadcasting wastes seed, creates uneven plant populations, and makes weeding difficult. A seeder places seed at the right depth, right spacing, and right quantity — consistently. Maize planted with a precision planter can yield 30–50% more than broadcast or hand-placed seed.
+
+Types of seeders: Jab planter (manual): Injects a single seed at correct depth per push. Good for maize, sorghum, sunflower. Row seeder (animal or tractor drawn): Plants multiple rows simultaneously. Suitable for wheat, barley, teff, sorghum. Precision planter (tractor drawn): Meters out exact seed spacing — used for maize, sunflower, sesame.
+
+Calibration: Before planting, always calibrate the seeder. Fill the hopper with the actual seed you will plant (seed size and shape vary between varieties and affect metering). Drive 100 meters, collect and count seeds deposited. Calculate seeds per meter and compare with target plant population. Adjust metering wheel or gate accordingly.
+
+Seed preparation: Use only clean, graded seed — broken, undersized, or damaged seeds jam the metering mechanism. Dress seed with appropriate fungicide treatment before loading into hopper. Do not use seed that has been treated with pesticides in food-grade containers.
+
+Operating the seeder: Maintain consistent tractor speed — speed changes alter seed spacing. Check seed flow regularly — hoppers can jam, especially with small-seeded crops. Walk behind periodically to check seed is being placed, not just rolling along the surface.
+
+Maintenance: Clean hoppers thoroughly after each use — old seed rots and blocks metering mechanisms. Oil all moving parts. Check for worn or bent metering fingers. Store covered to prevent rust.`,
+
+  12: `Irrigation pumps are the heart of smallholder irrigation in Ethiopia, drawing water from rivers, boreholes, ponds, and canals to fields. Proper maintenance prevents breakdowns at the worst possible time — during the dry season when crops are fully dependent on irrigation.
+
+Types of irrigation pumps: Centrifugal pumps are most common — driven by diesel engine or electric motor. Submersible pumps are placed directly in a borehole or water source. Hand pumps are used for small plots and domestic water. Know which type you have and follow its specific maintenance schedule.
+
+Daily checks before operation: Check engine oil level (if diesel driven). Check fuel — never run dry as it can damage fuel pump. Check all connections and pipes for leaks. Prime the pump if it has been sitting — most centrifugal pumps need priming before they can draw water. Check that the suction pipe is submerged and strainer is not blocked.
+
+Priming: A centrifugal pump cannot pump air — it must be filled with water before starting. Pour water through the priming plug on top of the pump casing until full. Block the outlet and start the engine. Once pressure builds and water flows, open the outlet.
+
+Strainer maintenance: The strainer (foot valve) at the end of the suction pipe prevents debris entering the pump. Clean it weekly — a clogged strainer reduces flow and can burn out the pump. Lift the suction pipe and clean strainer in a bucket of water.
+
+After each operation: Flush pump with clean water if pumping from muddy source. Release pressure before disconnecting pipes. Run engine at idle for 2 minutes before shutting off (for cooling). Store in shade — UV light degrades rubber seals and hoses.
+
+Long-term maintenance: Change engine oil every 250 hours. Replace impeller seals annually or when water leaks from shaft. Check and replace fuel filter every 6 months. Keep spare seals, a spare V-belt, and spark plugs (for petrol engines) on hand.`,
+
+  13: `Regular maintenance is the single most cost-effective investment you can make in your farm equipment. A tractor or implement that breaks down during harvest can cost you far more in lost crop than the price of regular servicing.
+
+Why maintenance matters: Equipment failure during planting or harvest season can cause 10–20% crop losses through delayed operations. Well-maintained equipment uses 15–20% less fuel. Machines that are regularly serviced last 2–3 times longer.
+
+Maintenance schedule framework:
+
+DAILY (before each use): Check all fluid levels (engine oil, coolant, hydraulic oil, fuel). Check tire pressure. Grease all fittings. Visual inspection for leaks, loose bolts, and damage. Clean air filter pre-cleaner.
+
+WEEKLY (every 50 hours of operation): Check battery terminals and electrolyte. Clean full air filter element. Check fan belt tension — should deflect 1–1.5cm under firm pressure. Check and clean fuel system pre-filter. Inspect all hoses and connections.
+
+MONTHLY (every 250 hours): Change engine oil and filter. Check and adjust valve clearances (tractor engines). Inspect and adjust brakes. Check and adjust clutch free play. Lubricate all cables and linkages. Check wheel nut torque.
+
+ANNUALLY (every 500–1000 hours): Full service including fuel injector test, injection pump calibration, timing check, cylinder compression test, and complete hydraulic system check. This should be done by a qualified mechanic.
+
+Record keeping: Keep a simple logbook with date, hours on meter, work done, parts replaced, and fuel used for every machine. This helps identify problems early, tracks costs, and proves service history if you sell the machine.
+
+Common mistakes: Using the wrong grade of engine oil. Ignoring small leaks until they become big problems. Skipping oil changes to save money — this is false economy. Not cleaning the air filter in dusty conditions — a blocked filter can damage an engine within hours.`,
+
+  14: `Fuel is one of the largest operating costs in mechanized farming. Simple operational practices and good equipment maintenance can reduce fuel consumption by 20–30% without reducing work output.
+
+Understanding fuel use: A tractor uses fuel proportional to the load placed on the engine. Overloading (too-large implement, too-deep tillage in hard soil) causes high fuel use and slow work. Underloading (too-small implement for tractor size) wastes capacity. Matching implement size to tractor power is the most important fuel economy decision.
+
+Tire inflation: Under-inflated tires dramatically increase rolling resistance and fuel consumption. For field work, use the correct inflation pressure for the load — many tractors use lower field pressure (0.8–1.2 bar) and higher road pressure (1.4–1.8 bar). Check and inflate daily.
+
+Engine tune-up: A well-tuned engine burns fuel completely and efficiently. Black smoke from the exhaust means incomplete combustion — wasted fuel. Have injectors tested and cleaned annually. Replace fuel filters on schedule. A clean air filter allows proper air-fuel ratio.
+
+Gear selection: Use the highest gear that allows the engine to pull comfortably without lugging (struggling). The correct approach in most modern tractors is: select a gear where the engine runs at 75–80% of rated speed under load. This is called "shift-up, throttle-back" — higher gear, lower RPM = less fuel.
+
+Transport on roads: Raise implements fully for road travel. Reduce ballast weight when transporting between fields — extra weight means more fuel. Plan work schedules to reduce empty travel.
+
+PTO-driven equipment: PTO (power take-off) driven implements like threshers and balers are most efficient when operating at the rated PTO speed (540 or 1000 RPM). Operating significantly above or below this wastes fuel and causes wear.
+
+Fuel storage: Store diesel in clean, sealed containers away from direct sun. Water contamination in fuel causes injector damage. Drain water from fuel tank drain plug monthly. Use fuel within 6 months — old diesel degrades and causes injector problems.`,
+
+  15: `Farm machinery causes thousands of injuries each year across Africa — most of which are entirely preventable. Following basic safety procedures protects you, your workers, and your family.
+
+The most dangerous moments:
+
+1. PTO (Power Take-Off) entanglement: The rotating PTO shaft can catch loose clothing in a fraction of a second, causing severe injury or death. ALWAYS keep the PTO shield (guard) in place. NEVER step over a rotating PTO. ALWAYS turn off the engine before connecting or disconnecting PTO-driven implements.
+
+2. Getting on and off moving machinery: NEVER jump on or off a moving tractor. Always bring the machine to a complete stop. Use the steps and handles provided.
+
+3. Hydraulic systems: Hydraulic oil under high pressure can inject through skin and cause serious injury. NEVER use bare hands to find hydraulic leaks — use cardboard. Before working under a raised implement, always lower it to the ground or use a safety prop.
+
+4. Overturning on slopes: Tractors turn over quickly on hillsides. NEVER make sharp turns on slopes. Keep your speed slow on uneven ground. Never turn at the top or bottom of a slope. Always drive up and down slopes, never across steep hillsides.
+
+5. Bystanders and children: Keep all bystanders, especially children, well away from operating machinery. Children should never ride on tractors unless a proper seat with restraint is fitted. Post a lookout when reversing.
+
+6. Harvesting machinery: Keep hands and feet well away from rotating cutters, chains, and augers. Stop all moving parts before clearing blockages. Use a stick, never your hand, to clear jams.
+
+Personal protective equipment: Wear safety boots, not sandals, around machinery. Use hearing protection near loud engines. Wear goggles when using angle grinders or handling chemicals.
+
+Fire prevention: Keep a fire extinguisher on every tractor and combine. Clear dry crop residue from engine and exhaust areas regularly — this is a major cause of harvest fires.`,
+
+  16: `Precision agriculture uses technology and data to apply the right input (seed, water, fertilizer) at the right place, in the right amount, at the right time. While high-tech precision agriculture (GPS, drones, sensors) is still developing in Ethiopia, the principles can be applied with simple tools.
+
+The core idea: Instead of treating your entire farm the same way, precision agriculture recognizes that different parts of your field have different soil conditions, water availability, and yield potential. By managing these zones differently, you can increase average yield while reducing input costs.
+
+Simple precision agriculture steps for Ethiopian smallholders:
+
+Step 1 — Map your field: Walk your field and note where yields have been high or low in past seasons. Note where water pools, where soil is sandy or clay-heavy, where slopes face different directions. Draw a simple sketch.
+
+Step 2 — Soil testing by zone: Take separate soil samples from different zones in your field (high-yield area, low-yield area, waterlogged area). Have each sample tested separately at an agricultural research station or private lab. Results will show different nutrient levels requiring different fertilizer rates.
+
+Step 3 — Variable fertilizer application: Apply more DAP and Urea to high-potential zones where returns are greatest. Apply lime (if acidic) to zones where pH is low. Reduce inputs on chronically low-yield zones that may need different crops or drainage investment.
+
+Step 4 — Yield monitoring: After harvest, weigh crop from different parts of the field separately. Keep records year by year. Patterns reveal which management changes are working.
+
+Technology: Basic smartphone apps can help — GPS mapping apps (like Google Maps) to measure field size and mark zones. Weather apps for planning. AgriEquip and similar platforms for equipment access. Simple digital scales for yield monitoring.
+
+The discipline of observing, recording, and responding to field data is the foundation of precision agriculture regardless of the technology level.`,
+
+  17: `Healthy soil is the foundation of productive farming. In Ethiopia, much farmland has suffered from decades of intensive cultivation, erosion, and limited organic matter return — leading to declining yields even with the same fertilizer amounts.
+
+Understanding soil pH: pH measures soil acidity or alkalinity on a scale of 0–14. Most crops grow best between pH 5.5–7.0. Ethiopian highland soils are often acidic (pH 4.5–5.5) due to rainfall leaching nutrients and leaving aluminum and hydrogen, which are toxic to roots at low pH. Acidic soils reduce fertilizer effectiveness significantly — even correct fertilizer amounts give poor response if pH is too low.
+
+Lime application: Agricultural lime (calcium carbonate) raises soil pH in acidic soils. Apply 1–3 tons per hectare depending on pH test result and soil type. Incorporate into soil by ploughing. It takes 3–6 months to fully react, so apply before the planting season. The effect lasts 3–5 years. This single intervention can increase crop yield by 30–50% in acidic areas.
+
+Soil organic matter: Organic matter improves soil structure, water-holding capacity, and nutrient supply. Ethiopian farmland typically has 1–2% organic matter — healthy soil should have 3–5%. Build organic matter by: returning crop residue to fields rather than burning, composting kitchen and animal waste, applying manure, and growing legumes as rotation crops.
+
+Compost making: A basic compost pile uses crop residue, animal manure, kitchen waste, and a small amount of soil layered together. Keep moist but not wet. Turn every 2–3 weeks. Ready in 2–3 months when dark, crumbly, and earthy-smelling. Apply 2–5 tons per hectare before planting.
+
+Fertilizer fundamentals: DAP (Diammonium Phosphate — 18% N, 46% P) supplies nitrogen and phosphorus at planting. Urea (46% N) supplies nitrogen for vegetative growth, applied 4–6 weeks after planting. Rates depend on crop, yield target, and soil test. Never guess — a soil test costs 200–500 ETB and can save thousands in misused fertilizer.
+
+Signs of nutrient deficiency: Nitrogen — yellowing of older leaves, stunted growth. Phosphorus — purple/red tint on leaves, poor root development. Potassium — brown leaf edges. Iron/zinc — yellowing of young leaves while veins stay green (in high-pH soils).`,
+
+  18: `Water is the most limiting factor for crop production in Ethiopia's dry seasons and drought-prone areas. Efficient irrigation can double or triple the productivity of available water resources.
+
+Water-use efficiency defined: Crop water productivity measures how much yield you get per liter of water used. Drip irrigation can produce the same yield as furrow irrigation using 40–60% less water. This means more area can be irrigated from the same water source.
+
+Furrow irrigation (most common in Ethiopia): Water flows down channels between crop rows. Efficiency is typically 40–60% — 40–60% of applied water actually reaches plant roots; the rest is lost to evaporation, runoff, and deep percolation. Improvements: shorten furrow length to reduce runoff at the end, use gentle slope, irrigate when soil is just dry (not after every rain).
+
+Drip irrigation: Water delivered directly to root zone through emitters on surface or subsurface pipes. Efficiency 85–95%. Benefits: lower disease (foliage stays dry), less weeds (only the root zone is wetted), less labor after installation. Increasingly affordable for smallholders — a simple 500m² system can cost 15,000–40,000 ETB. Highly recommended for vegetables and fruit trees.
+
+Sprinkler irrigation: Water sprayed over the crop. Efficiency 70–80%. Good for field crops on gentle slopes. Risk of fungal disease if leaves stay wet overnight — irrigate in morning so foliage dries during the day.
+
+Irrigation scheduling: The biggest water waste is irrigating too often or too much. Irrigate based on crop need, not habit. Check soil moisture by feeling soil 10–15cm deep — if it forms a ball when squeezed, no irrigation needed yet. If it crumbles and falls apart, irrigate. Many crops have critical periods (flowering, grain fill) where water stress causes the most yield loss — prioritize water at these times.
+
+Water harvesting: Collect rainwater in farm ponds, check dams, and half-moon catchments for use in dry spells. A simple farm pond of 500m³ capacity can irrigate 0.5 hectare of vegetables during the dry season.`,
+
+  19: `Pests — insects, rodents, birds, and nematodes — cause 20–40% of crop losses in Ethiopia annually. Integrated pest management (IPM) uses multiple strategies to control pests economically and with minimum environmental impact.
+
+The IPM approach: Rather than automatically spraying pesticide on a schedule, IPM starts with prevention, then uses biological and cultural controls, and only applies chemical pesticides when pest numbers exceed the economic threshold (when damage cost exceeds control cost).
+
+Scouting: The foundation of IPM is regular crop inspection. Walk your field every 3–5 days. Look under leaves, at growing points, and on stems. Count pest numbers per plant and compare to action thresholds. Keep records — knowing when and where pests appear helps predict future outbreaks.
+
+Cultural controls: Crop rotation breaks pest cycles — pests that specialize in one crop cannot survive when a different crop is grown. Early planting avoids peak pest periods. Resistant varieties tolerate or repel specific pests. Proper plant spacing improves air circulation and reduces fungal pest conditions.
+
+Biological control: Natural enemies — parasitic wasps, predatory beetles, and spiders — kill many crop pests. Protect natural enemies by avoiding broad-spectrum insecticide sprays when pests are below threshold. Some biological control agents can be purchased and released — ask your extension agent what is available in your area.
+
+Common Ethiopian crop pests:
+- Stemborer (maize, sorghum): Larvae bore into stems causing dead heart. Use Bacillus thuringiensis (Bt) spray early when larvae are small.
+- Aphids (vegetables, wheat): Cluster on shoots. Natural enemies usually control them. Spray insecticidal soap or neem extract if numbers are very high.
+- Fall armyworm (maize): Check whorl for frass (droppings). Spray into whorl with recommended insecticide when found.
+- Desert locust: Report immediately to agricultural authorities — locust control is organized at regional level.
+- Rodents: Use snap traps in fields and stores. Keep storage clean and sealed.
+
+Pesticide safety: Read the label before every use. Wear gloves, mask, and goggles. Never eat, drink, or smoke while handling pesticides. Observe the pre-harvest interval (days between last spray and harvest). Dispose of empty containers safely — never burn or reuse.`,
+
+  20: `Plant diseases caused by fungi, bacteria, viruses, and nematodes can devastate crops quickly. Early detection and prevention are far more effective and cheaper than trying to control disease after it has spread.
+
+The disease triangle: Disease only occurs when three conditions are present simultaneously: a susceptible crop variety, a disease-causing pathogen, and favorable environmental conditions (humidity, temperature). Remove any one of these and disease cannot develop. This is the basis of prevention.
+
+Key prevention strategies:
+
+1. Use certified, disease-free seed: Many diseases are seed-borne and spread from infected seed. Buying certified seed from reputable sources eliminates this entry point. Treat seed with recommended fungicide before planting for additional protection.
+
+2. Crop rotation: Many pathogens survive in soil or on crop debris. Rotating to a non-host crop breaks the disease cycle. Never grow the same crop in the same field in consecutive seasons if you have had disease problems.
+
+3. Resistant varieties: Plant breeding has produced varieties resistant to major diseases. Ethiopian farmers now have access to rust-resistant wheat, wilt-resistant tomatoes, and blight-resistant potato varieties. Use them.
+
+4. Field hygiene: Remove and burn (do not compost) diseased plant material. Clean equipment between fields to avoid moving soil-borne pathogens. Don't walk from a diseased area to a healthy one without washing boots.
+
+5. Optimum plant density: Overcrowding creates humidity and reduces air flow — ideal conditions for fungal disease. Follow recommended plant spacings. Prune lower leaves of tomato, coffee, and vegetables to improve air circulation.
+
+Major Ethiopian crop diseases:
+- Wheat rust (yellow, stem, leaf): Orange/yellow powder on leaves. Highly contagious. Report immediately. Spray triazole fungicide early.
+- Coffee wilt (Gibberella xylarioides): Sudden wilting, brown discoloration inside stem. Remove and burn affected trees. No chemical cure — use resistant varieties.
+- Maize lethal necrosis: Yellowing, death of plant. Spread by insects and through infected seed. Use certified seed, control thrips vectors.
+- Tomato late blight: Brown water-soaked patches on leaves and fruit. Spray mancozeb or copper-based fungicide preventatively in rainy season.
+- Banana Xanthomonas wilt: Yellow wilting, bacterial ooze in stem. Remove entire plant including mat. No chemical control.`,
+
+  21: `Climate change is making Ethiopian farming more challenging. Rainfall is becoming less predictable, droughts are more frequent, and extreme weather events are increasing. Climate-smart agriculture adapts to these changes while also reducing greenhouse gas emissions.
+
+Understanding climate impacts on your farm: Longer dry spells reduce soil moisture at critical crop stages. Heavier but shorter rains cause more surface runoff and soil erosion. Higher temperatures increase water evaporation and crop water demand. Unpredictable season onset makes planting timing decisions harder.
+
+Adaptation strategies:
+
+1. Drought-tolerant varieties: Use improved varieties selected for drought tolerance. Teff is naturally drought-tolerant once established. Drought-tolerant maize varieties (DT maize) can yield 20–30% more than standard varieties in dry years.
+
+2. Soil water conservation: Every liter of rainwater you keep in your soil is water you don't need to irrigate later. Mulching with crop residue, compost, or dry grass reduces evaporation by 30–50%. Tied ridges (blocking the furrow at intervals) prevent runoff and harvest rainwater in the field.
+
+3. Diversify crops: Grow several crops rather than depending on one. If drought or pest hits one crop, others may survive. Intercropping maize with beans, or teff with pulses, spreads risk and improves soil health.
+
+4. Adjust planting calendar: Monitor seasonal forecasts from Ethiopia's National Meteorological Institute. Delay planting if early rains fail — planting too early in failed rains wastes seed. Use short-season varieties that can be planted later and still mature before season end.
+
+5. Agroforestry: Integrate trees with crops and livestock. Trees provide shade reducing temperature stress, roots prevent erosion, falling leaves add organic matter, and trees can produce fruit or timber as additional income. Moringa, Faidherbia albida, and fruit trees are compatible with Ethiopian crop systems.
+
+6. Soil carbon building: Increasing soil organic matter through compost, crop residue management, and reduced tillage helps soil absorb more water and releases it more slowly to plants — a natural drought buffer.
+
+Climate information: Access weather forecasts and seasonal outlooks through Ethiopia's National Meteorological Institute (NMA), local radio agricultural programs, and the Teff AI assistant on AgriEquip.`,
+
+  22: `Dairy farming is one of the most reliable income sources for Ethiopian smallholders — cows produce milk every day regardless of season. Ethiopia has the largest cattle population in Africa, yet milk production per animal is very low due to poor nutrition, breed, and management.
+
+Dairy breeds: Local Zebu cattle are heat-tolerant and disease-resistant but produce only 1–3 liters/day. Crossbred cattle (Zebu x Holstein, or Zebu x Jersey) produce 8–15 liters/day under good feeding. Pure exotic breeds (Holstein, Friesian) produce 20–30+ liters but need intensive care and nutrition. Start with crossbreds — they balance productivity with manageability.
+
+Housing: Dairy cows need shelter from rain, cold nights, and direct sun. A simple open-sided shed with a raised concrete or compacted earth floor that drains well is sufficient. Keep the shed clean — manure accumulation causes mastitis (udder infection) and hoof problems.
+
+Nutrition: This is the most important factor in milk production. A high-producing dairy cow needs 50–70 kg fresh forage daily plus 3–5 kg concentrate feed. Grow improved forage: Napier grass (elephant grass) produces 60–80 tons/ha/year and is the most important dairy forage in highland Ethiopia. Supplement with hay, crop residue (treated with urea), and commercial dairy concentrate.
+
+Water: A milking cow needs 60–80 liters of clean water daily. Poor water access is one of the most common causes of low milk production. Provide clean water at all times — dirty water reduces intake and spreads disease.
+
+Milking: Milk at the same time every day — cows are creatures of habit and irregular milking reduces production. Clean the udder before milking with warm, clean water. Use a strip cup to detect mastitis before milking. Milk into clean containers. Cool milk quickly after milking to extend shelf life.
+
+Mastitis prevention: Mastitis (udder infection) is the most costly dairy disease. After each milking, dip all 4 teats in iodine-based teat dip. Dry off cows with antibiotic dry-cow therapy to prevent infections during the non-milking period. Check for swelling, heat, or clots in milk — treat immediately.`,
+
+  23: `Beef production offers Ethiopian farmers an opportunity to turn grass, crop residue, and by-products into high-value meat. Ethiopia has the potential to be a major beef exporter, but currently most cattle are marketed at low weights after long periods on poor nutrition.
+
+Cattle selection for beef: Choose cattle with good body conformation — wide, deep body, well-muscled hindquarters. Boran and Ogaden breeds are naturally well-suited for beef. Crossbred bulls can also produce good beef under good management. Avoid very thin or sick animals regardless of price.
+
+Fattening (feedlot) system: Short-term intensive feeding (60–90 days) transforms thin animals into well-finished beef cattle. This system is profitable because: feed conversion is most efficient in the first 90 days of fattening. Thin animals bought at low prices and sold at high finish weight generate profit from the price difference.
+
+Fattening ration: A basic fattening diet consists of ad-lib roughage (hay, silage, or crop residue) plus concentrate supplement. Common concentrate mixes include: noug cake, cotton cake, wheat bran, maize bran. A target of 0.8–1.2 kg daily weight gain is achievable with a good ration.
+
+Water: Provide clean water at all times. A fattening animal drinks 25–50 liters/day — restricted water dramatically reduces feed intake and growth rate.
+
+Health management: Deworm all animals entering the feedlot with ivermectin or albendazole. Vaccinate for clostridial diseases (blackleg, anthrax in endemic areas). Check and treat for external parasites (ticks, lice). Isolate any sick animals immediately.
+
+Marketing: Sell when animals reach their economic slaughter weight — continuing to feed after this point reduces profit as feed conversion efficiency declines. Know your buyers — abattoirs, butchers, and live animal traders each have different requirements. Record purchase price, all feed costs, and sale price to calculate actual profit per animal.`,
+
+  24: `Poultry — chickens, ducks, turkeys, and guinea fowl — is Ethiopia's most widely kept livestock and an important source of nutrition and income for rural households, particularly women. Improving local flock management can triple production with modest investment.
+
+Village chicken management: Village chickens kept in traditional scavenging systems have low productivity — 30–60 eggs/year and slow growth. Simple improvements dramatically increase output: supplementary feeding with grain or household scraps twice daily, providing clean water at all times, housing at night to prevent predator losses, and basic vaccination against Newcastle disease.
+
+Improved breeds: Improved dual-purpose breeds like the Horro, Koekoek, and Sasso are better adapted to Ethiopian conditions than exotic commercial breeds. They tolerate heat, scavenge for food, and still produce 150–200 eggs/year under semi-intensive management.
+
+Housing: Chickens need protection from predators (foxes, raptors, snakes), rain, cold nights, and direct sun. A simple raised wooden or bamboo henhouse with wire mesh sides is sufficient. Provide nest boxes (one per 5 hens), perches, and a litter floor (dry material like sawdust or rice husks — 5–10cm deep).
+
+Feeding: Layer hens need a balanced diet including protein (25–30%), energy from grains, calcium (for eggshell formation — provide crushed bone or limestone), and minerals. A simple layer mash can be prepared on-farm from: maize (50%), wheat bran (20%), noug cake or soybean meal (20%), lime or crushed shells (8%), premix (2%).
+
+Newcastle disease: This viral disease kills entire flocks within days and is the single biggest cause of village poultry mortality in Ethiopia. Vaccination is the only protection. Vaccinate all birds at 3 weeks of age with thermostable I-2 Newcastle vaccine delivered in drinking water. Revaccinate every 3–4 months.
+
+Broiler production: Commercial meat chickens (broilers) reach 2kg liveweight in 42 days under intensive management. High-input (specialized feeds, controlled environment, all-in all-out biosecurity) but high-output. Requires significant capital and consistent market access.`,
+
+  25: `Sheep and goats (small ruminants) are found in virtually every Ethiopian farming household. They are a flexible, accessible source of income — sold quickly in emergencies, given as gifts at festivals, and consumed for family nutrition. Ethiopia is one of Africa's largest sheep and goat producers.
+
+Breed selection: For sheep, the Menz, Afar, and Horro breeds are well-adapted to their local environments. Dorper crossbreds grow faster but need better management. For goats, the Central Highland, Abergelle, and Somali breeds are productive in their respective zones. Use locally adapted breeds before introducing exotic genetics.
+
+Feeding: Small ruminants are browsers (goats) and grazers (sheep) and can utilize rangeland, crop residue, and browse that cattle cannot efficiently use. Supplement during the dry season or late pregnancy with hay, crop residue treated with urea, and concentrates. Goats in particular need access to a wide variety of browse — monoculture grass diet alone does not meet their nutritional needs.
+
+Water: Sheep and goats can survive on less water than cattle, but clean water at all times still maximizes productivity. In dry conditions, 3–5 liters/day per adult animal is the minimum requirement.
+
+Reproduction management: Monitor females (ewes and does) for heat signs and ensure access to a healthy, fertile male. A ram can serve 30–40 ewes and a buck 25–30 does in a breeding season. Separate young males from females by 4 months of age to prevent unintended early breeding, which reduces dam productivity.
+
+Internal parasites (worms): Gastrointestinal worms are the most common cause of poor growth and death in small ruminants. Signs include diarrhea, rough coat, swelling under the jaw (bottle jaw), and weight loss. Deworm with ivermectin or albendazole every 3–4 months and after moving animals to new pasture. Rotate pastures to reduce worm burden on grazing land.
+
+Marketing: Small ruminants command premium prices before major festivals (Eid, Timkat, Christmas, Easter). Time sales to coincide with these periods. Finish animals on good feed for 30–60 days before festival sales to achieve heavier weights and higher prices.`,
+
+  26: `Vaccination is the most cost-effective health intervention available to Ethiopian livestock farmers. A single vaccine dose costing 2–20 ETB can prevent disease losses worth thousands of ETB per animal.
+
+Core principle: Vaccines work by exposing the animal's immune system to a harmless version of the disease-causing organism, enabling the animal to build defenses before encountering the real disease. Vaccines prevent disease — they cannot cure an already-sick animal.
+
+Handling and storage (cold chain): Most livestock vaccines must be kept cold (2–8°C) at all times from manufacture to injection. A broken cold chain kills the vaccine — you may vaccinate animals but they will not be protected. Always: transport vaccines in a cooler with ice packs. Keep out of direct sunlight. Use vaccines within 2 hours of opening the vial. Never freeze vaccines labeled "do not freeze."
+
+Core vaccination schedule for Ethiopian livestock:
+
+CATTLE:
+- Anthrax: Annual vaccination before the rainy season in endemic areas (lowlands). Highly fatal — vaccinate preventatively.
+- Blackleg: Annual in highland areas where disease occurs.
+- CBPP (Contagious Bovine Pleuropneumonia): As recommended by veterinary authorities.
+- FMD (Foot and Mouth Disease): In high-risk areas, vaccinate every 6 months.
+- LSD (Lumpy Skin Disease): As needed in outbreak areas.
+- Brucellosis: Heifers 4–8 months old vaccinated once (Brucella S19 vaccine). Males are not vaccinated.
+
+SHEEP AND GOATS:
+- Sheep and Goat Pox: Annual vaccination before the rainy season.
+- Pasteurellosis: Annual in highland areas.
+- Anthrax: Annual in endemic lowland areas.
+
+POULTRY:
+- Newcastle Disease: All birds, every 3–4 months. Thermostable I-2 vaccine suitable for village conditions.
+- Gumboro (IBD): Chicks at 14–21 days for intensive flocks.
+
+PIGS (where kept):
+- Swine Fever (Classical): Biannual vaccination.
+
+Record keeping: Record vaccination date, vaccine name, batch number, and number of animals vaccinated for every flock/herd. This helps plan future vaccinations and proves disease protection status for market buyers.`,
+
+  27: `Farm financial management is not just for large commercial operations — even a smallholder with one hectare makes dozens of financial decisions each season. Simple budgeting skills improve profitability dramatically.
+
+Why budget: A budget lets you plan how much you need to spend, when you need the cash, and what profit you expect. Without a budget, many farmers find they have spent too much on inputs, have no cash left to hire labor at harvest time, or take loans at high interest rates in desperation.
+
+A simple crop budget — step by step:
+
+Step 1 — Expected income: Estimate yield (kg or quintals). Multiply by expected market price. Example: 15 quintals teff × 1,000 ETB/quintal = 15,000 ETB expected income.
+
+Step 2 — Input costs: Seed: cost per kg × kg needed. Fertilizer: DAP and Urea cost × quantity. Pesticide/herbicide: as needed. Land preparation (tractor hire or draft animals). Labor for planting, weeding, harvesting, threshing.
+
+Step 3 — Overhead costs: Land rent (if applicable). Transportation to market. Storage and processing. Loan interest payments.
+
+Step 4 — Gross margin: Expected income minus all costs = gross margin (profit before family labor costs).
+
+Step 5 — Cash flow timing: Identify when you need cash and when you receive it. Most costs come at the start of the season; income comes at harvest. Plan how to cover the gap — savings, cooperative credit, or produce advance.
+
+Budgeting for multiple enterprises: If you grow two crops and keep livestock, budget each enterprise separately. This shows which is most profitable and helps you decide how to allocate land, water, and labor.
+
+Record the actual results at the end of each season and compare to your budget. Understanding why results differed from predictions improves your planning each year.`,
+
+  28: `Farm record keeping seems like extra work, but farmers who maintain simple records consistently make more money — they know their true costs, identify what is and isn't working, and have evidence of their farming history for bank loans and insurance.
+
+What records to keep:
+
+FIELD RECORDS: For each plot/field, record each season: crop and variety planted, planting date, seed rate and cost, fertilizer type, rate, date, and cost, pesticide and herbicide use, labor used (days and cost), irrigation water used, yield harvested (weigh accurately), selling price and buyer.
+
+LIVESTOCK RECORDS: For each animal or herd/flock: births and deaths (date, cause), vaccination dates and products used, treatment dates and medicines used, weight at key stages (weaning, sale), feed purchased and costs, milk production (daily if dairy), sales (date, animal, price, buyer).
+
+FINANCIAL RECORDS: Cash book: date, description, money in, money out, balance. Sales receipts. Purchase receipts. Loan records (amount, lender, interest rate, repayment schedule).
+
+Simple record keeping tools: A hardcover notebook kept in a dry place works perfectly. Pre-printed record sheets from agricultural offices or NGOs provide structure. Smartphone apps — basic spreadsheet apps (Google Sheets, Excel) work well if you have smartphone access.
+
+Tips for consistent record keeping: Record at the time the event happens — not from memory later. Keep it simple — a few key numbers are better than complex records you abandon after a month. Store books in a dry, safe place away from animals. Review records monthly to catch trends and problems early.
+
+Using records: At season end, calculate your gross margin per crop. Compare to previous seasons and to neighbor farmers. Use records to apply for credit — banks and microfinance institutions respond much better to farmers who can demonstrate their financial history with actual records.`,
+
+  29: `Getting good prices for your produce is as important as growing a good crop. Many Ethiopian farmers lose 30–50% of potential income through poor marketing decisions, selling at the wrong time, to the wrong buyer, at the wrong place.
+
+Know your market options:
+
+1. Farm gate sale: Selling directly to traders who come to your farm or village. Convenient but usually the lowest price — traders need margin for transport, storage, and their profit.
+
+2. Local market: Selling at the nearest market yourself. Higher price but requires transport cost and your time.
+
+3. Cooperative marketing: Selling through a farmers' cooperative pools volumes from many farmers, giving more bargaining power and access to premium buyers. In Ethiopia, cooperatives have secured export contracts for coffee and sesame, giving members significantly higher prices.
+
+4. Direct to processor/buyer: Selling directly to mills, food companies, or exporters removes intermediaries. Requires meeting specific quality and quantity requirements and often advance agreements.
+
+5. Forward contracts: Agreeing on price before harvest reduces price risk but sacrifices potential upside if prices rise.
+
+Market information: Knowing current market prices before you sell is essential. Access market prices through: local radio agricultural programs, Ethiopia Commodity Exchange (ECX) prices (for major commodities), community market information systems, and the Teff AI assistant on AgriEquip.
+
+Post-harvest quality: High-quality produce always commands premium prices. For grain: dry to correct moisture, clean and grade, store properly in clean bags or metal silos. For vegetables: grade by size, remove damaged items, pack carefully. For coffee: process properly (wet or natural) and present to buyers in correct grading.
+
+Negotiation: Know your break-even price (cost of production per quintal) before you go to market — never sell below this. Compare offers from multiple buyers before accepting. Selling in groups gives more bargaining power than selling alone.
+
+Timing: Prices are lowest immediately after harvest when everyone is selling. Farmers with storage capacity who wait 2–3 months typically receive 20–40% higher prices. Simple hermetic storage bags (like PICS bags) preserve grain quality for 6+ months.`,
+
+  30: `Digital payment systems are rapidly transforming financial transactions for Ethiopian farmers, reducing the need to carry cash, enabling faster payments, and improving financial record keeping.
+
+Telebirr: Ethio Telecom's mobile money platform is the largest in Ethiopia with over 40 million users. Works on any mobile phone, including basic feature phones using USSD menus (*127#). Functions include: send and receive money, pay for goods and services, save money (earn interest on savings), buy airtime. Registration requires only your phone number and ID — available at any Telebirr agent.
+
+CBE Birr: Commercial Bank of Ethiopia's mobile banking app links to your CBE bank account. Available for smartphone users. Functions include: account balance checks, money transfers, bill payments, loan applications. If you have a CBE account, download CBE Birr from the app store.
+
+M-Pesa: Safaricom's mobile money service, available in some parts of Ethiopia. Similar functions to Telebirr.
+
+Using digital payments for farm business: Receive payment for equipment rental directly to your Telebirr or bank account — safer than cash. Pay labor wages digitally — both parties have a record of payment. Pay for inputs from agro-dealers who accept digital payment. Receive payment from buyers for produce — immediate and verifiable.
+
+Security: Never share your PIN with anyone — not family, agents, or people claiming to be from the mobile money company. If you receive an unexpected payment, wait before spending — it may be a scam. Regularly check your transaction history for unauthorized activity.
+
+Using the AgriEquip wallet: Your AgriEquip wallet works like a digital account for rental-related transactions. Rental fees, deposits, and withdrawals all flow through the wallet. All transactions are recorded and visible in your transaction history — this is a financial record you can use to demonstrate business activity.
+
+Financial inclusion: For farmers without bank accounts, mobile money provides access to the formal financial system for the first time — building a digital transaction record that can support future loan applications.`,
+};
+ENDOFFILE
+echo "Done - $(wc -c < /tmp/lesson_content.js) bytes"
+Output
+
+Done - 63224 bytes
+Done
 };
 
 const LESSON_IMAGES = {
