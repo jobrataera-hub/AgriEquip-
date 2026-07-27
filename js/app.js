@@ -126,7 +126,6 @@ const ACADEMY_LESSONS = [
 
 // ─── Lesson content — PASTE HERE ──────────────────────────
 
-cat > /tmp/lesson_content.js << 'ENDOFFILE'
 const LESSON_CONTENT = {
   0: `Teff (Eragrostis tef) is Ethiopia's most important staple crop, used to make injera. It thrives in a wide range of altitudes, from lowlands to highlands above 2,800m, making it one of the most adaptable cereals grown in the country.
 
@@ -648,13 +647,7 @@ Using the AgriEquip wallet: Your AgriEquip wallet works like a digital account f
 
 Financial inclusion: For farmers without bank accounts, mobile money provides access to the formal financial system for the first time — building a digital transaction record that can support future loan applications.`,
 };
-ENDOFFILE
-echo "Done - $(wc -c < /tmp/lesson_content.js) bytes"
-Output
 
-Done - 63224 bytes
-Done
-};
 
 const LESSON_IMAGES = {
 };
