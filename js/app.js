@@ -126,7 +126,7 @@ const ACADEMY_LESSONS = [
 
 // ─── Lesson content — PASTE HERE ──────────────────────────
 
-const LESSON_CONTENT = {
+ const LESSON_CONTENT = {
   0: `Teff (Eragrostis tef) is Ethiopia's most important staple crop, used to make injera. It thrives in a wide range of altitudes, from lowlands to highlands above 2,800m, making it one of the most adaptable cereals grown in the country.
 
 Planting: Teff is typically sown at the start of the main rainy season (Meher), from June to July, though some regions also grow a smaller Belg-season crop. Seeds are broadcast rather than row-planted, and because they are extremely small, a fine, well-prepared seedbed is essential — clumped or rocky soil leads to poor germination.
