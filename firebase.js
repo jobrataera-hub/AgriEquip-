@@ -1,7 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
 import { getAuth, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
-import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDQL4d38G1ZQwARORaszwsf1YIRypKjP_M",
@@ -15,8 +14,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
-setPersistence(auth, browserLocalPersistence).catch(e => console.warn('Auth persistence:', e));
+// Keep auth session alive across page reloads.
+// Wrapped in catch so a failure here never blocks the rest of the app.
+setPersistence(auth, browserLocalPersistence).catch(e =>
+  console.warn('Auth persistence:', e)
+);
 
-export { auth, db, storage, app };
+export { auth, db, app };
