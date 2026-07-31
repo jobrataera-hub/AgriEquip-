@@ -1173,11 +1173,8 @@ function renderSection(id) {
         <div id="depositSection" style="display:none!important"  class="section-card">
           <h3>⬆️ Deposit Request</h3>
           <p style="color:#64748B;font-size:.82rem;margin-bottom:12px">Send money to AgriEquip first, then fill this form.</p>
-          <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:14px;margin-bottom:14px;font-size:.83rem;line-height:2">
-            🏦 <strong>CBE</strong> — Account: <strong>1000123456789</strong><br>
-            📱 <strong>Telebirr</strong> — <strong>+251 993 920 750</strong><br>
-            🏦 <strong>Awash Bank</strong> — Account: <strong>01320123456789</strong><br>
-            <span style="opacity:.6;font-size:.75rem">Name: AgriEquip Platform</span>
+          <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:14px;margin-bottom:14px;font-size:.83rem;text-align:center">
+            <p style="color:#F59E0B">🚧 Deposit payment details will appear here once this feature is live.</p>
           </div>
           <label style="color:#64748B;font-size:.78rem;display:block;margin-bottom:4px">Your Sender Bank *</label>
           <select class="form-input" id="senderBank"><option value="">Select bank</option>${BANKS.map(b=>`<option>${b}</option>`).join('')}</select>
