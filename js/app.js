@@ -2237,8 +2237,7 @@ const msgEl = document.getElementById('profileMsg');
   const btn = document.getElementById('profileSaveBtn');
   if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
   try {
-    await withTimeout(
-      setDoc(doc(db,'users',currentUser.uid), {
+    await setDoc(doc(db,'users',currentUser.uid), {
         fullName:    val('profileName'),
         fatherName:  val('profileFatherName'),
         phoneNumber: val('profilePhone'),
