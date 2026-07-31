@@ -2233,23 +2233,23 @@ async function submitListing() {
 function filterEquipment() { loadEquipment(); }
 
 async function saveProfile() {
-  const msgEl = document.getElementById('profileMsg');
+const msgEl = document.getElementById('profileMsg');
   const btn = document.getElementById('profileSaveBtn');
   if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
   try {
-    // setDoc + merge instead of updateDoc: updateDoc THROWS if the target
-    // document (or any assumption about its existing shape) is missing,
-    // which silently fails the save and looks like data "resets" next visit.
-    // merge:true creates the doc if needed and only touches these fields.
-    await setDoc(doc(db,'users',currentUser.uid), {
-      fullName:    val('profileName'),
-      fatherName:  val('profileFatherName'),
-      phoneNumber: val('profilePhone'),
-      address:     val('profileCity'),
-      updatedAt:   serverTimestamp()
-    }, { merge: true });
+    await withTimeout(
+      setDoc(doc(db,'users',currentUser.uid), {
+        fullName:    val('profileName'),
+        fatherName:  val('profileFatherName'),
+        phoneNumber: val('profilePhone'),
+        address:     val('profileCity'),
+        updatedAt:   serverTimestamp()
+      }, { merge: true }),
+      10000, 'Save timed out — check your connection'
+    );
     await loadUserProfile();
-    flashMsg(msgEl,'✅ Profile updated!','#22C55E');
+    flashMsg(msgEl,'✅ Profile saved and confirmed!','#22C55E');
+    renderSection('profile');
   } catch(e) {
     console.error('saveProfile failed:', e);
     flashMsg(msgEl,'❌ Failed to save: ' + (e.message || e.code || 'unknown error'),'#EF4444');
