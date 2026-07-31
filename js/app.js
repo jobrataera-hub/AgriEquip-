@@ -2233,19 +2233,17 @@ async function submitListing() {
 function filterEquipment() { loadEquipment(); }
 
 async function saveProfile() {
-const msgEl = document.getElementById('profileMsg');
+  const msgEl = document.getElementById('profileMsg');
   const btn = document.getElementById('profileSaveBtn');
   if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
   try {
     await setDoc(doc(db,'users',currentUser.uid), {
-        fullName:    val('profileName'),
-        fatherName:  val('profileFatherName'),
-        phoneNumber: val('profilePhone'),
-        address:     val('profileCity'),
-        updatedAt:   serverTimestamp()
-      }, { merge: true }),
-      10000, 'Save timed out — check your connection'
-    );
+      fullName:    val('profileName'),
+      fatherName:  val('profileFatherName'),
+      phoneNumber: val('profilePhone'),
+      address:     val('profileCity'),
+      updatedAt:   serverTimestamp()
+    }, { merge: true });
     await loadUserProfile();
     flashMsg(msgEl,'✅ Profile saved and confirmed!','#22C55E');
     renderSection('profile');
