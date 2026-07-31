@@ -2236,23 +2236,34 @@ async function saveProfile() {
   const msgEl = document.getElementById('profileMsg');
   const btn = document.getElementById('profileSaveBtn');
   if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
+
+  const updates = {
+    fullName:    val('profileName'),
+    fatherName:  val('profileFatherName'),
+    phoneNumber: val('profilePhone'),
+    address:     val('profileCity'),
+  };
+
   try {
     await setDoc(doc(db,'users',currentUser.uid), {
-      fullName:    val('profileName'),
-      fatherName:  val('profileFatherName'),
-      phoneNumber: val('profilePhone'),
-      address:     val('profileCity'),
-      updatedAt:   serverTimestamp()
+      ...updates,
+      updatedAt: serverTimestamp()
     }, { merge: true });
-    await loadUserProfile();
-    flashMsg(msgEl,'✅ Profile saved and confirmed!','#22C55E');
-    renderSection('profile');
+
+    // Update local state directly instead of re-fetching + re-rendering
+    // the whole section — that full-DOM rebuild was wiping the inputs
+    // and the success message the instant it appeared.
+    userProfile = { ...(userProfile || {}), ...updates };
+
+    flashMsg(msgEl, '✅ Profile saved!', '#22C55E');
   } catch(e) {
     console.error('saveProfile failed:', e);
-    flashMsg(msgEl,'❌ Failed to save: ' + (e.message || e.code || 'unknown error'),'#EF4444');
+    flashMsg(msgEl, '❌ Failed to save: ' + (e.message || e.code || 'unknown error'), '#EF4444');
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '💾 Save Changes'; }
   }
+}
+
 }
 
 function copyReferral() {
