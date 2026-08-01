@@ -81,8 +81,10 @@ body{font-family:'Poppins',sans-serif;min-height:100vh;background:linear-gradien
       </svg>
       Register with Google
     </button>
-    <div class="or-divider">or register with email</div>
-    <div class="sec-lbl">Personal Info</div>
+    <div class="fg"><label class="lbl">Father's Name *</label><span class="ico">👨</span><input type="text" id="regFatherName" class="fi" placeholder="e.g. Kebede Tadesse"></div>
+    <div class="fg"><label class="lbl">Phone Number</label><span class="ico">📱</span><input type="tel" id="regPhone" class="fi" placeholder="+251 9XX XXX XXX"></div>
+    <div class="fg"><label class="lbl">City</label><span class="ico">📍</span><input type="text" id="regCity" class="fi" placeholder="e.g. Addis Ababa"></div>
+    <div class="sec-lbl">Account</div>
     <div class="fg"><label class="lbl">Full Name *</label><span class="ico">👤</span><input type="text" id="regFullName" class="fi" placeholder="e.g. Abebe Kebede"></div>
     <div class="fg"><label class="lbl">Father's Name *</label><span class="ico">👨</span><input type="text" id="regFatherName" class="fi" placeholder="e.g. Kebede Tadesse"></div>
     <div class="sec-lbl">Account</div>
@@ -137,6 +139,8 @@ async function saveUserToFirestore(user, extra = {}) {
       displayName: user.displayName || extra.fullName || '',
       fullName: extra.fullName || user.displayName || '',
       fatherName: extra.fatherName || '',
+      phoneNumber: extra.phoneNumber || '',
+      address: extra.address || '',
       role: 'farmer', vipLevel: 'free',
       rank: 'seedling', rankPoints: 0,
       walletBalance: 0, referralCode,
@@ -212,6 +216,8 @@ window.handleLogin = async function() {
 window.handleRegister = async function() {
   const fullName = document.getElementById('regFullName').value.trim();
   const fatherName = document.getElementById('regFatherName').value.trim();
+  const phoneNumber = document.getElementById('regPhone').value.trim();
+  const address = document.getElementById('regCity').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value;
   const confirm = document.getElementById('regConfirm').value;
@@ -223,7 +229,7 @@ window.handleRegister = async function() {
   btn.disabled=true; btn.textContent='Creating account...';
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
-    await saveUserToFirestore(cred.user, {fullName, fatherName, referral});
+    await saveUserToFirestore(cred.user, {fullName, fatherName, phoneNumber, address, referral});
     showMsg('✅ Account created!','success');
     setTimeout(()=>window.location.href='dashboard.html', 800);
   } catch(e) { showMsg(cleanErr(e.message),'error'); btn.disabled=false; btn.textContent='Create Account →'; }
