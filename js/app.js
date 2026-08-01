@@ -2237,6 +2237,14 @@ async function saveProfile() {
   const btn = document.getElementById('profileSaveBtn');
   if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
 
+  const safetyTimer = setTimeout(() => {
+    if (btn && btn.disabled) {
+      btn.disabled = false;
+      btn.textContent = '💾 Save Changes';
+      flashMsg(msgEl, '⏳ Still trying to save — check your connection.', '#F59E0B');
+    }
+  }, 15000);
+
   const updates = {
     fullName:    val('profileName'),
     fatherName:  val('profileFatherName'),
@@ -2249,19 +2257,18 @@ async function saveProfile() {
       ...updates,
       updatedAt: serverTimestamp()
     }, { merge: true });
-
-    // Update local state directly instead of re-fetching + re-rendering
-    // the whole section — that full-DOM rebuild was wiping the inputs
-    // and the success message the instant it appeared.
     userProfile = { ...(userProfile || {}), ...updates };
-
+    clearTimeout(safetyTimer);
     flashMsg(msgEl, '✅ Profile saved!', '#22C55E');
   } catch(e) {
+    clearTimeout(safetyTimer);
     console.error('saveProfile failed:', e);
     flashMsg(msgEl, '❌ Failed to save: ' + (e.message || e.code || 'unknown error'), '#EF4444');
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '💾 Save Changes'; }
   }
+
+
 
 }
 
