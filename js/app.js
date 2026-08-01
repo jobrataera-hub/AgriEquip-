@@ -2262,7 +2262,6 @@ async function saveProfile() {
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '💾 Save Changes'; }
   }
-}
 
 }
 
