@@ -2235,33 +2235,27 @@ function filterEquipment() { loadEquipment(); }
 async function saveProfile() {
   const msgEl = document.getElementById('profileMsg');
   const btn = document.getElementById('profileSaveBtn');
+
+  // TEMPORARY DIAGNOSTIC — shows what currentUser actually is at the
+  // moment Save is tapped, since we can't easily check dev tools.
+  flashMsg(msgEl, 'DEBUG → currentUser: ' + (currentUser ? currentUser.uid : 'NULL/UNDEFINED'), '#F59E0B');
+  await new Promise(r => setTimeout(r, 2500));
+
   if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
-
-  const safetyTimer = setTimeout(() => {
-    if (btn && btn.disabled) {
-      btn.disabled = false;
-      btn.textContent = '💾 Save Changes';
-      flashMsg(msgEl, '⏳ Still trying to save — check your connection.', '#F59E0B');
-    }
-  }, 15000);
-
   const updates = {
     fullName:    val('profileName'),
     fatherName:  val('profileFatherName'),
     phoneNumber: val('profilePhone'),
     address:     val('profileCity'),
   };
-
   try {
     await setDoc(doc(db,'users',currentUser.uid), {
       ...updates,
       updatedAt: serverTimestamp()
     }, { merge: true });
     userProfile = { ...(userProfile || {}), ...updates };
-    clearTimeout(safetyTimer);
     flashMsg(msgEl, '✅ Profile saved!', '#22C55E');
   } catch(e) {
-    clearTimeout(safetyTimer);
     console.error('saveProfile failed:', e);
     flashMsg(msgEl, '❌ Failed to save: ' + (e.message || e.code || 'unknown error'), '#EF4444');
   } finally {
