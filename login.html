@@ -98,7 +98,7 @@ body{font-family:'Poppins',sans-serif;min-height:100vh;background:linear-gradien
   <div class="msg" id="message"></div>
 </div>
 <script type="module">
-import { auth, db } from './firebase.js';
+import { auth, db } from './firebase.js?v=2';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, increment, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
