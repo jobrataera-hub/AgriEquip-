@@ -1,7 +1,7 @@
 // AgriEquip — app.js — single clean module
 // Exposes all functions to window._app so bridge in HTML can reach them
 
-import { auth, db } from '../firebase.js?v=2;
+import { auth, db } from '../firebase.js?v=2';
 import {
   onAuthStateChanged, signOut
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
