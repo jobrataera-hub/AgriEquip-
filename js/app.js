@@ -1,7 +1,7 @@
 // AgriEquip — app.js — single clean module
 // Exposes all functions to window._app so bridge in HTML can reach them
 
-import { auth, db } from '../firebase.js';
+import { auth, db } from '../firebase.js?v=2;
 import {
   onAuthStateChanged, signOut
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
@@ -2235,12 +2235,6 @@ function filterEquipment() { loadEquipment(); }
 async function saveProfile() {
   const msgEl = document.getElementById('profileMsg');
   const btn = document.getElementById('profileSaveBtn');
-
-  // TEMPORARY DIAGNOSTIC — shows what currentUser actually is at the
-  // moment Save is tapped, since we can't easily check dev tools.
-  flashMsg(msgEl, 'DEBUG → currentUser: ' + (currentUser ? currentUser.uid : 'NULL/UNDEFINED'), '#F59E0B');
-  await new Promise(r => setTimeout(r, 2500));
-
   if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
   const updates = {
     fullName:    val('profileName'),
@@ -2261,7 +2255,6 @@ async function saveProfile() {
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '💾 Save Changes'; }
   }
-
 
 
 }
