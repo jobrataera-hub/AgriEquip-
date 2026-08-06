@@ -27,7 +27,7 @@ const NAV = [
   { id:'settings',  icon:'⚙️',  label:'Settings' },
   { id:'about',     icon:'ℹ️',  label:'About & Legal' },
 ];
-
+ 
 const VIP_PLANS = [
   { badge:'⚪', name:'Free',  fee:'0 ETB/mo',     commission:10, listings:2,   perk:'Basic access'              },
   { badge:'🟡', name:'VIP 1', fee:'200 ETB/mo',   commission:8,  listings:5,   perk:'Standard badge'            },
