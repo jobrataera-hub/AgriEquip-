@@ -146,7 +146,8 @@ async function saveUserToFirestore(user, extra = {}) {
       walletBalance: 0, referralCode,
       usedReferral: extra.referral || null,
       referralCount: 0, referralEarnings: 0,
-      verified: false, createdAt: serverTimestamp()
+      verified: false, createdAtNo response()
+      
     });
     if (extra.referral && extra.referral.startsWith('AGR-')) {
       const q = query(collection(db,'users'), where('referralCode','==',extra.referral));
