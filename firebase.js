@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
 import { getAuth, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-import { initializeFirestore } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDQL4d38G1ZQwARORaszwsf1YIRypKjP_M",
@@ -13,15 +13,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-// Auto-detects whether this network blocks Firestore's normal streaming
-// connection (common on some mobile carriers/proxies) and falls back to
-// long-polling automatically — targets the exact symptom we confirmed:
-// writes hang indefinitely while reads work fine.
-const db = initializeFirestore(app, {
-  experimentalAutoDetectLongPolling: true,
-  useFetchStreams: false,
-});
+const db = getFirestore(app);
 
 setPersistence(auth, browserLocalPersistence).catch(e =>
   console.warn('Auth persistence:', e)
