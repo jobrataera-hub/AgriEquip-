@@ -2226,9 +2226,10 @@ async function submitListing() {
     flashMsg(msgEl,'✅ Equipment listed! (+30 XP)','#22C55E');
     selectedEquipFiles = [];
     setTimeout(() => { toggleListingForm(); loadMyListings(); }, 1500);
-  } catch(e) { flashMsg(msgEl,'❌ Failed to list: ' + (e.message||'Try again.'),'#EF4444'); }
-  finally { if (btn) btn.disabled = false; }
-}
+  } catch(e) { 
+  flashMsg(msgEl,'❌ Failed to list: ' + (e.message||'Try again.'),'#EF4444'); 
+  throw e; 
+  }
 
 function filterEquipment() { loadEquipment(); }
 
@@ -2250,8 +2251,10 @@ async function saveProfile() {
     userProfile = { ...(userProfile || {}), ...updates };
     flashMsg(msgEl, '✅ Profile saved!', '#22C55E');
   } catch(e) {
+    clearTimeout(safetyTimer);
     console.error('saveProfile failed:', e);
     flashMsg(msgEl, '❌ Failed to save: ' + (e.message || e.code || 'unknown error'), '#EF4444');
+    throw e;
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '💾 Save Changes'; }
   }
