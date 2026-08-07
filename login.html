@@ -86,7 +86,7 @@ body{font-family:'Poppins',sans-serif;min-height:100vh;background:linear-gradien
     <div class="fg"><label class="lbl">City</label><span class="ico">📍</span><input type="text" id="regCity" class="fi" placeholder="e.g. Addis Ababa"></div>
     <div class="sec-lbl">Account</div>
     <div class="fg"><label class="lbl">Full Name *</label><span class="ico">👤</span><input type="text" id="regFullName" class="fi" placeholder="e.g. Abebe Kebede"></div>
-   <div class="fg"><label class="lbl">Email *</label><span class="ico">✉️</span><input type="email" id="regEmail" class="fi" placeholder="your@email.com"></div>
+    <div class="fg"><label class="lbl">Email *</label><span class="ico">✉️</span><input type="email" id="regEmail" class="fi" placeholder="your@email.com"></div>
     <div class="fg"><label class="lbl">Password * (min 6)</label><span class="ico">🔒</span><input type="password" id="regPassword" class="fi pr" placeholder="Create password"><button type="button" class="ico-right" onclick="togglePwd('regPassword',this)">🙈</button></div>
     <div class="fg"><label class="lbl">Confirm Password *</label><span class="ico">🔐</span><input type="password" id="regConfirm" class="fi pr" placeholder="Repeat password"><button type="button" class="ico-right" onclick="togglePwd('regConfirm',this)">🙈</button></div>
     <div class="sec-lbl">Optional</div>
@@ -144,8 +144,7 @@ async function saveUserToFirestore(user, extra = {}) {
       walletBalance: 0, referralCode,
       usedReferral: extra.referral || null,
       referralCount: 0, referralEarnings: 0,
-      verified: false, createdAtNo response()
-      
+      verified: false, createdAt: serverTimestamp()
     });
     if (extra.referral && extra.referral.startsWith('AGR-')) {
       const q = query(collection(db,'users'), where('referralCode','==',extra.referral));
@@ -241,4 +240,4 @@ window.showForgotPassword = async function() {
 };
 </script>
 </body>
-</html>
+  </html>
