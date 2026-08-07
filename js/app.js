@@ -2223,14 +2223,17 @@ async function submitListing() {
       images = await uploadEquipmentImages(selectedEquipFiles, currentUser.uid);
     }
     await addDoc(collection(db,'equipment'), { ownerId:currentUser.uid, ownerEmail:currentUser.email, name, category:cat, description:desc||'', pricePerDay:price, location:{city}, images, availability:'available', createdAt:serverTimestamp() });
-    completeTask('list_equipment', 30);
+        completeTask('list_equipment', 30);
     flashMsg(msgEl,'✅ Equipment listed! (+30 XP)','#22C55E');
     selectedEquipFiles = [];
     setTimeout(() => { toggleListingForm(); loadMyListings(); }, 1500);
   } catch(e) { 
-  flashMsg(msgEl,'❌ Failed to list: ' + (e.message||'Try again.'),'#EF4444'); 
-  throw e; 
+    flashMsg(msgEl,'❌ Failed to list: ' + (e.message||'Try again.'),'#EF4444'); 
+    throw e; 
+  } finally {
+    if (btn) btn.disabled = false; // 👈 Closes your loading button state
   }
+} // 👈 Added this bracket to properly close the submitListing() function!
 
 function filterEquipment() { loadEquipment(); }
 
