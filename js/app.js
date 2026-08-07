@@ -2036,8 +2036,9 @@ async function submitBookingRequest(equipmentId) {
     completeTask('first_booking_request', 20);
     flashMsg(msgEl, '✅ Booking request sent! The owner will respond soon.', '#22C55E');
     setTimeout(() => { closeBookingModal(); closeEquipmentDetail(); showSection('bookings'); }, 1500);
-  } catch(e) {
-    flashMsg(msgEl, '❌ Failed to send request: ' + (e.message || 'Try again.'), '#EF4444');
+  } catch(e) { 
+  flashMsg(msgEl,'❌ Failed to list: ' + (e.message||'Try again.'),'#EF4444');
+  throw e;
   } finally {
     if (btn) btn.disabled = false;
   }
