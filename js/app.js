@@ -1669,9 +1669,15 @@ async function loadMyListings() {
       </div>`;
       // ^ EDIT 5: owner delete button added above
     }).join('');
-  } catch(e) {}
+  } catch(e) {
+    console.error('loadMyListings failed:', e);
+    // 1. Write the error directly on your Listings page
+    el.innerHTML = `<p style="color:#ef4444;text-align:center;padding:20px">❌ Error loading your listings: ${e.message}</p>`;
+    // 2. Also trigger your red ASYNC ERROR banner at the top!
+    throw e; 
+  }
 }
-
+  
 async function loadCommunity() {
   const el = document.getElementById('communityFeed');
   if (!el) return;
