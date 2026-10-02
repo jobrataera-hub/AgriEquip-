@@ -1,0 +1,24 @@
+# Base44 development environment for AgriEquip
+# Static site (HTML/CSS/vanilla JS) served directly from the cloned source.
+# Firebase (Auth/Firestore/Storage) is called from the browser using the
+# public web config hardcoded in firebase.js — no server-side env needed.
+services:
+  web:
+    image: nginx:1.27-alpine
+    container_name: agriequip-web
+    # Repo dirs on the sandbox are root-only (700); nginx workers run as user
+    # "nginx" and would get 403. Patch nginx.conf to run workers as root.
+    command: ["sh", "-ec", "sed -i 's/^user  nginx;/user  root;/' /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"]
+    ports:
+      - "3000:80"
+    volumes:
+      # Bind-mount the whole repo so edits appear on refresh — no rebuilds.
+      - ./:/usr/share/nginx/html:ro
+    restart: on-failure
+    healthcheck:
+      # Busybox wget is present in alpine; probe actual page delivery.
+      test: ["CMD-SHELL", "wget -qO /dev/null http://127.0.0.1/splash.html || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
